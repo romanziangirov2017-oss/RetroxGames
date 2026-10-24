@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Фан-архив лора Devil May Cry: игры, манга, новеллы, персонажи и аниме.">
+    <title>Devil May Cry: Lore Archive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@300;400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            overflow-x: clip;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 0, 139, 0.1) 0%, transparent 50%);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="rgba(139,0,0,0.03)"/></svg>');
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header { text-align: center; padding: 40px 0 20px; position: relative; }
+
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: #cc0000;
+            text-shadow:
+                0 0 20px rgba(204, 0, 0, 0.5),
+                0 0 40px rgba(204, 0, 0, 0.3),
+                0 0 80px rgba(204, 0, 0, 0.1);
+            letter-spacing: 4px;
+            animation: pulseGlow 3s ease-in-out infinite alternate;
+            line-height: 1.2;
+        }
+
+        h1 span {
+            display: block;
+            font-size: 0.4em;
+            color: #888;
+            letter-spacing: 12px;
+            text-shadow: none;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            margin-top: 5px;
+        }
+
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 20px rgba(204, 0, 0, 0.5), 0 0 40px rgba(204, 0, 0, 0.3); }
+            to   { text-shadow: 0 0 30px rgba(204, 0, 0, 0.8), 0 0 60px rgba(204, 0, 0, 0.5), 0 0 100px rgba(204, 0, 0, 0.2); }
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            color: #aaa;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-family: 'MedievalSharp', cursive;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            border-color: #cc0000;
+            color: #fff;
+            background: linear-gradient(135deg, #2a0000, #1a0000);
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+        }
+
+        .cat-btn:focus-visible { outline: 2px solid #cc0000; outline-offset: 3px; }
+
+        .cat-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: #cc0000;
+            box-shadow: 0 0 10px #cc0000;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .item-card {
+            display: block;
+            width: 100%;
+            background: linear-gradient(145deg, #111 0%, #0a0a0a 100%);
+            border: 1px solid #222;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            text-align: left;
+            appearance: none;
+            -webkit-appearance: none;
+            animation: cardIn 0.45s ease both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .item-card:hover::before,
+        .item-card:focus-visible::before { left: 100%; }
+
+        .item-card:hover,
+        .item-card:focus-visible {
+            border-color: #cc0000;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(204, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .item-card:focus-visible { outline: 2px solid #cc0000; outline-offset: 3px; }
+
+        .item-card .card-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(204, 0, 0, 0.5));
+        }
+
+        .item-card h3 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.3rem;
+            color: #cc0000;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .item-card p { color: #777; font-size: 0.85rem; line-height: 1.5; }
+
+        .item-card .tag {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 12px;
+            border: 1px solid #333;
+            font-size: 0.7rem;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+
+        .modal-content {
+            background: linear-gradient(145deg, #151515, #0a0a0a);
+            border: 1px solid #cc0000;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 0 60px rgba(204, 0, 0, 0.2);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 98% 100%, 0 100%);
+            animation: modalIn 0.4s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9) translateY(30px); opacity: 0; }
+            to   { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-track { background: #0a0a0a; }
+        .modal-content::-webkit-scrollbar-thumb { background: #cc0000; border-radius: 3px; }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none;
+            border: 1px solid #333;
+            color: #888;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus-visible {
+            border-color: #cc0000;
+            color: #cc0000;
+            transform: rotate(90deg);
+            outline: none;
+        }
+
+        .modal-content h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: #cc0000;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            padding-right: 50px;
+        }
+
+        .modal-content .modal-subtitle {
+            color: #666;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .modal-content .story-text {
+            color: #bbb;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .modal-content .story-text p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .modal-content .story-text .highlight { color: #cc0000; font-weight: 700; }
+
+        .modal-content .story-text .quote {
+            border-left: 3px solid #cc0000;
+            padding-left: 15px;
+            margin: 20px 0;
+            color: #999;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: #333;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .modal-content { padding: 25px 20px; }
+            .modal-content h2 { font-size: 1.5rem; }
+            .items-grid { grid-template-columns: 1fr; }
+            h1 { letter-spacing: 2px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Devil May Cry<span>Lore Archive</span></h1>
+            <p class="subtitle">Хроники охотника на демонов</p>
+        </header>
+
+        <nav class="category-nav">
+            <button class="cat-btn active" data-category="games">ИГРЫ (1–5)</button>
+            <button class="cat-btn" data-category="manga">МАНГА</button>
+            <button class="cat-btn" data-category="novels">НОВЕЛЛЫ</button>
+            <button class="cat-btn" data-category="characters">ПЕРСОНАЖИ</button>
+            <button class="cat-btn" data-category="anime">АНИМЕ</button>
+        </nav>
+
+        <div class="items-grid" id="itemsGrid"></div>
+
+        <footer>Devil May Cry &copy; Capcom | Fan-made Lore Archive</footer>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Закрыть">&times;</button>
+            <h2 id="modalTitle"></h2>
+            <div class="modal-subtitle" id="modalSubtitle"></div>
+            <div class="story-text" id="modalStory"></div>
+        </div>
+    </div>
+
+    <script>
+        const loreData = {
+            games: [
+                {
+                    id: 'dmc1', icon: '🗡️', title: 'Devil May Cry', year: '2001', tag: 'PlayStation 2',
+                    subtitle: 'Начало легенды',
+                    story: `
+                        <p>Данте — <span class="highlight">получеловек-полудемон</span>, сын легендарного Тёмного Рыцаря Спарды, который много веков назад изгнал Владыку Тьмы Мундуса в подземный мир. Данте владеет частным агентством по истреблению демонов, и однажды получает загадочное приглашение от женщины по имени <span class="highlight">Триш</span> — отправиться на остров Маллет и сразиться с Мундусом.</p>
+                        <p>Мундус, пробуждаясь, посылает своих слуг уничтожить Данте. Пробиваясь через орды демонов, Данте попадает в огромный замок, где сталкивается со своим братом <span class="highlight">Вергилием</span>, превращённым в демона Нело Анджело. Тяжкая участь брата наполняет душу Данте раскаянием и яростью.</p>
+                        <p>В финальной битве против Мундуса Данте использует силу истинного Сына Спарды. Триш, изначально созданная Мундусом как приманка, встаёт на сторону Данте, и вместе они одерживают победу. Мундус запечатан, но Данте теряет брата — и обретает верного союзника в лице Триш, которая становится его напарницей.</p>
+                        <div class="quote">«Я — Данте, сын Спарды. И я здесь, чтобы отправить тебя обратно в ад.»</div>
+                    `
+                },
+                {
+                    id: 'dmc2', icon: '🌑', title: 'Devil May Cry 2', year: '2003', tag: 'PlayStation 2',
+                    subtitle: 'Тени прошлого',
+                    story: `
+                        <p>События разворачиваются в городе <span class="highlight">Вьё-де-Марли</span>. Данте получает заказ на поиск таинственной печати, которая может открыть врата между миром людей и демонов. В этом ему помогает <span class="highlight">Люсия</span> — член клана хранителей с демонической кровью.</p>
+                        <p>Их противник — безумный бизнесмен <span class="highlight">Ариус</span>, который стремится освободить демоническое божество <span class="highlight">Аргосака</span>. Люсия играет ключевую роль в противостоянии, а Данте, объединив с ней усилия, останавливает Ариуса и сражается с Аргосаксом в финальной битве.</p>
+                        <p>После победы Данте отправляется в измерение демонов, оставляя Люсии свой меч и монету — символ того, что он вернётся. Эта часть часто считается самой мрачной и философской в серии, исследующей тему одиночества и предназначения.</p>
+                        <div class="quote">«Демоны не плачут. Но иногда... даже они чувствуют боль.»</div>
+                    `
+                },
+                {
+                    id: 'dmc3', icon: '🔥', title: "Devil May Cry 3: Dante's Awakening", year: '2005', tag: 'PlayStation 2',
+                    subtitle: 'Пробуждение',
+                    story: `
+                        <p>Хронологически первая часть серии. Молодой Данте, ещё не открывший агентство, получает визит таинственного <span class="highlight">Аркхама</span> — учёного-демонолога, который убил свою жену. Аркхам сообщает Данте, что его брат <span class="highlight">Вергилий</span> строит башню <span class="highlight">Темен-ни-гру</span>, чтобы получить силу Спарды.</p>
+                        <p>Данте отправляется остановить брата. В башне он встречает <span class="highlight">Леди</span> — дочь Аркхама, которая охотится на собственного отца. Братья сражаются несколько раз: их конфликт строится на противоположных жизненных целях — Вергилий стремится к абсолютной силе, Данте — к защите человечества.</p>
+                        <p>Аркхам предаёт Вергилия и забирает силу Спарды себе, но объединёнными усилиями Данте, Вергилий и Леди побеждают его. В финале Вергилий уходит в портал между мирами, где проигрывает Мундусу и становится его рабом — Нело Анджело. Данте остаётся в мире людей, открывает агентство «Devil May Cry» и начинает свой путь охотника на демонов.</p>
+                        <div class="quote">«Сила — это всё. Без силы ты ничто. Без силы ты не можешь защитить даже то, что тебе дорого.» — Вергилий</div>
+                    `
+                },
+                {
+                    id: 'dmc4', icon: '⚔️', title: 'Devil May Cry 4', year: '2008', tag: 'PlayStation 3 / Xbox 360',
+                    subtitle: 'Орден Меча',
+                    story: `
+                        <p>Действие происходит на острове <span class="highlight">Фортуна</span>, где правит Орден Меча. Главный герой — <span class="highlight">Неро</span>, молодой рыцарь Ордена, обладающий демонической рукой <span class="highlight">Devil Bringer</span>. Во время фестиваля Ордена <span class="highlight">Данте</span> убивает Верховного Жреца Санктуса на глазах у Неро, и Неро отправляется в погоню.</p>
+                        <p>Постепенно раскрывается истинная суть Ордена: Санктус стремится использовать силу Спарды для создания <span class="highlight">Спасителя</span> — гигантской статуи-оружия. Неро узнаёт, что его рука — наследие Вергилия, его истинного отца. Данте и Неро объединяются, чтобы остановить Санктуса.</p>
+                        <p>Неро освобождает Кирие, свою возлюбленную, и уничтожает Санктуса. Данте забирает Ямато — меч Вергилия — и передаёт его Неро, признавая его силу. Неро остаётся защитником Фортуны, а Данте возвращается в своё агентство.</p>
+                        <div class="quote">«Я не собираюсь быть как ты. Я сам решу, каким мне быть.» — Неро</div>
+                    `
+                },
+                {
+                    id: 'dmc-reboot', icon: '🌀', title: 'DmC: Devil May Cry', year: '2013', tag: 'PS3 / Xbox 360 / PC',
+                    subtitle: 'Перезапуск',
+                    story: `
+                        <p><span class="highlight">DmC: Devil May Cry</span> — перезапуск серии, разработанный студией <span class="highlight">Ninja Theory</span> и изданный Capcom в 2013 году. Действие происходит в совершенно новой вселенной, не связанной с предыдущими играми.</p>
+                        <p>Главный герой — <span class="highlight">Данте</span>, <span class="highlight">напфилим</span> (гибрид ангела и демона), который не помнит своего прошлого. Он скрывается от демонов в мире людей, пока его не находит <span class="highlight">Кэт</span> и не приводит в организацию «Орден» к своему брату <span class="highlight">Вергилию</span>.</p>
+                        <p>Выясняется, что 9000 лет назад демон <span class="highlight">Мундус</span> победил в войне, а отец Данте — демон <span class="highlight">Спарда</span> — полюбил ангела <span class="highlight">Еву</span>, и у них родились близнецы. Мундус убил Еву, и теперь Данте стремится отомстить, но постепенно задумывается, за что именно он сражается.</p>
+                        <p>Ключевая особенность — измерение <span class="highlight">Лимбо</span>, параллельная реальность, отражающая мир людей, которая постоянно разрушается и атакует Данте. Демоны могут в любой момент затянуть его туда.</p>
+                        <div class="quote">«Меня зовут Данте. И я не тот, кем ты меня считаешь.»</div>
+                    `
+                },
+                {
+                    id: 'dmc5', icon: '🌳', title: 'Devil May Cry 5', year: '2019', tag: 'PS4 / Xbox One / PC',
+                    subtitle: 'Королевская битва',
+                    story: `
+                        <p>Прошло несколько лет после событий DMC4. <span class="highlight">Неро</span> лишается демонической руки — её отрубает таинственный незнакомец. Тем временем <span class="highlight">Данте</span> получает заказ от загадочного мужчины по имени <span class="highlight">V</span> на уничтожение демона, которого тот называет «твоя причина».</p>
+                        <p>Все трое — Данте, Неро и V — сходятся в <span class="highlight">Редгрейв-Сити</span>, над которым вырос демонический <span class="highlight">Древо Клифот</span>, высасывающее кровь людей. Выясняется, что незнакомец, отрубивший руку Неро, — это <span class="highlight">Уризен</span>, демоническая половина Вергилия, отделившаяся от него с помощью Ямато. V — человеческая половина Вергилия, его совесть и слабость.</p>
+                        <p>Вергилий разделил себя, чтобы избавиться от человеческих слабостей и обрести силу. Данте сражается с Уризеном, Неро — с Вергилием. В финале братья Данте и Вергилий объединяются, чтобы срубить Древо Клифот и закрыть портал в мир демонов. Они остаются в аду, а Неро, Люсия и Триш продолжают защищать мир людей.</p>
+                        <div class="quote">«Я — V. Я — то, что осталось от Вергилия. Его человеческая часть... его слабость.»</div>
+                    `
+                }
+            ],
+            manga: [
+                {
+                    id: 'vov', icon: '📖', title: 'Devil May Cry 5: Visions of V', year: '2019–2021', tag: 'Манга / 5 томов',
+                    subtitle: 'Глазами V',
+                    story: `
+                        <p>Спин-офф манга, рассказывающая историю <span class="highlight">V</span> — загадочного мужчины, появившегося в Devil May Cry 5. Это приквел к событиям игры, раскрывающий то, что осталось за кадром.</p>
+                        <p>V родился из <span class="highlight">человеческой половины Вергилия</span>, отделённой с помощью Ямато. Слабый и умирающий, он заключает контракты с тремя демоническими фамильярами: <span class="highlight">Грифоном</span> (птица-демон), <span class="highlight">Шэдоу</span> (пантера) и <span class="highlight">Найтмер</span> (гигантский голем). Каждый из них — часть его самого, его страхи и сожаления.</p>
+                        <p>Манга показывает путь V от момента его рождения до встречи с Данте. Он использует всех — Данте, Неро — как инструменты для достижения своей цели: уничтожить Уризена и воссоединиться с Вергилием. Но постепенно V начинает ценить человеческие связи и понимать, что значит быть человеком.</p>
+                        <p>Финал манги подводит к кульминации DMC5, где V сливается с Уризеном, вновь становясь Вергилием. Это история о слабости, которая оказывается силой, и о том, что даже демон может обрести человечность.</p>
+                        <div class="quote">«Я не могу позволить себе роскошь быть человеком. Но... возможно, это и есть моя сила.»</div>
+                    `
+                },
+                {
+                    id: 'dmc3manga', icon: '📕', title: 'Devil May Cry 3 Manga', year: '2005–2006', tag: 'Манга / 2 тома',
+                    subtitle: 'Код Данте и Вергилия',
+                    story: `
+                        <p>Манга, являющаяся приквелом к Devil May Cry 3. Сюжет разворачивается незадолго до событий игры и раскрывает предысторию конфликта братьев.</p>
+                        <p>Молодой Данте, только начинающий карьеру охотника, получает необычный заказ от своего посредника <span class="highlight">Энзо</span>. Первоначально отказавшись, он оказывается втянут в события демонического характера, которые приводят его к противостоянию с Вергилием.</p>
+                        <p>Манга раскрывает важные детали: причины возведения <span class="highlight">Темен-ни-гру</span>, мотивацию Вергилия в его поисках силы, сложные взаимоотношения братьев. Планировалась как трилогия, но были выпущены только две части — «Код Данте» и «Код Вергилия».</p>
+                        <p>Это произведение органично дополняет игровую историю, не раскрывая критических сюжетных поворотов, но углубляя понимание вселенной.</p>
+                    `
+                }
+            ],
+            novels: [
+                {
+                    id: 'dmc1novel', icon: '📘', title: 'Devil May Cry Novel', year: '2002', tag: 'Ранобэ / 2 тома',
+                    subtitle: 'Начало пути',
+                    story: `
+                        <p>Ранобэ-приквел к оригинальной игре, написанное <span class="highlight">Син-я Гойкедой</span> в сотрудничестве с создателем серии Хидеки Камией. Иллюстрации выполнил Сиро Мива.</p>
+                        <p>Сюжет разворачивается примерно за <span class="highlight">три года до событий Devil May Cry 3</span>. Данте около 16–17 лет, он только начинает карьеру наёмника. История рассказывает о его первых серьёзных отношениях и важных моментах, связанных с братом Вергилием.</p>
+                        <p>Новелла содержит множество небольших, но значимых деталей, которые позже нашли отражение в игровой серии. Особое влияние произведение оказало на пятую часть игры, что делает его важным материалом для понимания общей истории Devil May Cry.</p>
+                        <div class="quote">«Данте ещё не знал, что его ждёт. Но он уже чувствовал — это только начало.»</div>
+                    `
+                },
+                {
+                    id: 'dmc4novel', icon: '📙', title: 'Devil May Cry 4: Deadly Fortune', year: '2009', tag: 'Ранобэ / 2 тома',
+                    subtitle: 'Смертельная удача',
+                    story: `
+                        <p>Новелизация Devil May Cry 4, написанная <span class="highlight">Бинго Морихаси</span>. События пересказываются с двух точек зрения: Неро и Данте.</p>
+                        <p>Книга углубляется в предысторию <span class="highlight">Неро</span> и Ордена Меча в Фортуне. Раскрываются сцены, которые в игре были лишь намёками: Неро, найденный младенцем в чёрном одеяле (отсюда его имя — «чёрный»), его первые встречи с Кирие и Кредо, намёки на то, что Вергилий посещал Фортуну.</p>
+                        <p>Также более подробно прописаны антагонисты — Санктус и Агнус. Показаны параллельные расследования Данте и его путь через Фортуну, что делает историю более полной и многогранной.</p>
+                    `
+                },
+                {
+                    id: 'dmc5novel', icon: '📗', title: 'Devil May Cry 5: Before the Nightmare', year: '2019', tag: 'Ранобэ',
+                    subtitle: 'Перед кошмаром',
+                    story: `
+                        <p>Приквел-новелла к Devil May Cry 5, написанная <span class="highlight">Бинго Морихаси</span>. Действие происходит за несколько лет до событий игры.</p>
+                        <p>Неро живёт вместе с Кирие, и однажды встречает девушку <span class="highlight">Нико</span>, которая мечтает стать оружейником. Её дерзкий характер сначала настораживает Неро, но постепенно они сближаются. Именно Нико станет той, кто создаст для Неро новые руки-протезы после потери Devil Bringer.</p>
+                        <p>Параллельно Данте получает заказ от таинственного мужчины по имени <span class="highlight">V</span> через информатора Моррисона. V просит убить демона, которого называет «твоя причина». Так начинается цепочка событий, ведущая в Редгрейв-Сити.</p>
+                        <p>Новелла подробно описывает, как Неро потерял демоническую руку, и как Данте, V и Неро оказались втянуты в историю с Древом Клифот.</p>
+                        <div class="quote">«Иногда прошлое возвращается не для того, чтобы простить. А для того, чтобы забрать своё.»</div>
+                    `
+                }
+            ],
+            characters: [
+                {
+                    id: 'dante', icon: '🗡️', title: 'Данте', year: 'DMC 1–5', tag: 'Главный герой',
+                    subtitle: 'Сын Спарды, охотник на демонов',
+                    story: `
+                        <p><span class="highlight">Данте</span> — центральный персонаж серии, сын легендарного Тёмного Рыцаря <span class="highlight">Спарды</span> и человеческой женщины <span class="highlight">Евы</span>, младший брат-близнец Вергилия и дядя Неро. После гибели матери от рук демонов Мундуса он посвятил жизнь истреблению нечисти и открыл агентство «Devil May Cry».</p>
+                        <p>Данте — полудемон, унаследовавший колоссальную силу отца. Он владеет двуручным мечом <span class="highlight">Rebellion</span> (позже — мечом Спарды) и парой пистолетов «Эбони и Айвори», а его демоническая форма называется <span class="highlight">Devil Trigger</span>. Несмотря на внешнюю беспечность и любовь к пицце, за шутками скрывается глубокое чувство ответственности за человечество.</p>
+                        <p>На протяжении серии Данте побеждает Мундуса, Аркхама, Ариуса, Санктуса и Уризена. В финале DMC5 он вместе с Вергилием остаётся в аду, чтобы срубить Древо Клифот и защитить мир людей.</p>
+                        <div class="quote">«Я — Данте, сын Спарды. И я здесь, чтобы отправить тебя обратно в ад.»</div>
+                    `
+                },
+                {
+                    id: 'vergil', icon: '🌀', title: 'Вергилий', year: 'DMC 1, 3, 5', tag: 'Брат-близнец / Антагонист',
+                    subtitle: 'Тот, кто жаждет силы',
+                    story: `
+                        <p><span class="highlight">Вергилий</span> — старший брат-близнец Данте, также сын Спарды и Евы, и биологический отец Неро. В детстве он пережил ту же травму потери матери, но выбрал путь абсолютной силы, считая, что только она может защитить то, что дорого.</p>
+                        <p>Вергилий — мастер катаны <span class="highlight">Ямато</span>, способной разрезать пространство и отделять человеческое от демонического. В DMC3 он пытается открыть врата в мир демонов, чтобы получить силу Спарды, но терпит поражение и становится рабом Мундуса — <span class="highlight">Нело Анджело</span>.</p>
+                        <p>В DMC5 Вергилий разделяет себя Ямато на демоническую половину <span class="highlight">Уризена</span> и человеческую — <span class="highlight">V</span>. После воссоединения он принимает свою человечность и вместе с Данте остаётся в аду, чтобы уничтожить Древо Клифот.</p>
+                        <div class="quote">«Сила — это всё. Без силы ты ничто.»</div>
+                    `
+                },
+                {
+                    id: 'nero', icon: '🐺', title: 'Неро', year: 'DMC 4–5', tag: 'Главный герой',
+                    subtitle: 'Рыцарь Ордена Меча',
+                    story: `
+                        <p><span class="highlight">Неро</span> — сын Вергилия и племянник Данте, выросший сиротой на острове Фортуна. Он был принят в семью Кирие и Кредо и вступил в Орден Меча, где стал единственным рыцарем, обладающим демонической рукой — <span class="highlight">Devil Bringer</span>.</p>
+                        <p>В DMC4 Неро раскрывает заговор Санктуса и вместе с Данте останавливает Орден. В DMC5 он теряет демоническую руку, но получает кибернетические протезы <span class="highlight">Devil Breaker</span>, созданные Нико. Неро осознаёт своё происхождение, но выбирает защищать людей по собственному желанию, а не из-за наследия крови.</p>
+                        <p>После событий DMC5 он основывает передвижной филиал агентства «Devil May Cry», чтобы обеспечивать свою семью с Кирие.</p>
+                        <div class="quote">«Я не собираюсь быть как ты. Я сам решу, каким мне быть.»</div>
+                    `
+                },
+                {
+                    id: 'trish', icon: '⚡', title: 'Триш', year: 'DMC 1–5', tag: 'Союзник / Демон',
+                    subtitle: 'Создана по образу Евы',
+                    story: `
+                        <p><span class="highlight">Триш</span> — демон, созданный Мундусом по образу матери Данте, <span class="highlight">Евы</span>, чтобы заманить его в ловушку. Изначально она была врагом, но после того, как Данте спас её, Триш переосмыслила своё существование и встала на его сторону.</p>
+                        <p>Она стала напарницей Данте и работает в его агентстве. Триш обладает демонической силой, контролирует молнии и использует пистолеты. В DMC4 она маскируется под <span class="highlight">Глорию</span>, чтобы проникнуть в Орден Меча.</p>
+                        <p>Несмотря на своё происхождение, Триш проявляет человеческие эмоции и глубоко привязана к Данте, хотя их отношения остаются неоднозначными.</p>
+                        <div class="quote">«Демоны не плачут. Но иногда... даже они чувствуют боль.»</div>
+                    `
+                },
+                {
+                    id: 'lady', icon: '🔫', title: 'Леди (Мэри)', year: 'DMC 3–5', tag: 'Союзник / Охотница',
+                    subtitle: 'Дочь Аркхама',
+                    story: `
+                        <p><span class="highlight">Леди</span>, настоящее имя <span class="highlight">Мэри</span>, — человек и охотница на демонов, впервые появившаяся в DMC3. Она — дочь безумного учёного <span class="highlight">Аркхама</span>, который убил её мать ради демонической силы.</p>
+                        <p>Леди поклялась отомстить отцу и выследила его. Вместе с Данте она участвовала в битве на башне Темен-ни-гру. После гибели Аркхама она стала союзницей и партнёром Данте, часто появляясь в его агентстве.</p>
+                        <p>Она не обладает демоническими силами, но компенсирует это великолепным владением огнестрельным оружием (особенно дробовиком <span class="highlight">Kalina Ann</span>, названным в честь матери) и невероятной решимостью.</p>
+                    `
+                },
+                {
+                    id: 'lucia', icon: '🦋', title: 'Люсия', year: 'DMC 2', tag: 'Главная героиня',
+                    subtitle: 'Искусственный демон',
+                    story: `
+                        <p><span class="highlight">Люсия</span> — искусственный демон, созданный бизнесменом <span class="highlight">Ариусом</span>, но позже сбежавшая от него и ставшая членом клана <span class="highlight">Вьё-де-Марли</span> на острове Думари. Её удочерила <span class="highlight">Матиер</span>, лидер клана.</p>
+                        <p>Люсия — ловкая и смертоносная охотница, сражающаяся с демонами. В DMC2 она помогает Данте остановить Ариуса и не дать ему освободить <span class="highlight">Аргосака</span>. Она борется с комплексом из-за своего искусственного происхождения, но Данте помогает ей принять себя.</p>
+                        <p>После победы над Ариусом Люсия остаётся защищать остров, а Данте оставляет ей свой меч и монету в знак того, что вернётся.</p>
+                    `
+                },
+                {
+                    id: 'nico', icon: '🔧', title: 'Нико', year: 'DMC 5', tag: 'Союзник / Оружейник',
+                    subtitle: 'Гений-изобретатель',
+                    story: `
+                        <p><span class="highlight">Нико</span> (полное имя — <span class="highlight">Николетта Гольдштейн</span>) — талантливый инженер и оружейник, внучка легендарной Нелл Гольдштейн и дочь безумного учёного Агнуса. Она помогает Неро в его охоте на демонов и создаёт для него кибернетические протезы <span class="highlight">Devil Breaker</span> после потери руки.</p>
+                        <p>Нико — эксцентричная, дерзкая, с своеобразным чувством юмора. Она ездит на фургоне, который служит мобильным филиалом агентства «Devil May Cry». Несмотря на сложные отношения с отцом, она унаследовала его гениальность, но направила её на защиту людей.</p>
+                    `
+                },
+                {
+                    id: 'v', icon: '📖', title: 'V', year: 'DMC 5', tag: 'Главный герой',
+                    subtitle: 'Человеческая половина Вергилия',
+                    story: `
+                        <p><span class="highlight">V</span> — загадочный мужчина, появившийся в DMC5. Он выглядит слабым и передвигается с тростью, но на самом деле является <span class="highlight">человеческой половиной Вергилия</span>, отделённой с помощью Ямато. Его тело слабо, но он командует тремя демоническими фамильярами.</p>
+                        <p>V нанимает Данте, чтобы тот убил «его причину» — Уризена, демоническую половину самого Вергилия. По мере развития сюжета V осознаёт ценность человеческих связей и жертвует собой, чтобы вновь слиться с Уризеном и восстановить Вергилия.</p>
+                        <p>Его фамильяры — <span class="highlight">Грифон</span> (птица, контролирующая молнии), <span class="highlight">Шэдоу</span> (пантера, использующая шипы) и <span class="highlight">Найтмер</span> (гигантский голем) — являются воплощениями его страхов и воспоминаний.</p>
+                    `
+                },
+                {
+                    id: 'patty', icon: '👧', title: 'Пэтти Лоуэлл', year: 'Аниме 2007 / DMC 5', tag: 'Союзник',
+                    subtitle: 'Девочка, которую спас Данте',
+                    story: `
+                        <p><span class="highlight">Пэтти Лоуэлл</span> (Patty Lowell) — ключевой персонаж аниме-сериала 2007 года. На момент событий аниме ей около <span class="highlight">8–10 лет</span>. Данте изначально принимает её за наследницу огромного состояния с таким же именем и берётся охранять, но позже выясняется, что это ошибка.</p>
+                        <p>Пэтти — сирота, которая после спасения начинает жить в офисе «Devil May Cry», берёт на себя уборку и готовку, присматривая за неряшливым Данте. Несмотря на юный возраст, она обладает живым характером и не боится говорить Данте всё, что думает о его лени.</p>
+                        <p>На самом деле Пэтти — потомок могущественного волшебника <span class="highlight">Алана Лоуэлла</span>, а её мать, <span class="highlight">Нина Лоуэлл</span>, также обладает магической кровью. В DMC5 Пэтти уже <span class="highlight">18 лет</span>, она звонит Данте по телефону, но физически в игре не появляется.</p>
+                        <p>Пэтти — один из самых человечных персонажей франшизы, напоминающий Данте о его человеческой стороне.</p>
+                    `
+                },
+                {
+                    id: 'sparda', icon: '🛡️', title: 'Спарда', year: 'Легенда', tag: 'Тёмный Рыцарь',
+                    subtitle: 'Отец Данте и Вергилия',
+                    story: `
+                        <p><span class="highlight">Спарда</span> — легендарный демон-мечник, отец Данте и Вергилия. Два тысячелетия назад он был одним из генералов Мундуса, но предал демонического императора и встал на защиту человечества.</p>
+                        <p>Спарда победил Мундуса и запечатал врата в мир демонов, пожертвовав частью своей силы. Позже он встретил человеческую женщину <span class="highlight">Еву</span>, влюбился в неё, и у них родились близнецы. После этого Спарда исчез, и его судьба остаётся неизвестной.</p>
+                        <p>Его наследие — мечи Rebellion и Yamato, а также амулеты, подаренные сыновьям, — играет ключевую роль во всей серии.</p>
+                    `
+                },
+                {
+                    id: 'eva', icon: '👼', title: 'Ева', year: 'Легенда', tag: 'Мать',
+                    subtitle: 'Человеческая женщина',
+                    story: `
+                        <p><span class="highlight">Ева</span> — человеческая женщина, жена Спарды и мать Данте и Вергилия. Она была убита демонами Мундуса, когда близнецам было около восьми лет. Её смерть стала катализатором: Вергилий выбрал путь силы, а Данте — путь мести и защиты.</p>
+                        <p>Её образ был использован Мундусом для создания Триш. Ева также фигурирует в воспоминаниях и видениях братьев на протяжении всей серии.</p>
+                    `
+                },
+                {
+                    id: 'mundus', icon: '😈', title: 'Мундус', year: 'DMC 1', tag: 'Антагонист',
+                    subtitle: 'Князь Тьмы',
+                    story: `
+                        <p><span class="highlight">Мундус</span> — главный антагонист первой игры и повелитель демонов. Два тысячелетия назад он был побеждён и запечатан Спардой. Он ответственен за смерть Евы и создание Триш.</p>
+                        <p>Мундус обладает колоссальной демонической силой и тремя глазами. В DMC1 Данте побеждает его и запечатывает снова. В DMC5 упоминается, что Мундус был ослаблен и свергнут, что позволило Уризену занять его место.</p>
+                    `
+                },
+                {
+                    id: 'urizen', icon: '🔥', title: 'Уризен', year: 'DMC 5', tag: 'Антагонист',
+                    subtitle: 'Демоническая половина Вергилия',
+                    story: `
+                        <p><span class="highlight">Уризен</span> — демоническая половина Вергилия, отделённая от него с помощью Ямато. Он — гигантский, невероятно сильный демон, олицетворяющий жажду силы и жестокость Вергилия без человеческих сомнений.</p>
+                        <p>Уризен захватывает власть в аду, свергнув ослабленного Мундуса, и выращивает <span class="highlight">Древо Клифот</span>, чтобы поглотить человеческий мир. Данте сражается с ним несколько раз и в итоге побеждает.</p>
+                        <p>В финале Уризен вновь сливается с V, восстанавливая Вергилия — целостную личность, принявшую и силу, и человечность.</p>
+                    `
+                },
+                {
+                    id: 'arkham', icon: '🦉', title: 'Аркхам', year: 'DMC 3', tag: 'Антагонист',
+                    subtitle: 'Безумный учёный',
+                    story: `
+                        <p><span class="highlight">Аркхам</span> — главный антагонист DMC3, отец Леди. Талантливый учёный-демонолог, он убил свою жену Калину Анн ради получения демонической силы.</p>
+                        <p>Аркхам манипулирует Вергилием, чтобы получить меч Спарды, но в итоге превращается в бесформенного демона и погибает от рук Данте, Вергилия и Леди.</p>
+                    `
+                },
+                {
+                    id: 'sanctus', icon: '⛪', title: 'Санктус', year: 'DMC 4', tag: 'Антагонист',
+                    subtitle: 'Верховный Жрец Ордена',
+                    story: `
+                        <p><span class="highlight">Санктус</span> — главный антагонист DMC4, лидер Ордена Меча. Он стремится использовать силу Спарды для создания <span class="highlight">Спасителя</span> — гигантского оружия, чтобы уничтожить всех демонов и установить контроль над миром.</p>
+                        <p>Санктус погибает от руки Данте в начале игры, но воскресает с демонической силой. В финале он сливается со Спасителем, но Неро уничтожает его.</p>
+                    `
+                },
+                {
+                    id: 'agnus', icon: '🧪', title: 'Агнус', year: 'DMC 4', tag: 'Антагонист',
+                    subtitle: 'Безумный алхимик',
+                    story: `
+                        <p><span class="highlight">Агнус</span> — главный учёный Ордена Меча, создатель демонического оружия и искусственных демонов. Он также пытался восстановить Ямато и создать «Анжело Агнуса».</p>
+                        <p>Агнус — отец Нико, хотя она его ненавидит. Он погибает от рук Данте.</p>
+                    `
+                },
+                {
+                    id: 'arius', icon: '💼', title: 'Ариус', year: 'DMC 2', tag: 'Антагонист',
+                    subtitle: 'Безумный бизнесмен',
+                    story: `
+                        <p><span class="highlight">Ариус</span> — главный антагонист DMC2, глава корпорации «Уроборос». Он одержим идеей получить силу демонического божества <span class="highlight">Аргосака</span> и стать бессмертным.</p>
+                        <p>Ариус создал Люсию как искусственного демона, но она сбежала. В финале он сливается с силой Аргосака, но терпит поражение от Люсии и Данте.</p>
+                    `
+                },
+                {
+                    id: 'credo', icon: '⚔️', title: 'Кредо', year: 'DMC 4', tag: 'Союзник / Антагонист',
+                    subtitle: 'Капитан Святых Рыцарей',
+                    story: `
+                        <p><span class="highlight">Кредо</span> — капитан Святых Рыцарей Ордена Меча, старший брат Кирие и наставник Неро. Изначально он противостоит Неро, но позже осознаёт обман Санктуса и помогает ему.</p>
+                        <p>Кредо принимает «Вознесение» и становится демоном <span class="highlight">Анджело Кредо</span>, но сохраняет контроль. Он погибает, защищая Неро и Кирие от Санктуса.</p>
+                    `
+                },
+                {
+                    id: 'kyrie', icon: '🎤', title: 'Кирие', year: 'DMC 4–5', tag: 'Союзник',
+                    subtitle: 'Певица Ордена',
+                    story: `
+                        <p><span class="highlight">Кирие</span> — добрая и мягкая девушка, сестра Кредо и возлюбленная Неро. Она выросла вместе с Неро после того, как их родители погибли.</p>
+                        <p>Кирие — певица Ордена Меча. В DMC4 её похищают, чтобы использовать в ритуале, но Неро спасает её. После событий DMC5 она живёт с Неро и поддерживает его.</p>
+                    `
+                },
+                {
+                    id: 'griffon', icon: '🦅', title: 'Грифон', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
+                    subtitle: 'Птица-демон',
+                    story: `
+                        <p><span class="highlight">Грифон</span> — в DMC1 был генералом Мундуса, сражавшимся с Данте. В DMC5 он появляется как фамильяр V, воплощая часть воспоминаний Вергилия.</p>
+                        <p>Грифон болтлив, саркастичен и любит подшучивать над окружающими, но предан V.</p>
+                    `
+                },
+                {
+                    id: 'shadow', icon: '🐆', title: 'Шэдоу', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
+                    subtitle: 'Пантера',
+                    story: `
+                        <p><span class="highlight">Шэдоу</span> — демоническая пантера, фамильяр V. Она сражается, манипулируя своим телом и создавая шипы. Шэдоу — молчаливая и смертоносная, воплощает инстинкты и воспоминания Вергилия.</p>
+                    `
+                },
+                {
+                    id: 'nightmare', icon: '🗿', title: 'Найтмер', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
+                    subtitle: 'Живое оружие',
+                    story: `
+                        <p><span class="highlight">Найтмер</span> — гигантский демонический голем, созданный Мундусом как биологическое оружие. В DMC5 он становится фамильяром V, воплощая его самые глубокие страхи.</p>
+                        <p>Найтмер медлителен, но обладает огромной силой и выносливостью.</p>
+                    `
+                },
+                {
+                    id: 'matier', icon: '🧝', title: 'Матиер', year: 'DMC 2', tag: 'Союзник',
+                    subtitle: 'Лидер клана Вьё-де-Марли',
+                    story: `
+                        <p><span class="highlight">Матиер</span> — пожилая женщина, лидер клана охотников на демонов на острове Думари. В молодости она сражалась бок о бок со Спардой.</p>
+                        <p>Она удочерила Люсию и обучила её пути охотницы. Именно Матиер нанимает Данте в DMC2, чтобы остановить Ариуса.</p>
+                    `
+                },
+                {
+                    id: 'morrison', icon: '🕶️', title: 'Моррисон', year: 'DMC 5', tag: 'Союзник',
+                    subtitle: 'Информатор Данте',
+                    story: `
+                        <p><span class="highlight">Моррисон</span> — информатор и посредник Данте, который находит для него заказы и передаёт сведения. В DMC5 именно он связывает Данте с V.</p>
+                        <p>Спокойный, деловой и невозмутимый, Моррисон знает о демоническом мире больше, чем кажется обычному человеку.</p>
+                    `
+                },
+                {
+                    id: 'enzo', icon: '💼', title: 'Энзо', year: 'Манга / Новеллы', tag: 'Союзник',
+                    subtitle: 'Первый информатор Данте',
+                    story: `
+                        <p><span class="highlight">Энзо Ферино</span> — информатор и посредник Данте, появляющийся в ранних новеллах и манге. Именно он находит для молодого Данте первые заказы, когда тот ещё работал под именем Тони Рэдгрейва.</p>
+                    `
+                }
+            ],
+            anime: [
+                {
+                    id: 'dmc-anime', icon: '📺', title: 'Devil May Cry: The Animated Series', year: '2007', tag: 'Аниме / 12 серий',
+                    subtitle: 'Демон против демонов',
+                    story: `
+                        <p>Аниме-сериал студии <span class="highlight">Madhouse</span>, снятый по мотивам одноимённой игры. Премьера состоялась в 2007 году, всего вышло 12 серий по 25 минут. В России сериал известен под названием «Демон против демонов».</p>
+                        <p>Сюжет вращается вокруг <span class="highlight">Данте</span> — охотника на демонов, который едва сводит концы с концами. В его офисе, бывшем ресторане, поселяется <span class="highlight">Пэтти Лоуэлл</span> — девочка, которую он спас. Она берёт на себя уборку и готовку, пока Данте спит или ест пиццу.</p>
+                        <p>Главным антагонистом выступает демон <span class="highlight">Сид</span>, который постепенно собирает силу, чтобы переродиться в могущественного огнедышащего демона. В финале Данте предстоит сразиться с ним в решающей битве.</p>
+                        <p>Аниме также включает таких персонажей, как <span class="highlight">Триш</span>, <span class="highlight">Леди</span> и <span class="highlight">Моррисон</span>, и расширяет повседневную жизнь Данте за пределами игр.</p>
+                    `
+                },
+                {
+                    id: 'dmc-netflix', icon: '🎬', title: 'Devil May Cry (Netflix)', year: '2025–2027', tag: 'Аниме / 3 сезона',
+                    subtitle: 'Адаптация от Adi Shankar',
+                    story: `
+                        <p><span class="highlight">Devil May Cry</span> от Netflix — второй аниме-сериал по франшизе, созданный шоураннером <span class="highlight">Ади Шанкаром</span> (известен по «Castlevania») и анимированный южнокорейской студией <span class="highlight">Studio Mir</span> («Легенда о Корре», «Ведьмак: Кошмар Волка»).</p>
+                        <p>Первый сезон вышел <span class="highlight">3 апреля 2025 года</span> и состоит из 8 серий. Сюжет разворачивается вокруг молодого <span class="highlight">Данте</span> — наёмного охотника на демонов, который оказывается втянут в заговор сил, стремящихся открыть портал между миром людей и демонов. Адаптация вольно основана на событиях DMC3 и представляет собой альтернативный приквел к играм.</p>
+                        <p>Второй сезон вышел <span class="highlight">12 мая 2026 года</span> и сосредоточен на противостоянии Данте с его братом-близнецом <span class="highlight">Вергилием</span>. В числе антагонистов также появляются <span class="highlight">Мундус</span> и Ариус. Шоураннер подтвердил, что сериал задуман как трилогия: первый сезон — «Inferno», второй — «Purgatorio», третий — «Paradiso». Третий сезон станет финальным и завершит «Сагу Force Edge».</p>
+                        <p>Озвучка: <span class="highlight">Johnny Yong Bosch</span> — Данте (он же был голосом Неро в DMC4–5), <span class="highlight">Robbie Daymond</span> — Вергилий, <span class="highlight">Scout Taylor-Compton</span> — Леди. Один из персонажей, вице-президент Бейнс, стал последней ролью легендарного <span class="highlight">Кевина Конроя</span> (Бэтмен из DCAU).</p>
+                        <div class="quote">«Для тех, кто следил за названиями эпизодов: я показывал структуру всё это время. Это всегда была "Божественная комедия" Данте с пушками и красным плащом.» — Ади Шанкар</div>
+                    `
+                }
+            ]
+        };
+
+        const itemsGrid = document.getElementById('itemsGrid');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const modalStory = document.getElementById('modalStory');
+        const modalClose = document.getElementById('modalClose');
+
+        let lastFocusedElement = null;
+
+        function renderItems(category) {
+            const items = loreData[category] || [];
+            itemsGrid.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'item-card';
+                card.style.animationDelay = `${index * 0.04}s`;
+                card.innerHTML = `
+                    <span class="card-icon">${item.icon}</span>
+                    <h3>${item.title}</h3>
+                    <p>${item.subtitle}</p>
+                    <span class="tag">${item.year} · ${item.tag}</span>
+                `;
+                card.addEventListener('click', () => openModal(item, card));
+                itemsGrid.appendChild(card);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openModal(item, trigger) {
+            lastFocusedElement = trigger || null;
+            modalTitle.textContent = item.title;
+            modalSubtitle.textContent = `${item.year} · ${item.tag}`;
+            modalStory.innerHTML = item.story;
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            modalClose.focus();
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+                lastFocusedElement = null;
+            }
+        }
+
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderItems(btn.dataset.category);
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
+            if (e.key === 'Tab' && modalOverlay.classList.contains('active')) {
+                const focusable = modalOverlay.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
+                if (!focusable.length) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+        });
+
+        renderItems('games');
+    </script>
+</body>
+</html>
