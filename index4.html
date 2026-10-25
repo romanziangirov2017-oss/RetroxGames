@@ -1,848 +1,998 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Горячая картошка: Перезагрузка</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Vergil Clicker — Judgement Cut Edition</title>
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-    html, body { height: 100%; }
-    body {
-        background: radial-gradient(circle at 50% 0%, #1b1b25 0%, #08080c 70%);
-        color: #fff;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        overflow: hidden;
-        padding: 8px;
-        touch-action: none;
-    }
-    #info {
-        font-size: 16px;
-        margin-bottom: 8px;
-        text-align: center;
-        min-height: 46px;
-        max-width: 620px;
-        font-weight: bold;
-        color: #ff9f43;
-        line-height: 1.35;
-    }
-    #game-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 620px;
-    }
-    canvas {
-        background-color: #14141c;
-        border: 4px solid #2b2b3a;
-        border-radius: 14px;
-        display: block;
-        width: 100%;
-        height: auto;
-        box-shadow: 0 10px 30px rgba(0,0,0,.75);
-    }
+*{box-sizing:border-box}
+html,body{position:fixed;top:0;left:0;width:100%;height:100%;overflow:hidden;margin:0;padding:0;background:#0b132b;color:#fff;font-family:sans-serif;user-select:none;transition:background .5s}
+.game-wrapper{display:flex;flex-direction:column;align-items:center;width:100%;max-width:380px;height:100%;padding:8px;box-sizing:border-box;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;position:relative;z-index:2;margin:0 auto}
+.game-wrapper::-webkit-scrollbar{display:none}
+.game-wrapper{scrollbar-width:none}
 
-    /* ---------- НИЖНЯЯ ПАНЕЛЬ (джойстик + кнопка) ---------- */
-    #controls {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        max-width: 620px;
-        margin-top: 10px;
-    }
-    #controls-right {
-        margin-left: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 8px;
-        min-width: 0;
-    }
-    #active-buffs {
-        font-size: 13px;
-        color: #9aa0b0;
-        line-height: 1.4;
-        text-align: right;
-        min-height: 18px;
-    }
-    button {
-        padding: 12px 30px;
-        font-size: 17px;
-        background: linear-gradient(45deg, #ff9f43, #ff5252);
-        color: #fff;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: bold;
-        letter-spacing: .3px;
-        box-shadow: 0 4px 18px rgba(255,120,60,.45);
-        transition: transform .12s ease;
-        white-space: nowrap;
-    }
-    button:hover { transform: scale(1.05); }
-    button:active { transform: scale(.97); }
+.top-bar{display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px;font-size:.72rem;flex-shrink:0}
+.badge{background:rgba(255,255,255,.08);border:1px solid #1d3557;padding:3px 8px;border-radius:6px;font-weight:bold;letter-spacing:1px}
+.badge.lvl{color:#00f5d4;border-color:#00f5d4;text-shadow:0 0 6px #00f5d4}
+.badge.combo{color:#ffd700;border-color:#ffd700;text-shadow:0 0 6px #ffd700;transition:all .2s}
+.badge.combo.hot{background:#ffd700;color:#000;box-shadow:0 0 15px #ffd700}
+.save-btn{background:rgba(255,255,255,.08);border:1px solid #1d3557;color:#fff;padding:3px 8px;border-radius:6px;font-size:.72rem;cursor:pointer;font-weight:bold;font-family:inherit}
+.save-btn:hover{background:rgba(255,255,255,.15)}
 
-    /* ---------- ДЖОЙСТИК: ВНЕ ИГРОВОГО ПОЛЯ ---------- */
-    #joystick-zone {
-        position: relative;
-        width: 112px;
-        height: 112px;
-        flex-shrink: 0;
-        border-radius: 50%;
-        background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.12), rgba(255,255,255,.03) 70%);
-        border: 2px solid rgba(255,255,255,.18);
-        box-shadow: 0 0 22px rgba(0,0,0,.45) inset;
-        display: none;
-        touch-action: none;
-    }
-    #joystick-zone.active { display: block; }
-    #joystick-stick {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 52px;
-        height: 52px;
-        margin: -26px 0 0 -26px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 35% 30%, #ffd479, #ff9f43 60%, #e8761f);
-        box-shadow: 0 5px 16px rgba(0,0,0,.6), inset 0 -4px 8px rgba(0,0,0,.28);
-        pointer-events: none;
-        will-change: transform;
-    }
+.score{font-size:2.2rem;font-weight:bold;text-shadow:0 0 20px #fff;margin:0;cursor:pointer;line-height:1.1}
+.status{font-size:.9rem;color:#90e0ef;font-style:italic;min-height:18px;transition:all .3s;text-align:center;margin:2px 0}
+.click-info{font-size:.72rem;color:#a8dadc;margin-bottom:4px}
 
-    /* на низких экранах (ландшафт телефона) всё компактнее */
-    @media (max-height: 560px) {
-        #info { display: none; }
-        #game-wrapper { max-width: min(620px, 78vh); }
-        #joystick-zone { width: 88px; height: 88px; }
-        #joystick-stick { width: 42px; height: 42px; margin: -21px 0 0 -21px; }
-        button { padding: 9px 20px; font-size: 15px; }
-    }
+.v-container{width:130px;height:130px;margin:4px 0;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative}
+.v-btn{width:130px;height:130px;background:radial-gradient(circle,#0077b6 0%,#03045e 100%);border:4px solid #48cae4;border-radius:50%;cursor:pointer;box-shadow:0 0 25px rgba(0,119,182,.6);transition:all .2s;display:flex;justify-content:center;align-items:center;font-weight:bold;font-size:.95rem;letter-spacing:2px}
+.v-btn:active{transform:scale(.95);box-shadow:0 0 35px #48cae4}
+.v-btn.dt{background:radial-gradient(circle,#00bbf9 0%,#03045e 100%);border-color:#00f5d4;box-shadow:0 0 35px #00bbf9;text-shadow:0 0 10px #00f5d4}
+.v-btn.sdt{background:radial-gradient(circle,#ff0055 0%,#330011 100%);border-color:#ff4d6d;box-shadow:0 0 40px #ff0055;text-shadow:0 0 10px #ff4d6d}
+
+.gold-v{position:absolute;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#ffd700,#ff8c00);border:3px solid #fff;cursor:pointer;z-index:50;display:flex;justify-content:center;align-items:center;font-size:1.4rem;box-shadow:0 0 30px #ffd700,0 0 60px #ff8c00;animation:goldFloat 2s ease-in-out infinite, goldGlow 1s ease-in-out infinite}
+@keyframes goldFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.05)}}
+@keyframes goldGlow{0%,100%{box-shadow:0 0 30px #ffd700,0 0 60px #ff8c00}50%{box-shadow:0 0 50px #ffd700,0 0 100px #ff0055}}
+
+.f-text{position:absolute;pointer-events:none;font-weight:bold;font-size:1.15rem;animation:f .6s ease-out forwards;z-index:5;white-space:nowrap}
+.crit{font-size:1.6rem!important;text-shadow:0 0 20px #ffd700,0 0 40px #ff0055!important}
+
+.s-box{width:100%;background:rgba(11,19,43,.7);border:2px solid #1d3557;border-radius:10px;padding:6px;margin-bottom:5px;flex-shrink:0;transition:border-color .3s,box-shadow .3s}
+.s-box.allies{max-height:120px;overflow-y:auto;overflow-x:hidden;padding-right:3px;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.s-box.allies::-webkit-scrollbar{width:4px}
+.s-box.allies::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:2px}
+.s-box.allies::-webkit-scrollbar-thumb{background:#48cae4;border-radius:2px}
+.s-box.allies.full-house{border-color:#ffd700;box-shadow:0 0 15px #ffd700,inset 0 0 10px rgba(255,215,0,.2)}
+.s-title{text-align:center;font-size:.82rem;text-transform:uppercase;color:#48cae4;margin-bottom:4px;border-bottom:1px solid #1d3557;padding-bottom:2px;letter-spacing:1px}
+.s-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;background:rgba(255,255,255,.05);padding:4px 6px;border-radius:6px;transition:background .3s,box-shadow .3s}
+.s-item:last-child{margin-bottom:0}
+.s-item.powered{background:linear-gradient(90deg,rgba(255,0,85,.15),rgba(255,215,0,.1));box-shadow:0 0 12px rgba(255,215,0,.4)}
+.s-item b{font-size:.82rem}
+.s-item .info{font-size:.65rem;color:#a8dadc}
+.buy-btn{background:#0077b6;color:#fff;border:none;padding:4px 6px;border-radius:5px;font-weight:bold;cursor:pointer;width:84px;font-size:.72rem;flex-shrink:0;font-family:inherit}
+.buy-btn:disabled{background:#4a4e69;opacity:.6;cursor:not-allowed}
+.buy-btn.bought{background:#2a9d8f!important;opacity:1!important;cursor:not-allowed}
+.buy-btn.left{background:#4a1a1a!important;color:#ff4d6d!important;opacity:1!important;cursor:not-allowed}
+
+.y-wrap{width:100%;height:13px;background:rgba(11,19,43,.85);border:1px solid #4a3500;border-radius:7px;overflow:hidden;margin:0 0 5px;position:relative;flex-shrink:0}
+.y-fill{height:100%;width:0%;background:linear-gradient(90deg,#4a3500,#8b6914,#ffd700,#fff);transition:width .3s ease}
+.y-fill.stage2{background:linear-gradient(90deg,#8b6914,#ffd700,#ff0055,#ffd700)}
+.y-fill.stage3{background:linear-gradient(90deg,#ff0055,#ffd700,#fff,#ffd700,#ff0055)}
+.y-fill.end{background:linear-gradient(90deg,#ff0055,#ff0000,#fff,#ff0000,#ff0055);animation:endPulse 1s ease-in-out infinite}
+@keyframes endPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.5)}}
+.y-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:bold;letter-spacing:1.2px;color:#fff;text-shadow:0 0 4px #000;pointer-events:none}
+
+.mm-wrap{width:100%;height:15px;background:rgba(11,19,43,.85);border:2px solid #1d3557;border-radius:9px;overflow:hidden;margin:0 0 5px;position:relative;cursor:default;transition:all .3s;flex-shrink:0}
+.mm-fill{height:100%;width:0%;background:linear-gradient(90deg,#0077b6,#00bbf9,#48cae4);transition:width .25s ease,background .3s}
+.mm-wrap.full{border-color:#ffd700;box-shadow:0 0 22px #ffd700;cursor:pointer;animation:fullPulse 1s ease-in-out infinite}
+.mm-wrap.full .mm-fill{background:linear-gradient(90deg,#ffd700,#ff8c00,#ff0055,#ffd700)}
+.mm-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:bold;letter-spacing:1.2px;color:#fff;text-shadow:0 0 4px #000;pointer-events:none}
+body.overdrive{background:radial-gradient(circle at 50% 50%,#3a0a1a,#1a0033,#001133)!important}
+body.gold{background:radial-gradient(circle at 50% 50%,#3a2a00,#1a1000,#000)!important}
+body.overdrive .v-btn{box-shadow:0 0 60px #ffd700,0 0 100px #ff0055;border-color:#ffd700}
+
+.c-line{position:fixed;background:rgba(255,255,255,.9);box-shadow:0 0 15px #00bbf9,0 0 5px #fff;transform-origin:top left;z-index:99;pointer-events:none}
+.flash{position:fixed;inset:0;background:#fff;z-index:150;pointer-events:none;animation:flashOut .5s ease-out forwards}
+
+.rs{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.94);flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:20px}
+.rb-btn{background:linear-gradient(45deg,#ff0055,#9b5de5);color:#fff;border:none;padding:14px 32px;font-size:1.3rem;font-weight:bold;border-radius:50px;cursor:pointer;box-shadow:0 0 30px #ff0055;letter-spacing:2px;font-family:inherit}
+.rb-btn:hover{transform:scale(1.05);box-shadow:0 0 50px #ff0055}
+
+.toasts{position:fixed;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;z-index:180;pointer-events:none;max-width:210px}
+.toast{background:linear-gradient(135deg,#1a2a4a,#0a1030);border:2px solid #ffd700;border-radius:8px;padding:6px 10px;font-size:.72rem;font-weight:bold;color:#ffd700;text-shadow:0 0 6px #ffd700;box-shadow:0 0 15px rgba(255,215,0,.5);animation:toastIn .3s ease, toastOut .3s ease 2.7s forwards}
+.toast .t-title{color:#fff;font-size:.62rem;letter-spacing:1px;display:block;margin-bottom:1px;opacity:.7}
+@keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes toastOut{to{transform:translateX(120%);opacity:0}}
+
+@keyframes fullPulse{0%,100%{box-shadow:0 0 22px #ffd700}50%{box-shadow:0 0 38px #ff0055,0 0 65px #ffd700}}
+@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,-2px)}80%{transform:translate(3px,4px)}}
+.shake{animation:shake .35s ease}
+@keyframes f{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-80px)}}
+@keyframes flashOut{0%{opacity:1}100%{opacity:0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
+<div class="game-wrapper" id="gw">
+    <div class="top-bar">
+        <span class="badge lvl" id="lvlBadge">Lv.1</span>
+        <span class="badge combo" id="comboBadge">×1</span>
+        <button class="save-btn" id="saveBtn">💾 Save</button>
+    </div>
+    <div style="text-align:center;width:100%">
+        <h1 style="font-size:1.1rem;text-transform:uppercase;color:#48cae4;margin:0;letter-spacing:1px">Vergil Motivation</h1>
+        <div class="score" id="s">0</div>
+        <div class="status" id="st">You lack motivation...</div>
+        <div class="click-info" id="cc">Clicks: 0 / 15000</div>
+    </div>
 
-<div id="info">Не дайте картошке взорваться у вас — передавайте её касанием!<br>Управление: WASD / стрелки / джойстик</div>
+    <div class="v-container">
+        <div class="v-btn" id="vb">VERGIL</div>
+        <div class="gold-v" id="goldV" style="display:none">⭐</div>
+    </div>
 
-<div id="game-wrapper">
-    <canvas id="game-canvas" width="600" height="400"></canvas>
-</div>
+    <div class="mm-wrap" id="mmWrap">
+        <div class="mm-fill" id="mmFill"></div>
+        <div class="mm-label" id="mmLabel">MOTIVATION 0%</div>
+    </div>
 
-<div id="controls">
-    <div id="joystick-zone"><div id="joystick-stick"></div></div>
-    <div id="controls-right">
-        <div id="active-buffs"></div>
-        <button id="start-btn">Старт</button>
+    <div class="y-wrap" id="yWrap">
+        <div class="y-fill" id="yFill"></div>
+        <div class="y-label" id="yLabel">YAMATO 0/15000</div>
+    </div>
+
+    <div class="s-box allies" id="alliesBox">
+        <div class="s-title">⚔ Recruit Allies</div>
+        <div class="s-item"><div><b style="color:#e63946">Dante</b><div class="info" id="infoDante">+1/sec</div></div><button class="buy-btn" id="bD" data-ally="dante">Cost: 50</button></div>
+        <div class="s-item"><div><b style="color:#457b9d">Nero</b><div class="info" id="infoNero">+2/sec</div></div><button class="buy-btn" id="bN" data-ally="nero">Cost: 100</button></div>
+        <div class="s-item"><div><b style="color:#9b5de5">V (Vi)</b><div class="info">+5/sec</div></div><button class="buy-btn" id="bV" data-ally="v">Cost: 250</button></div>
+        <div class="s-item"><div><b style="color:#ffb703">Lady</b><div class="info">+12/sec</div></div><button class="buy-btn" id="bL" data-ally="lady">Cost: 400</button></div>
+        <div class="s-item"><div><b style="color:#ffd700">Trish</b><div class="info">+25/sec</div></div><button class="buy-btn" id="bT" data-ally="trish">Cost: 750</button></div>
+        <div class="s-item"><div><b style="color:#e76f51">Nico</b><div class="info">+55/sec</div></div><button class="buy-btn" id="bNi" data-ally="nico">Cost: 1200</button></div>
+        <div class="s-item"><div><b style="color:#9d0208">Urizen</b><div class="info">+130/sec</div></div><button class="buy-btn" id="bU" data-ally="urizen">Cost: 2000</button></div>
+    </div>
+
+    <div class="s-box">
+        <div class="s-title">⚡ Power Upgrades</div>
+        <div class="s-item"><div><b style="color:#caf0f8">Click +1</b><div class="info">+1 per click</div></div><button class="buy-btn" id="upC1">Cost: 200</button></div>
+        <div class="s-item"><div><b style="color:#caf0f8">Click +5</b><div class="info">+5 per click</div></div><button class="buy-btn" id="upC5">Cost: 1500</button></div>
+        <div class="s-item"><div><b style="color:#caf0f8">Auto +1</b><div class="info">+1 click/sec</div></div><button class="buy-btn" id="upA1">Cost: 3000</button></div>
+        <div class="s-item"><div><b style="color:#caf0f8">Auto +10</b><div class="info">+10 clicks/sec</div></div><button class="buy-btn" id="upA10">Cost: 25000</button></div>
+    </div>
+
+    <div class="s-box" style="margin-bottom:8px">
+        <div class="s-title">🔥 Devil Awaken</div>
+        <div class="s-item"><div><b style="color:#00f5d4">Devil Trigger</b><div class="info">x15 Click</div></div><button class="buy-btn" id="btnDT" disabled>500 Clicks</button></div>
+        <div class="s-item"><div><b style="color:#ff4d6d">Sin Devil Trigger</b><div class="info">x50 Click</div></div><button class="buy-btn" id="btnSDT" disabled>1000 Clicks</button></div>
     </div>
 </div>
 
+<div class="toasts" id="toasts"></div>
+
+<div class="rs" id="rs">
+    <h2 id="rsTitle" style="font-size:1.8rem;margin-bottom:10px;text-transform:uppercase;color:#ff4d6d;text-shadow:0 0 15px #ff0055;text-align:center;padding:0 20px">JUDGEMENT CUT</h2>
+    <p id="rsMsg" style="color:#ffd700;text-align:center;margin-bottom:12px;font-size:.9rem;padding:0 20px"></p>
+    <div style="text-align:center;color:#a8dadc;font-size:.75rem;margin-bottom:12px">
+        Motivation: <b id="rsScore" style="color:#fff">0</b> • Level: <b id="rsLevel" style="color:#00f5d4">1</b>
+    </div>
+    <div id="rsCountdown" style="color:#ff4d6d;font-size:1rem;font-weight:bold;letter-spacing:2px;margin-bottom:20px;text-align:center;text-shadow:0 0 10px #ff0055"></div>
+    <button class="rb-btn" id="rb">REBIRTH</button>
+</div>
+
 <script>
-(() => {
-'use strict';
+/* ===== CONSTANTS ===== */
+const ALLY_KEYS = ['dante','nero','v','lady','trish','nico','urizen'];
+const ALLY_INCOME = {dante:1, nero:2, v:5, lady:12, trish:25, nico:55, urizen:130};
+const SHATTER_STAGES = [5000, 10000, 15000, 35000];
+const SAVE_KEY = 'vergil_clicker_save_v3';
 
-/* ============================ БАЗА ============================ */
-const canvas   = document.getElementById('game-canvas');
-const ctx      = canvas.getContext('2d');
-const infoEl   = document.getElementById('info');
-const startBtn = document.getElementById('start-btn');
-const joyZone  = document.getElementById('joystick-zone');
-const joyStick = document.getElementById('joystick-stick');
-const buffsEl  = document.getElementById('active-buffs');
+/* ===== STATE ===== */
+let n=0, c=0, p=1, a=true;
+let o = {dante:false,nero:false,v:false,lady:false,trish:false,nico:false,urizen:false,dt:false,sdt:false};
+let upgrades = {c1:false, c5:false, a1:false, a10:false};
+let clickBonus = 0, autoClicks = 0;
+let mainInterval = null;
+let meter=0, odActive=false, odEndTime=0, odTick=null, odMult=1;
+let secretAura=false, secretInterval=null;
+let scoreClicks=0, scoreClickTimer=null;
+let shatterStage=0, yamatoTriggered=false, yamatoUnlocked=false, shatterInProgress=false;
+let achievements = {};
+let comboCount=0, comboResetTimer=null, comboMult=1;
+let goldActive=false, goldEndTime=0, goldSpawnTimer=null, goldElTimer=null;
+let bigCutBonusEndTime=0;
+let rebirthTimer=null, endTimer=null;
+let dantePowered=false, neroPowered=false;
 
-const W = canvas.width;
-const H = canvas.height;
+/* ===== AUDIO ===== */
+let actx=null;
+function soundOn(){ if(!actx){ try{ actx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} } }
+function tone(freq,dur,type,vol,slideTo){
+    if(!actx)return;
+    try{
+        const osc=actx.createOscillator(),g=actx.createGain();
+        osc.type=type||'sine'; osc.frequency.value=freq;
+        if(slideTo)osc.frequency.exponentialRampToValueAtTime(slideTo,actx.currentTime+dur);
+        g.gain.value=vol||0.08;
+        g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dur);
+        osc.connect(g);g.connect(actx.destination);
+        osc.start();osc.stop(actx.currentTime+dur);
+    }catch(e){}
+}
+function sndClick(){ tone(480+Math.random()*180,0.06,'square',0.05); }
+function sndCrit(){ tone(880,0.08,'square',0.08); setTimeout(()=>tone(1320,0.13,'square',0.08),60); }
+function sndBuy(){ tone(523,0.1,'sine',0.1); setTimeout(()=>tone(784,0.15,'sine',0.1),80); }
+function sndOver(){ [440,660,880,1100].forEach((f,i)=>setTimeout(()=>tone(f,0.2,'triangle',0.12),i*90)); }
+function sndShatter(){ tone(1200,0.6,'sawtooth',0.15,80); setTimeout(()=>tone(2000,1.2,'triangle',0.12,400),100); }
+function sndAchievement(){ [660,880,1320].forEach((f,i)=>setTimeout(()=>tone(f,0.15,'sine',0.12),i*100)); }
+function sndGold(){ [880,1320,1760].forEach((f,i)=>setTimeout(()=>tone(f,0.2,'triangle',0.15),i*80)); }
 
-const CFG = {
-    playerSpeed:    3.5,   // игрок заметно быстрее ботов
-    botSpeed:       2.5,
-    botHolderBonus: 0.9,   // бот с картошкой догоняет игрока
-    speedMul:       1.65,
-    slowMul:        0.45,
-    passCooldown:   16,
-    buffSpeed:      300,
-    buffFreeze:     120,
-    itemMax:        3,
-    itemInterval:   3500,
-    roundMin:       10000,
-    roundMax:       18000,
-    fleeRadius:     220
-};
-
-const ICON = { speed: '⚡', shield: '🛡️', freeze: '🧊' };
-
-const state = {
-    players: [],
-    items: [],
-    particles: [],
-    texts: [],
-    potatoHolder: null,
-    active: false,
-    startTime: 0,
-    roundLength: 14000,
-    spawnTimer: null,
-    endTimer: null,
-    shake: 0,
-    wins: 0,
-    losses: 0
-};
-
-const keys = Object.create(null);
-const JOY = { id: null, active: false, x: 0, y: 0, mag: 0 };
-
-const clamp = (v, a, b) => v < a ? a : (v > b ? b : v);
-const rand  = (a, b) => a + Math.random() * (b - a);
-const dist  = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-
-function shade(hex, amt) {
-    const n = parseInt(hex.slice(1), 16);
-    const r = clamp(((n >> 16) & 255) + amt, 0, 255);
-    const g = clamp(((n >> 8) & 255) + amt, 0, 255);
-    const b = clamp((n & 255) + amt, 0, 255);
-    return `rgb(${r},${g},${b})`;
+/* ===== MUSIC LOOPS ===== */
+let musicTimer = null, musicActive = false;
+function stopMusic(){
+    musicActive = false;
+    if(musicTimer){ clearInterval(musicTimer); musicTimer = null; }
+}
+function playBuryTheme(){
+    const lead = [165, 196, 220, 247, 220, 196, 165, 147];
+    const bass = [82, 82, 98, 82, 82, 73, 82, 82];
+    stopMusic(); musicActive = true;
+    let i = 0;
+    musicTimer = setInterval(()=>{
+        if(!a || !musicActive){ stopMusic(); return; }
+        tone(lead[i % lead.length], 0.4, 'triangle', 0.09);
+        tone(bass[i % bass.length], 0.5, 'sawtooth', 0.06);
+        i++;
+    }, 420);
+}
+function playStormTheme(){
+    const lead = [330, 294, 262, 247, 330, 349, 392, 440];
+    const bass = [82, 98, 82, 110, 82, 98, 110, 123];
+    stopMusic(); musicActive = true;
+    let i = 0;
+    musicTimer = setInterval(()=>{
+        if(!a || !musicActive){ stopMusic(); return; }
+        tone(lead[i % lead.length], 0.42, 'square', 0.07);
+        tone(bass[i % bass.length], 0.55, 'sawtooth', 0.08);
+        i++;
+    }, 450);
 }
 
-/* ============================ ВВОД ============================ */
-window.addEventListener('keydown', e => {
-    keys[e.code] = true;
-    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
-    if (e.code === 'Space' && !state.active) initGame();
-});
-window.addEventListener('keyup', e => { keys[e.code] = false; });
-window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
+/* ===== DOM ===== */
+const s=document.getElementById('s'), st=document.getElementById('st'),
+      vb=document.getElementById('vb'), cc=document.getElementById('cc'),
+      rs=document.getElementById('rs'), bDT=document.getElementById('btnDT'),
+      bSDT=document.getElementById('btnSDT'), mmWrap=document.getElementById('mmWrap'),
+      mmFill=document.getElementById('mmFill'), mmLabel=document.getElementById('mmLabel'),
+      yWrap=document.getElementById('yWrap'), yFill=document.getElementById('yFill'),
+      yLabel=document.getElementById('yLabel'), alliesBox=document.getElementById('alliesBox'),
+      toasts=document.getElementById('toasts'), lvlBadge=document.getElementById('lvlBadge'),
+      comboBadge=document.getElementById('comboBadge'), goldV=document.getElementById('goldV'),
+      rsTitle=document.getElementById('rsTitle'), rsMsg=document.getElementById('rsMsg'),
+      rsScore=document.getElementById('rsScore'), rsLevel=document.getElementById('rsLevel'),
+      rsCountdown=document.getElementById('rsCountdown'), rb=document.getElementById('rb'),
+      saveBtn=document.getElementById('saveBtn');
 
-/* ---- джойстик (фиксирован под полем) ---- */
-function joyStart(e) {
-    if (!state.active) return;
-    e.preventDefault();
-    JOY.id = e.pointerId;
-    JOY.active = true;
-    try { joyZone.setPointerCapture(e.pointerId); } catch (_) {}
-    joyUpdate(e);
+const items=[
+    {id:'bD',key:'dante',cost:50},
+    {id:'bN',key:'nero',cost:100},
+    {id:'bV',key:'v',cost:250},
+    {id:'bL',key:'lady',cost:400},
+    {id:'bT',key:'trish',cost:750},
+    {id:'bNi',key:'nico',cost:1200},
+    {id:'bU',key:'urizen',cost:2000}
+];
+const upgradeItems=[
+    {id:'upC1', key:'c1', cost:200,   type:'click', amount:1},
+    {id:'upC5', key:'c5', cost:1500,  type:'click', amount:5},
+    {id:'upA1', key:'a1', cost:3000,  type:'auto',  amount:1},
+    {id:'upA10',key:'a10',cost:25000, type:'auto',  amount:10}
+];
+
+/* ===== HELPERS ===== */
+function isFullHouse(){ return ALLY_KEYS.every(k => o[k]); }
+function getPassive(){
+    let base = autoClicks;
+    if(dantePowered) base += 50; else if(o.dante) base += ALLY_INCOME.dante;
+    if(neroPowered) base += 30; else if(o.nero) base += ALLY_INCOME.nero;
+    if(o.v) base += ALLY_INCOME.v;
+    if(o.lady) base += ALLY_INCOME.lady;
+    if(o.trish) base += ALLY_INCOME.trish;
+    if(o.nico) base += ALLY_INCOME.nico;
+    if(o.urizen) base += ALLY_INCOME.urizen;
+    if(isFullHouse()) base = Math.floor(base * 1.2);
+    if(odActive) base = Math.floor(base * 1.5);
+    if(goldActive) base = Math.floor(base * 2);
+    if(Date.now() < bigCutBonusEndTime) base = Math.floor(base * 1.5);
+    return base;
 }
-function joyUpdate(e) {
-    if (!JOY.active || e.pointerId !== JOY.id) return;
-    e.preventDefault();
-    const r  = joyZone.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const max = r.width / 2 - joyStick.offsetWidth / 2;
-
-    let dx = e.clientX - cx;
-    let dy = e.clientY - cy;
-    const d = Math.hypot(dx, dy);
-    if (d > max) { dx = dx / d * max; dy = dy / d * max; }
-
-    joyStick.style.transform = `translate(${dx}px, ${dy}px)`;
-
-    JOY.x = dx / max;
-    JOY.y = dy / max;
-    JOY.mag = Math.min(1, Math.hypot(JOY.x, JOY.y));
-    if (JOY.mag < 0.18) { JOY.x = 0; JOY.y = 0; JOY.mag = 0; }
-}
-function joyEnd(e) {
-    if (e.pointerId !== JOY.id) return;
-    JOY.active = false;
-    JOY.id = null;
-    JOY.x = JOY.y = JOY.mag = 0;
-    joyStick.style.transform = 'translate(0px, 0px)';
-}
-joyZone.addEventListener('pointerdown', joyStart);
-joyZone.addEventListener('pointermove', joyUpdate);
-joyZone.addEventListener('pointerup', joyEnd);
-joyZone.addEventListener('pointercancel', joyEnd);
-joyZone.addEventListener('lostpointercapture', joyEnd);
-
-function resetJoystick() {
-    JOY.active = false; JOY.id = null;
-    JOY.x = JOY.y = JOY.mag = 0;
-    joyStick.style.transform = 'translate(0px, 0px)';
+function getClickPower(){ return (p + clickBonus) * odMult * comboMult; }
+function getLevel(){ return Math.floor(c/500) + 1; }
+function safeInterval(fn, ms){
+    if(mainInterval) clearInterval(mainInterval);
+    mainInterval = setInterval(fn, ms);
 }
 
-/* ============================ ЭФФЕКТЫ ============================ */
-function burst(x, y, color, count, power = 3) {
-    for (let i = 0; i < count; i++) {
-        const a = Math.random() * Math.PI * 2;
-        const s = Math.random() * power + 0.6;
-        state.particles.push({
-            x, y,
-            vx: Math.cos(a) * s,
-            vy: Math.sin(a) * s,
-            life: 1,
-            decay: rand(0.018, 0.04),
-            color,
-            size: rand(1.8, 4.2)
-        });
-    }
-}
-function floatText(x, y, text, color) {
-    state.texts.push({ x, y, text, color, life: 1 });
-}
-
-/* ============================ ПЕРСОНАЖ ============================ */
-class Character {
-    constructor({ x, y, color, name, isBot, speed }) {
-        this.x = x;
-        this.y = y;
-        this.radius = 15;
-        this.color = color;
-        this.name = name;
-        this.isBot = isBot;
-        this.baseSpeed = speed;
-        this.speed = speed;
-
-        this.hasShield = false;
-        this.speedTimer = 0;
-        this.freezeTimer = 0;
-        this.passCooldown = 0;
-
-        this.wanderAngle = Math.random() * Math.PI * 2;
-        this.dirX = 0;
-        this.dirY = 0;
-    }
-
-    move(f) {
-        if (this.speedTimer  > 0) this.speedTimer  = Math.max(0, this.speedTimer  - f);
-        if (this.freezeTimer > 0) this.freezeTimer = Math.max(0, this.freezeTimer - f);
-        if (this.passCooldown > 0) this.passCooldown = Math.max(0, this.passCooldown - f);
-
-        let speed = this.baseSpeed;
-        // бот с картошкой получает ускорение погони
-        if (this.isBot && state.potatoHolder === this) speed += CFG.botHolderBonus;
-        if (this.speedTimer  > 0) speed *= CFG.speedMul;
-        if (this.freezeTimer > 0) speed *= CFG.slowMul;
-
-        let mx, my;
-        if (this.isBot) {
-            const v = this.think();
-            mx = v[0]; my = v[1];
-        } else {
-            mx = 0; my = 0;
-            if (keys['KeyW'] || keys['ArrowUp'])    my -= 1;
-            if (keys['KeyS'] || keys['ArrowDown'])  my += 1;
-            if (keys['KeyA'] || keys['ArrowLeft'])  mx -= 1;
-            if (keys['KeyD'] || keys['ArrowRight']) mx += 1;
-
-            if (JOY.mag > 0.18) { mx = JOY.x; my = JOY.y; }
-
-            const m = Math.hypot(mx, my);
-            if (m > 1) { mx /= m; my /= m; }
+/* ===== ACHIEVEMENTS ===== */
+const ACHIEVEMENTS = [
+    {id:'first', name:'FIRST BLOOD', desc:'Click Vergil once', cond:()=>c>=1},
+    {id:'motiv', name:'MOTIVATED', desc:'Reach 100 motivation', cond:()=>n>=100},
+    {id:'allies', name:'SPARDA FAMILY', desc:'Recruit any 3 allies', cond:()=>ALLY_KEYS.filter(k=>o[k]).length>=3},
+    {id:'fullhouse', name:'FULL HOUSE', desc:'Recruit all 7 allies', cond:()=>isFullHouse()},
+    {id:'dt', name:'DEVIL TRIGGER', desc:'Unlock Devil Trigger', cond:()=>o.dt},
+    {id:'sdt', name:'SIN DEVIL', desc:'Unlock Sin Devil Trigger', cond:()=>o.sdt},
+    {id:'combo20', name:'IN THE ZONE', desc:'Get 20+ combo', cond:()=>comboCount>=20},
+    {id:'combo50', name:'STORM APPROACH', desc:'Get 50+ combo', cond:()=>comboCount>=50},
+    {id:'gold', name:'GOLDEN TOUCH', desc:'Catch Golden Vergil', cond:()=>achievements.gold===true},
+    {id:'secret', name:'SECRET FOUND', desc:'Find the hidden secret', cond:()=>secretAura===true},
+    {id:'overdrive', name:'OVERDRIVE', desc:'Activate Motivation OD', cond:()=>odActive===true},
+    {id:'halfyamato', name:'HALF YAMATO', desc:'Reach 5000 clicks', cond:()=>c>=5000},
+    {id:'bigcut', name:'BIG CUT', desc:'Reach 10000 clicks', cond:()=>c>=10000},
+    {id:'yamato', name:'JUDGEMENT CUT', desc:'Reach 15000 clicks', cond:()=>c>=15000},
+    {id:'survivors', name:'THE SURVIVORS', desc:'Continue after Judgement Cut', cond:()=>dantePowered&&neroPowered},
+    {id:'end', name:'END OF REALITY', desc:'Reach 35000 clicks', cond:()=>c>=35000},
+    {id:'rich', name:'MOTIVATED RICH', desc:'Reach 50000 motivation', cond:()=>n>=50000},
+    {id:'lvl10', name:'LEVEL 10', desc:'Reach level 10', cond:()=>getLevel()>=10}
+];
+function checkAchievements(){
+    for(const ach of ACHIEVEMENTS){
+        if(!achievements[ach.id] && ach.cond()){
+            achievements[ach.id] = true;
+            showToast(ach.name, ach.desc);
+            sndAchievement();
         }
+    }
+}
+function showToast(title, desc){
+    const t=document.createElement('div');
+    t.className='toast';
+    t.innerHTML = `<span class="t-title">🏆 ACHIEVEMENT</span>${title}<br><span style="font-size:.6rem;opacity:.7">${desc}</span>`;
+    toasts.appendChild(t);
+    setTimeout(()=>t.remove(), 3100);
+}
 
-        this.dirX = mx;
-        this.dirY = my;
+/* ===== INIT ===== */
+function init(fresh){
+    n=0; c=0; p=1; a=true;
+    for(const k in o) o[k]=false;
+    for(const k in upgrades) upgrades[k]=false;
+    clickBonus=0; autoClicks=0;
+    meter=0; odActive=false; odMult=1; odEndTime=0;
+    secretAura=false; scoreClicks=0;
+    shatterStage=0; yamatoTriggered=false; yamatoUnlocked=false; shatterInProgress=false;
+    achievements={}; comboCount=0; comboMult=1;
+    goldActive=false; goldEndTime=0; bigCutBonusEndTime=0;
+    dantePowered=false; neroPowered=false;
+    if(mainInterval){clearInterval(mainInterval); mainInterval=null;}
+    if(odTick){clearInterval(odTick); odTick=null;}
+    if(secretInterval){clearInterval(secretInterval); secretInterval=null;}
+    if(comboResetTimer){clearTimeout(comboResetTimer); comboResetTimer=null;}
+    if(goldSpawnTimer){clearTimeout(goldSpawnTimer); goldSpawnTimer=null;}
+    if(goldElTimer){clearTimeout(goldElTimer); goldElTimer=null;}
+    if(scoreClickTimer){clearTimeout(scoreClickTimer); scoreClickTimer=null;}
+    if(rebirthTimer){clearInterval(rebirthTimer); rebirthTimer=null;}
+    if(endTimer){clearInterval(endTimer); endTimer=null;}
+    stopMusic();
 
-        this.x = clamp(this.x + mx * speed * f, this.radius, W - this.radius);
-        this.y = clamp(this.y + my * speed * f, this.radius, H - this.radius);
+    document.body.classList.remove('overdrive','gold');
+    mmWrap.classList.remove('full');
+    alliesBox.classList.remove('full-house');
+    vb.textContent="VERGIL"; vb.className="v-btn";
+    goldV.style.display='none';
+    rs.style.display='none';
+    document.querySelectorAll('.c-line,.flash,.f-text').forEach(el=>el.remove());
+
+    // Reset ally buttons & items
+    items.forEach(i=>{
+        const b=document.getElementById(i.id);
+        b.textContent=`Cost: ${i.cost}`;
+        b.className="buy-btn";
+        b.disabled=true;
+        b.removeAttribute('style');
+        const parent = b.parentElement;
+        parent.classList.remove('powered');
+        const nameEl = parent.querySelector('b');
+        if(i.key==='dante'){ nameEl.textContent='Dante'; nameEl.style.color='#e63946'; }
+        else if(i.key==='nero'){ nameEl.textContent='Nero'; nameEl.style.color='#457b9d'; }
+    });
+    document.getElementById('infoDante').textContent='+1/sec';
+    document.getElementById('infoNero').textContent='+2/sec';
+
+    upgradeItems.forEach(u=>{
+        const b=document.getElementById(u.id);
+        b.textContent=`Cost: ${u.cost}`;
+        b.className="buy-btn";
+        b.disabled=true;
+    });
+    bDT.textContent="500 Clicks"; bDT.className="buy-btn"; bDT.disabled=true;
+    bSDT.textContent="1000 Clicks"; bSDT.className="buy-btn"; bSDT.disabled=true;
+    alliesBox.scrollTop=0;
+
+    rsTitle.textContent = 'JUDGEMENT CUT';
+    rsTitle.style.color = '#ff4d6d';
+    rsTitle.style.textShadow = '0 0 15px #ff0055';
+    rsMsg.style.color = '#ffd700';
+    rb.style.display = 'block';
+
+    u();
+    safeInterval(tick, 1000);
+    scheduleGoldSpawn();
+    if(fresh) saveGame();
+}
+
+/* ===== TICK ===== */
+function tick(){
+    if(!a) return;
+    const passive = getPassive();
+    if(passive>0){
+        n += passive;
+        c += passive;
+    }
+    if(!odActive && meter<100) meter = Math.min(100, meter+0.5);
+    if(goldActive && Date.now()>goldEndTime){
+        goldActive=false;
+        document.body.classList.remove('gold');
+    }
+    u();
+    checkAchievements();
+}
+
+/* ===== YAMATO STAGES ===== */
+function triggerYamatoStage(stage){
+    if(stage < 1 || stage > 4) return;
+    if(shatterStage >= stage) return;
+    shatterStage = stage;
+    sndShatter();
+
+    const fl=document.createElement('div');
+    fl.className='flash';
+    document.body.appendChild(fl);
+    setTimeout(()=>fl.remove(),500);
+
+    let angles, msgText, bonus;
+    if(stage===1){ angles=[-35,35,-60,60,-20,20]; msgText='SMALL CUT'; }
+    else if(stage===2){
+        angles=[-45,45,-70,70,-25,25,-85,85];
+        msgText='BIG CUT';
+        bigCutBonusEndTime = Date.now() + 25000;
+        bonus='×1.5 PASSIVE 25s';
+    } else if(stage===3){
+        angles=[-35,35,-60,60,-20,20,-80,80,-15,15,-50,50];
+        msgText='JUDGEMENT CUT';
+        bonus='YOU MAY SKIP — 15s';
+    } else {
+        angles=[-20,20,-40,40,-60,60,-80,80,-10,10,-30,30,-50,50,-70,70];
+        msgText='JUDGEMENT CUT: END';
+        bonus='NO ESCAPE';
     }
 
-    /* --- ИИ --- */
-    think() {
-        const holder = state.potatoHolder;
-        let tx = this.x, ty = this.y, has = false;
+    angles.forEach((ang,idx)=>{
+        setTimeout(()=>{
+            const d=document.createElement('div');
+            d.className='c-line';
+            d.style.top='50%'; d.style.left='50%';
+            d.style.width='200vmax'; d.style.height=stage>=3?'7px':'5px';
+            d.style.transform=`translate(-50%,-50%) rotate(${ang}deg)`;
+            d.style.background='linear-gradient(90deg,transparent,#fff,#ffd700,#fff,transparent)';
+            d.style.boxShadow=`0 0 ${20+stage*5}px #ffd700,0 0 15px #fff`;
+            document.body.appendChild(d);
+            setTimeout(()=>d.remove(),900);
+        }, idx*50);
+    });
 
-        if (holder === this) {
-            // с картошкой: целимся в игрока (или ближайшего)
-            const human = state.players[0];
-            let target = human;
-            if (human && dist(human, this) > 420) {
-                let best = null, bd = Infinity;
-                for (const p of state.players) {
-                    if (p === this) continue;
-                    const d = dist(p, this);
-                    if (d < bd) { bd = d; best = p; }
+    setTimeout(()=>{
+        const msg=document.createElement('div');
+        msg.style.cssText=`position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:${stage>=3?'2.5rem':'1.8rem'};font-weight:bold;color:#fff;text-shadow:0 0 30px #ffd700,0 0 60px #ff0055,0 0 100px #fff;z-index:160;letter-spacing:6px;pointer-events:none;white-space:nowrap;text-align:center`;
+        msg.innerHTML = msgText + (bonus?`<div style="font-size:.9rem;color:${stage===4?'#ff0055':'#ffd700'};letter-spacing:2px;margin-top:6px">${bonus}</div>`:'');
+        document.body.appendChild(msg);
+        setTimeout(()=>{
+            msg.style.transition='opacity .8s';
+            msg.style.opacity='0';
+            setTimeout(()=>msg.remove(),800);
+        },1500);
+    }, 600);
+
+    // === STAGE 3: Judgement Cut ===
+    if(stage===3){
+        a = false;
+        if(mainInterval){ clearInterval(mainInterval); mainInterval=null; }
+        if(odTick){ clearInterval(odTick); odTick=null; }
+        odActive=false; odMult=1;
+        document.body.classList.remove('overdrive');
+        stopMusic();
+
+        setTimeout(()=>{
+            rsTitle.textContent = 'JUDGEMENT CUT';
+            rsTitle.style.color = '#ff4d6d';
+            rsTitle.style.textShadow = '0 0 15px #ff0055';
+            rsMsg.textContent = 'Yamato has cut reality. Rebirth — or continue.';
+            rsMsg.style.color = '#ffd700';
+            rsScore.textContent = n;
+            rsLevel.textContent = getLevel();
+            rb.style.display = 'block';
+            rs.style.display = 'flex';
+
+            let secs = 15;
+            rsCountdown.textContent = 'FALLING IN ' + secs + 's...';
+            if(rebirthTimer) clearInterval(rebirthTimer);
+            rebirthTimer = setInterval(()=>{
+                secs--;
+                if(secs>0){
+                    rsCountdown.textContent = 'FALLING IN ' + secs + 's...';
+                } else {
+                    clearInterval(rebirthTimer); rebirthTimer=null;
+                    rs.style.display = 'none';
+                    a = true;
+
+                    // Force Dante & Nero to be present
+                    o.dante = true; o.nero = true;
+                    const danteBtn = document.getElementById('bD');
+                    const neroBtn = document.getElementById('bN');
+                    danteBtn.textContent = 'BOUGHT';
+                    danteBtn.classList.add('bought');
+                    danteBtn.disabled = true;
+                    neroBtn.textContent = 'BOUGHT';
+                    neroBtn.classList.add('bought');
+                    neroBtn.disabled = true;
+
+                    // Allies leave
+                    const leaving = ['v','lady','trish','nico','urizen'];
+                    leaving.forEach(k=>{
+                        o[k] = false;
+                        const btn = document.querySelector(`[data-ally="${k}"]`);
+                        if(btn){
+                            btn.textContent = 'LEFT';
+                            btn.disabled = true;
+                            btn.classList.add('left');
+                            btn.classList.remove('bought');
+                        }
+                    });
+
+                    // Transform Dante into SDT, Nero into DT
+                    dantePowered = true;
+                    neroPowered = true;
+
+                    // Update Dante's visual
+                    const danteItem = document.querySelector('[data-ally="dante"]').parentElement;
+                    danteItem.classList.add('powered');
+                    const danteName = danteItem.querySelector('b');
+                    danteName.textContent = 'Dante (SDT)';
+                    danteName.style.color = '#ff0055';
+                    danteName.style.textShadow = '0 0 8px #ff0055';
+                    document.getElementById('infoDante').textContent = '+50/sec';
+                    document.getElementById('infoDante').style.color = '#ff4d6d';
+
+                    // Update Nero's visual
+                    const neroItem = document.querySelector('[data-ally="nero"]').parentElement;
+                    neroItem.classList.add('powered');
+                    const neroName = neroItem.querySelector('b');
+                    neroName.textContent = 'Nero (DT)';
+                    neroName.style.color = '#00bbf9';
+                    neroName.style.textShadow = '0 0 8px #00bbf9';
+                    document.getElementById('infoNero').textContent = '+30/sec';
+                    document.getElementById('infoNero').style.color = '#00f5d4';
+
+                    // Departure message
+                    const msg = document.createElement('div');
+                    msg.style.cssText='position:fixed;top:30%;left:50%;transform:translateX(-50%);color:#ff4d6d;font-size:1rem;font-weight:bold;text-shadow:0 0 15px #ff0055;z-index:170;text-align:center;padding:0 20px;animation:fadeIn .5s;pointer-events:none;max-width:90vw';
+                    msg.innerHTML='💀 V, Lady, Trish, Nico, Urizen have left.<br><span style="color:#00f5d4;font-size:.85rem">Dante awakens SDT. Nero triggers DT.</span><br><span style="color:#fff;font-size:.8rem;opacity:.8">Only the family remains.</span>';
+                    document.body.appendChild(msg);
+                    setTimeout(()=>{
+                        msg.style.transition='opacity 1s';
+                        msg.style.opacity='0';
+                        setTimeout(()=>msg.remove(),1000);
+                    }, 4000);
+
+                    // Unlock END
+                    yamatoUnlocked = true;
+                    safeInterval(tick, 1000);
+                    u();
+                    checkAchievements();
                 }
-                if (best) target = best;
-            }
-            if (target) { tx = target.x; ty = target.y; has = true; }
-        } else if (holder) {
-            // без картошки: убегаем от владельца (с «паникой»)
-            const d = dist(this, holder);
-            if (d < CFG.fleeRadius) {
-                const nx = (this.x - holder.x) / (d || 1);
-                const ny = (this.y - holder.y) / (d || 1);
-                tx = this.x + nx * 160 + Math.cos(this.wanderAngle) * 55;
-                ty = this.y + ny * 160 + Math.sin(this.wanderAngle) * 55;
-                this.wanderAngle += rand(-0.07, 0.07);
-                has = true;
-            }
-        }
+            }, 1000);
+        }, 1800);
+    }
 
-        if (!has) {
-            // ищем буст или бродим
-            let best = null, bd = Infinity;
-            for (const it of state.items) {
-                const d = dist(it, this);
-                if (d < bd) { bd = d; best = it; }
-            }
-            if (best && bd < 280) {
-                tx = best.x; ty = best.y;
+    // === STAGE 4: END ===
+    if(stage===4){
+        a = false;
+        if(mainInterval){ clearInterval(mainInterval); mainInterval=null; }
+        if(odTick){ clearInterval(odTick); odTick=null; }
+        if(secretInterval){ clearInterval(secretInterval); secretInterval=null; }
+        if(goldSpawnTimer){ clearTimeout(goldSpawnTimer); goldSpawnTimer=null; }
+        if(goldElTimer){ clearTimeout(goldElTimer); goldElTimer=null; }
+        goldActive = false;
+        document.body.classList.remove('gold','overdrive');
+        stopMusic();
+
+        setTimeout(()=>{
+            rsTitle.textContent = 'JUDGEMENT CUT: END';
+            rsTitle.style.color = '#ff0055';
+            rsTitle.style.textShadow = '0 0 20px #ff0055, 0 0 40px #ff0000';
+            rsMsg.textContent = '35000 clicks. There is no escape.';
+            rsMsg.style.color = '#ff4d6d';
+            rsScore.textContent = n;
+            rsLevel.textContent = getLevel();
+            rb.style.display = 'none';
+            rs.style.display = 'flex';
+
+            let secs = 5;
+            rsCountdown.textContent = 'REALITY ENDING IN ' + secs + '...';
+            if(endTimer) clearInterval(endTimer);
+            endTimer = setInterval(()=>{
+                secs--;
+                if(secs>0){
+                    rsCountdown.textContent = 'REALITY ENDING IN ' + secs + '...';
+                } else {
+                    clearInterval(endTimer); endTimer=null;
+                    try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+                    stopMusic();
+                    init(true);
+                }
+            }, 1000);
+        }, 1800);
+    }
+}
+
+function checkShatter(){
+    if(!a) return true;
+    for(let i=1; i<=4; i++){
+        if(i === 4 && !yamatoUnlocked) continue;
+        if(c >= SHATTER_STAGES[i-1] && shatterStage < i){
+            triggerYamatoStage(i);
+            if(i>=3) return true;
+        }
+    }
+    return false;
+}
+
+/* ===== CLICK ===== */
+vb.addEventListener('click',(e)=>{
+    if(!a) return;
+    if(checkShatter()) return;
+    soundOn();
+
+    comboCount++;
+    if(comboResetTimer) clearTimeout(comboResetTimer);
+    comboResetTimer = setTimeout(()=>{
+        comboCount=0; comboMult=1;
+        comboBadge.textContent='×1';
+        comboBadge.classList.remove('hot');
+        u();
+    }, 1500);
+
+    if(comboCount>=50){ comboMult=3; comboBadge.textContent='×3'; comboBadge.classList.add('hot'); }
+    else if(comboCount>=30){ comboMult=2; comboBadge.textContent='×2'; comboBadge.classList.add('hot'); }
+    else if(comboCount>=15){ comboMult=1.5; comboBadge.textContent='×1.5'; comboBadge.classList.add('hot'); }
+    else if(comboCount>=5){ comboMult=1.2; comboBadge.textContent='×1.2'; comboBadge.classList.add('hot'); }
+    else { comboMult=1; comboBadge.textContent='×1'; comboBadge.classList.remove('hot'); }
+
+    const crit = Math.random() < 0.08;
+    const gained = Math.floor(getClickPower() * (crit ? 3 : 1));
+    c++; n += gained;
+    if(!odActive && meter<100) meter = Math.min(100, meter+2);
+    sndClick();
+    if(crit){
+        sndCrit();
+        document.body.classList.add('shake');
+        setTimeout(()=>document.body.classList.remove('shake'),350);
+    }
+    u();
+    checkAchievements();
+
+    const t=document.createElement('div');
+    t.className='f-text'+(crit?' crit':'');
+    if(crit){
+        t.textContent='CRITICAL! +'+gained;
+        t.style.color='#ffd700';
+        t.style.textShadow='0 0 15px #ffd700,0 0 30px #ff0055';
+    } else {
+        const q = o.sdt ? ["KNEEL!","BEHOLD!","DIE!"] :
+                  o.dt ? ["STORM!","POWER!","MOTIVATION!"] :
+                  ["POWER!","MOTIVATION!","JACKPOT?","+POWER"];
+        t.textContent = q[Math.floor(Math.random()*q.length)];
+        t.style.color = o.sdt ? "#ff4d6d" : o.dt ? "#00f5d4" : "#caf0f8";
+        t.style.textShadow = `0 0 8px ${o.sdt?"#ff0055":o.dt?"#00bbf9":"#00bef7"}`;
+    }
+    t.style.left=`${e.clientX-15}px`;
+    t.style.top=`${e.clientY-20}px`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),600);
+});
+
+/* ===== GOLDEN VERGIL ===== */
+function scheduleGoldSpawn(){
+    if(!a) return;
+    const delay = 45000 + Math.random()*75000;
+    goldSpawnTimer = setTimeout(spawnGold, delay);
+}
+function spawnGold(){
+    if(!a) return;
+    if(goldActive){ scheduleGoldSpawn(); return; }
+    const wrapper = document.querySelector('.game-wrapper').getBoundingClientRect();
+    const size = 44;
+    const x = Math.random() * (wrapper.width - size - 20) + 10;
+    const y = Math.random() * (wrapper.height - size - 100) + 60;
+    goldV.style.left = x + 'px';
+    goldV.style.top = y + 'px';
+    goldV.style.display = 'flex';
+    goldElTimer = setTimeout(()=>{ goldV.style.display='none'; scheduleGoldSpawn(); }, 5000);
+}
+goldV.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    if(!a) return;
+    goldV.style.display='none';
+    if(goldElTimer) clearTimeout(goldElTimer);
+    n += 500; c += 100;
+    goldActive=true; goldEndTime = Date.now()+15000;
+    document.body.classList.add('gold');
+    sndGold();
+    showToast('GOLDEN VERGIL!', '+500 motivation • ×2 passive 15s');
+    achievements.gold = true;
+    checkAchievements();
+    scheduleGoldSpawn();
+    u();
+});
+
+/* ===== OVERDRIVE ===== */
+mmWrap.addEventListener('click',()=>{
+    if(!a || odActive || meter<100) return;
+    odActive=true; odMult=3; meter=0;
+    odEndTime = Date.now()+8000;
+    sndOver();
+    document.body.classList.add('overdrive');
+    const fl=document.createElement('div');
+    fl.className='flash';
+    fl.style.background='radial-gradient(circle,#ffd700,#ff0055,transparent)';
+    document.body.appendChild(fl);
+    setTimeout(()=>fl.remove(),500);
+
+    if(odTick) clearInterval(odTick);
+    odTick = setInterval(()=>{
+        const left = Math.max(0, odEndTime-Date.now());
+        if(left<=0 || !a){
+            clearInterval(odTick); odTick=null;
+            odActive=false; odMult=1;
+            document.body.classList.remove('overdrive');
+            u();
+        } else {
+            mmLabel.textContent = '⚡ OVERDRIVE '+Math.ceil(left/1000)+'s ⚡';
+        }
+    }, 200);
+});
+
+/* ===== BUY ALLIES ===== */
+items.forEach(i=>{
+    document.getElementById(i.id).addEventListener('click',function(){
+        if(!a) return;
+        if(!o[i.key] && n>=i.cost){
+            n -= i.cost;
+            o[i.key] = true;
+            this.textContent = "Bought";
+            this.classList.add('bought');
+            this.disabled = true;
+            soundOn(); sndBuy();
+            u(); checkAchievements();
+        }
+    });
+});
+
+/* ===== BUY UPGRADES ===== */
+upgradeItems.forEach(up=>{
+    document.getElementById(up.id).addEventListener('click',function(){
+        if(!a) return;
+        if(!upgrades[up.key] && n>=up.cost){
+            n -= up.cost;
+            upgrades[up.key] = true;
+            if(up.type==='click') clickBonus += up.amount;
+            else if(up.type==='auto') autoClicks += up.amount;
+            this.textContent = "Bought";
+            this.classList.add('bought');
+            this.disabled = true;
+            soundOn(); sndBuy();
+            u();
+        }
+    });
+});
+
+/* ===== DT / SDT ===== */
+bDT.addEventListener('click',function(){
+    if(!a || o.dt || c<500) return;
+    o.dt = true; p = 15;
+    vb.textContent="D.T."; vb.className="v-btn dt";
+    this.textContent="Active"; this.classList.add('bought'); this.disabled=true;
+    sndOver();
+    playBuryTheme();
+    u(); checkAchievements();
+});
+bSDT.addEventListener('click',function(){
+    if(!a || o.sdt || c<1000) return;
+    o.sdt = true; p = 50;
+    vb.textContent="S.D.T."; vb.className="v-btn sdt";
+    this.textContent="Active"; this.classList.add('bought'); this.disabled=true;
+    [220,330,440,660].forEach((f,i)=>setTimeout(()=>tone(f,0.3,'sawtooth',0.15), i*90));
+    playStormTheme();
+    u(); checkAchievements();
+});
+
+/* ===== SECRET ===== */
+s.addEventListener('click',()=>{
+    if(!a || secretAura) return;
+    scoreClicks++;
+    clearTimeout(scoreClickTimer);
+    scoreClickTimer = setTimeout(()=>scoreClicks=0, 600);
+    if(scoreClicks>=3){
+        secretAura = true; scoreClicks = 0;
+        const g=document.createElement('div');
+        g.className='flash';
+        g.style.background='radial-gradient(circle,#ffd700,#ff8c00,transparent)';
+        document.body.appendChild(g);
+        setTimeout(()=>g.remove(),500);
+        if(secretInterval) clearInterval(secretInterval);
+        secretInterval = setInterval(()=>{
+            if(!a){ clearInterval(secretInterval); secretInterval=null; return; }
+            n += 1; u();
+        }, 1000);
+        showToast('SECRET UNLOCKED', 'Motivation Aura: +1/sec forever');
+        sndOver();
+        checkAchievements();
+    }
+});
+
+rb.addEventListener('click',()=>{
+    if(rebirthTimer){ clearInterval(rebirthTimer); rebirthTimer=null; }
+    init(true);
+});
+
+/* ===== SAVE / LOAD ===== */
+function saveGame(){
+    try{
+        const data = {
+            n, c, p, o, upgrades, clickBonus, autoClicks,
+            achievements, shatterStage, yamatoUnlocked,
+            dantePowered, neroPowered
+        };
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    }catch(e){}
+}
+function loadGame(){
+    try{
+        const raw = localStorage.getItem(SAVE_KEY);
+        if(!raw) return false;
+        const d = JSON.parse(raw);
+        n = d.n || 0;
+        c = d.c || 0;
+        p = d.p || 1;
+        o = Object.assign({dante:false,nero:false,v:false,lady:false,trish:false,nico:false,urizen:false,dt:false,sdt:false}, d.o||{});
+        upgrades = Object.assign({c1:false,c5:false,a1:false,a10:false}, d.upgrades||{});
+        clickBonus = d.clickBonus || 0;
+        autoClicks = d.autoClicks || 0;
+        achievements = d.achievements || {};
+        shatterStage = d.shatterStage || 0;
+        yamatoUnlocked = d.yamatoUnlocked || false;
+        dantePowered = d.dantePowered || false;
+        neroPowered = d.neroPowered || false;
+        a = true;
+
+        if(mainInterval){clearInterval(mainInterval); mainInterval=null;}
+        if(odTick){clearInterval(odTick); odTick=null;}
+        if(secretInterval){clearInterval(secretInterval); secretInterval=null;}
+        if(goldSpawnTimer){clearTimeout(goldSpawnTimer); goldSpawnTimer=null;}
+        if(goldElTimer){clearTimeout(goldElTimer); goldElTimer=null;}
+        if(rebirthTimer){clearInterval(rebirthTimer); rebirthTimer=null;}
+        if(endTimer){clearInterval(endTimer); endTimer=null;}
+        stopMusic();
+
+        vb.textContent = o.sdt ? "S.D.T." : (o.dt ? "D.T." : "VERGIL");
+        vb.className = "v-btn" + (o.sdt?' sdt':(o.dt?' dt':''));
+
+        items.forEach(i=>{
+            const b=document.getElementById(i.id);
+            const parent = b.parentElement;
+            const nameEl = parent.querySelector('b');
+            if(i.key==='dante' && dantePowered){
+                b.textContent="BOUGHT"; b.className="buy-btn bought"; b.disabled=true;
+                parent.classList.add('powered');
+                nameEl.textContent='Dante (SDT)'; nameEl.style.color='#ff0055'; nameEl.style.textShadow='0 0 8px #ff0055';
+                document.getElementById('infoDante').textContent='+50/sec';
+                document.getElementById('infoDante').style.color='#ff4d6d';
+            } else if(i.key==='nero' && neroPowered){
+                b.textContent="BOUGHT"; b.className="buy-btn bought"; b.disabled=true;
+                parent.classList.add('powered');
+                nameEl.textContent='Nero (DT)'; nameEl.style.color='#00bbf9'; nameEl.style.textShadow='0 0 8px #00bbf9';
+                document.getElementById('infoNero').textContent='+30/sec';
+                document.getElementById('infoNero').style.color='#00f5d4';
+            } else if(o[i.key]){
+                b.textContent="Bought"; b.className="buy-btn bought"; b.disabled=true;
+            } else if(['v','lady','trish','nico','urizen'].includes(i.key) && yamatoUnlocked){
+                b.textContent="LEFT"; b.className="buy-btn left"; b.disabled=true;
             } else {
-                this.wanderAngle += rand(-0.25, 0.25);
-                tx = this.x + Math.cos(this.wanderAngle) * 120;
-                ty = this.y + Math.sin(this.wanderAngle) * 120;
+                b.textContent=`Cost: ${i.cost}`; b.className="buy-btn"; b.disabled=true;
             }
-        }
+        });
+        upgradeItems.forEach(u=>{
+            const b=document.getElementById(u.id);
+            if(upgrades[u.key]){ b.textContent="Bought"; b.className="buy-btn bought"; b.disabled=true; }
+            else { b.textContent=`Cost: ${u.cost}`; b.className="buy-btn"; b.disabled=true; }
+        });
+        if(o.dt){ bDT.textContent="Active"; bDT.className="buy-btn bought"; bDT.disabled=true; }
+        if(o.sdt){ bSDT.textContent="Active"; bSDT.className="buy-btn bought"; bSDT.disabled=true; }
+        goldV.style.display='none';
+        rs.style.display='none';
 
-        let dx = tx - this.x;
-        let dy = ty - this.y;
-        const d = Math.hypot(dx, dy) || 1;
-        dx /= d; dy /= d;
+        u();
+        safeInterval(tick, 1000);
+        scheduleGoldSpawn();
+        return true;
+    }catch(e){ return false; }
+}
+saveBtn.addEventListener('click',()=>{
+    saveGame();
+    saveBtn.textContent = '✓ Saved';
+    setTimeout(()=>saveBtn.textContent='💾 Save', 900);
+});
+window.addEventListener('beforeunload', saveGame);
+setInterval(()=>{ if(a) saveGame(); }, 15000);
 
-        // отталкивание от стен
-        const m = 55;
-        if (this.x < m)     dx += (m - this.x) / m * 1.9;
-        if (this.x > W - m) dx -= (this.x - (W - m)) / m * 1.9;
-        if (this.y < m)     dy += (m - this.y) / m * 1.9;
-        if (this.y > H - m) dy -= (this.y - (H - m)) / m * 1.9;
+/* ===== UI UPDATE ===== */
+function u(){
+    if(!a && !shatterInProgress) return;
 
-        dx += rand(-0.22, 0.22);
-        dy += rand(-0.22, 0.22);
+    s.textContent = n;
+    const lvl = getLevel();
+    lvlBadge.textContent = 'Lv.' + lvl;
+    const yMax = yamatoUnlocked ? 35000 : 15000;
+    cc.textContent = `Clicks: ${Math.min(c,yMax)} / ${yMax}`;
 
-        const len = Math.hypot(dx, dy) || 1;
-        return [dx / len, dy / len];
+    items.forEach(i=>{
+        if(!o[i.key] && !(i.key==='dante'&&dantePowered) && !(i.key==='nero'&&neroPowered))
+            document.getElementById(i.id).disabled = n < i.cost;
+    });
+    alliesBox.classList.toggle('full-house', isFullHouse());
+
+    upgradeItems.forEach(up=>{
+        if(!upgrades[up.key]) document.getElementById(up.id).disabled = n < up.cost;
+    });
+
+    if(!o.dt){
+        bDT.disabled = c < 500;
+        bDT.textContent = c>=500 ? "Activate" : `${500-c} clk`;
     }
-}
-
-/* ============================ БУСТЫ ============================ */
-class BuffItem {
-    constructor() {
-        let x = 0, y = 0;
-        for (let i = 0; i < 24; i++) {
-            x = rand(35, W - 35);
-            y = rand(35, H - 35);
-            if (!state.players.some(p => Math.hypot(p.x - x, p.y - y) < 65)) break;
-        }
-        this.x = x;
-        this.y = y;
-        this.radius = 13;
-        const types = ['speed', 'shield', 'freeze'];
-        this.type = types[Math.floor(Math.random() * types.length)];
-        this.phase = Math.random() * Math.PI * 2;
+    if(!o.sdt){
+        bSDT.disabled = c < 1000;
+        bSDT.textContent = c>=1000 ? "Activate" : `${1000-c} clk`;
     }
-}
 
-function spawnItem() {
-    if (!state.active) return;
-    if (state.items.length < CFG.itemMax) state.items.push(new BuffItem());
-}
-
-/* ============================ ЛОГИКА ============================ */
-function initGame() {
-    clearInterval(state.spawnTimer);
-    clearTimeout(state.endTimer);
-    resetJoystick();
-
-    state.players = [
-        new Character({ x: 90,     y: H / 2,  color: '#00cbc6', name: 'Вы',   isBot: false, speed: CFG.playerSpeed }),
-        new Character({ x: W - 90, y: 80,     color: '#ff5252', name: 'Bot1', isBot: true,  speed: CFG.botSpeed }),
-        new Character({ x: W - 90, y: H - 80, color: '#10ac84', name: 'Bot2', isBot: true,  speed: CFG.botSpeed }),
-        new Character({ x: W / 2,  y: H - 70, color: '#a55eea', name: 'Bot3', isBot: true,  speed: CFG.botSpeed })
-    ];
-
-    state.items = [];
-    state.particles = [];
-    state.texts = [];
-    state.active = true;
-    state.shake = 0;
-    state.startTime = performance.now();
-    state.roundLength = rand(CFG.roundMin, CFG.roundMax);
-    state.potatoHolder = state.players[1 + Math.floor(Math.random() * 3)];
-    state.potatoHolder.passCooldown = 30;
-
-    startBtn.style.display = 'none';
-    joyZone.classList.add('active');
-    buffsEl.textContent = '';
-    updateHolderText();
-
-    spawnItem();
-    spawnItem();
-    state.spawnTimer = setInterval(spawnItem, CFG.itemInterval);
-    state.endTimer   = setTimeout(endRound, state.roundLength);
-}
-
-function updateHolderText() {
-    const h = state.potatoHolder;
-    if (!h) return;
-    if (h.isBot) {
-        infoEl.innerHTML = `🔥 Картошка у <span style="color:${h.color}">${h.name}</span> — уклоняйтесь!`;
+    mmFill.style.width = meter+'%';
+    if(odActive){
+        mmWrap.classList.remove('full');
+    } else if(meter>=100){
+        mmWrap.classList.add('full');
+        mmLabel.textContent = '⚡ ACTIVATE OVERDRIVE ⚡';
     } else {
-        infoEl.innerHTML = `🔥 Картошка у <span style="color:#00cbc6">ВАС</span> — догоняйте бота и передавайте!`;
-    }
-}
-
-function passPotato(from, to) {
-    state.potatoHolder = to;
-    to.passCooldown = CFG.passCooldown;
-
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    const d = Math.hypot(dx, dy) || 1;
-
-    to.x   = clamp(to.x   + (dx / d) * 14, to.radius, W - to.radius);
-    to.y   = clamp(to.y   + (dy / d) * 14, to.radius, H - to.radius);
-    from.x = clamp(from.x - (dx / d) * 10, from.radius, W - from.radius);
-    from.y = clamp(from.y - (dy / d) * 10, from.radius, H - from.radius);
-
-    burst(to.x, to.y, '#ff9f43', 14, 3.4);
-    updateHolderText();
-    if (!to.isBot) state.shake = 9;
-}
-
-function handlePassing() {
-    const holder = state.potatoHolder;
-    if (!holder) return;
-
-    for (const p of state.players) {
-        if (p === holder) continue;
-
-        const dx = p.x - holder.x;
-        const dy = p.y - holder.y;
-        const d  = Math.hypot(dx, dy);
-        // увеличенный радиус касания
-        if (d >= p.radius + holder.radius + 5) continue;
-
-        const nx = d > 0.001 ? dx / d : 1;
-        const ny = d > 0.001 ? dy / d : 0;
-
-        if (p.hasShield) {
-            p.hasShield = false;
-            holder.x = clamp(holder.x - nx * 52, holder.radius, W - holder.radius);
-            holder.y = clamp(holder.y - ny * 52, holder.radius, H - holder.radius);
-            holder.passCooldown = 20;
-            burst(p.x, p.y, '#00d2d3', 16, 3.6);
-            floatText(p.x, p.y - 26, 'ЩИТ!', '#00d2d3');
-            continue;
-        }
-
-        if (holder.passCooldown > 0) continue;
-
-        passPotato(holder, p);
-        break;
-    }
-}
-
-function applyBuff(p, item) {
-    if (item.type === 'speed') {
-        p.speedTimer = CFG.buffSpeed;
-        floatText(p.x, p.y - 26, '⚡', '#ffd479');
-    } else if (item.type === 'shield') {
-        p.hasShield = true;
-        floatText(p.x, p.y - 26, '🛡️', '#00d2d3');
-    } else if (item.type === 'freeze') {
-        state.players.forEach(o => { if (o !== p) o.freezeTimer = CFG.buffFreeze; });
-        floatText(p.x, p.y - 26, '🧊', '#74b9ff');
-    }
-}
-
-function handleItemPickups() {
-    for (let i = state.items.length - 1; i >= 0; i--) {
-        const it = state.items[i];
-        for (const p of state.players) {
-            if (Math.hypot(p.x - it.x, p.y - it.y) < p.radius + it.radius) {
-                applyBuff(p, it);
-                burst(it.x, it.y, '#f1c40f', 12, 2.8);
-                state.items.splice(i, 1);
-                break;
-            }
-        }
-    }
-}
-
-function updateBuffsDisplay() {
-    const h = state.players[0];
-    if (!h) return;
-    const parts = [];
-    if (h.speedTimer > 0)  parts.push(`⚡ ${(h.speedTimer / 60).toFixed(1)}с`);
-    if (h.hasShield)       parts.push('🛡️ Щит');
-    if (h.freezeTimer > 0) parts.push('🧊 Замедление');
-    buffsEl.textContent = parts.join('  •  ');
-}
-
-function endRound() {
-    if (!state.active) return;
-    state.active = false;
-
-    clearInterval(state.spawnTimer);
-    clearTimeout(state.endTimer);
-
-    const holder = state.potatoHolder;
-    burst(holder.x, holder.y, '#ff9f43', 40, 7);
-    burst(holder.x, holder.y, '#ff5252', 30, 5);
-    burst(holder.x, holder.y, '#ffe066', 20, 4);
-    state.shake = 24;
-
-    resetJoystick();
-    joyZone.classList.remove('active');
-    startBtn.style.display = 'block';
-    startBtn.textContent = 'Ещё раз';
-
-    if (holder.isBot) {
-        state.wins++;
-        infoEl.innerHTML =
-            `💥 БУМ! Картошка взорвалась у <span style="color:${holder.color}">${holder.name}</span>.<br>` +
-            `<span style="color:#2ecc71;font-size:23px">Вы ПОБЕДИЛИ! 🎉</span>`;
-    } else {
-        state.losses++;
-        infoEl.innerHTML =
-            `💥 БУМ! Картошка взорвалась у вас…<br>` +
-            `<span style="color:#ff5252;font-size:23px">Вы ПРОИГРАЛИ! 😿</span>`;
-    }
-    buffsEl.textContent = `Побед: ${state.wins} • Поражений: ${state.losses} • Пробел — рестарт`;
-}
-
-/* ============================ ОБНОВЛЕНИЕ ============================ */
-function update(dt) {
-    const f = Math.min(dt / 16.667, 3);
-    for (const p of state.players) p.move(f);
-    handleItemPickups();
-    handlePassing();
-    state.shake = Math.max(0, state.shake - dt * 0.07);
-    updateBuffsDisplay();
-}
-
-function updateParticles(dt) {
-    const f = Math.min(dt / 16.667, 3);
-    for (let i = state.particles.length - 1; i >= 0; i--) {
-        const p = state.particles[i];
-        p.x += p.vx * f;
-        p.y += p.vy * f;
-        p.vx *= 0.96;
-        p.vy *= 0.96;
-        p.vy += 0.05 * f;
-        p.life -= p.decay * f;
-        if (p.life <= 0) state.particles.splice(i, 1);
-    }
-    for (let i = state.texts.length - 1; i >= 0; i--) {
-        const t = state.texts[i];
-        t.y -= 0.7 * f;
-        t.life -= 0.022 * f;
-        if (t.life <= 0) state.texts.splice(i, 1);
-    }
-}
-
-/* ============================ ОТРИСОВКА ============================ */
-function roundRect(x, y, w, h, r) {
-    ctx.beginPath();
-    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
-    ctx.closePath();
-}
-
-function drawBackground(now) {
-    ctx.fillStyle = '#14141c';
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.035)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let x = 0; x <= W; x += 40) { ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); }
-    for (let y = 0; y <= H; y += 40) { ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); }
-    ctx.stroke();
-
-    if (state.active) {
-        const t = clamp((now - state.startTime) / state.roundLength, 0, 1);
-        const period = 260 - 150 * t;
-        const pulse = 0.5 + 0.5 * Math.sin(now / period);
-        const a = 0.05 + 0.26 * t * pulse;
-        const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.9);
-        g.addColorStop(0, 'rgba(255,60,0,0)');
-        g.addColorStop(1, `rgba(255,60,0,${a.toFixed(3)})`);
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, W, H);
-    }
-}
-
-function drawTimerBar(now) {
-    if (!state.active) return;
-    const left = 1 - clamp((now - state.startTime) / state.roundLength, 0, 1);
-    const x = 20, y = 14, h = 8, barW = W - 40;
-
-    ctx.fillStyle = 'rgba(0,0,0,.5)';
-    roundRect(x, y, barW, h, 4); ctx.fill();
-
-    ctx.fillStyle = left > 0.5 ? '#2ecc71' : left > 0.25 ? '#ff9f43' : '#ff5252';
-    roundRect(x, y, Math.max(0, barW * left), h, 4); ctx.fill();
-}
-
-function drawItem(it, now) {
-    const pulse = 1 + Math.sin(now / 240 + it.phase) * 0.09;
-    ctx.save();
-    ctx.shadowColor = '#f1c40f';
-    ctx.shadowBlur = 16;
-    ctx.beginPath();
-    ctx.arc(it.x, it.y, it.radius * pulse, 0, Math.PI * 2);
-    ctx.fillStyle = '#f1c40f';
-    ctx.fill();
-    ctx.restore();
-
-    ctx.beginPath();
-    ctx.arc(it.x, it.y, it.radius * pulse, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255,255,255,.85)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.font = '15px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#111';
-    ctx.fillText(ICON[it.type], it.x, it.y + 1);
-    ctx.textBaseline = 'alphabetic';
-}
-
-function drawCharacter(c, now) {
-    const isHolder = c === state.potatoHolder;
-
-    if (isHolder) {
-        const pulse = 0.6 + 0.4 * Math.sin(now / 110);
-        const g = ctx.createRadialGradient(c.x, c.y, c.radius, c.x, c.y, c.radius + 34);
-        g.addColorStop(0, `rgba(255,120,0,${(0.5 * pulse).toFixed(3)})`);
-        g.addColorStop(1, 'rgba(255,120,0,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.radius + 34, 0, Math.PI * 2);
-        ctx.fill();
+        mmWrap.classList.remove('full');
+        mmLabel.textContent = 'MOTIVATION '+Math.floor(meter)+'%';
     }
 
-    ctx.beginPath();
-    ctx.ellipse(c.x, c.y + c.radius + 5, c.radius * 0.85, 4.5, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,0,0,.38)';
-    ctx.fill();
+    const prog = Math.min(100, (c/yMax)*100);
+    yFill.style.width = prog+'%';
+    yFill.classList.toggle('stage2', shatterStage===1);
+    yFill.classList.toggle('stage3', shatterStage>=2 && !yamatoUnlocked);
+    yFill.classList.toggle('end', yamatoUnlocked);
+    let stageTxt = '';
+    if(yamatoUnlocked) stageTxt = 'END LOCKED';
+    else if(shatterStage>=2) stageTxt = 'JUDGEMENT';
+    else if(shatterStage>=1) stageTxt = 'BIG CUT';
+    yLabel.textContent = stageTxt
+        ? `YAMATO ${Math.min(c,yMax)}/${yMax} • ${stageTxt}`
+        : `YAMATO ${Math.min(c,yMax)}/${yMax}`;
 
-    if (c.hasShield) {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.radius + 8, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0,210,211,.95)';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([8, 6]);
-        ctx.lineDashOffset = -now / 40;
-        ctx.stroke();
-        ctx.setLineDash([]);
+    let bg="linear-gradient(135deg,#0b132b,#1c2541)", txt="You lack motivation...", col="#90e0ef", sh="none";
+    if(goldActive){ bg="linear-gradient(135deg,#3a2a00,#1a1000,#000)"; txt="⭐ GOLDEN MOTIVATION ⭐"; col="#ffd700"; sh="0 0 15px #ffd700"; }
+    else if(odActive){ txt="⚡ OVERDRIVE ⚡"; col="#ffd700"; sh="0 0 15px #ffd700"; }
+    else if(o.sdt){ bg="linear-gradient(135deg,#1a0033,#001133,#330000)"; txt="ULTIMATE MOTIVATION"; col="#ff4d6d"; sh="0 0 10px #ff0055"; }
+    else if(o.dt){ bg="linear-gradient(135deg,#0b1a2e,#005f73)"; txt="MOTIVATION EVOLVED"; col="#00f5d4"; sh="0 0 10px #00bbf9"; }
+    else if(yamatoUnlocked){ bg="linear-gradient(135deg,#1a0000,#330011,#0a0000)"; txt="💀 THE SURVIVORS 💀"; col="#ff0055"; sh="0 0 15px #ff0055"; }
+    else if(isFullHouse()){ bg="linear-gradient(135deg,#2a1500,#3a1a00,#1a0a00)"; txt="⚡ FULL HOUSE ×1.2 ⚡"; col="#ffd700"; sh="0 0 15px #ffd700"; }
+    else if(o.urizen){ bg="linear-gradient(135deg,#1a0000,#330000,#4a0000)"; txt="URIZEN AWAKENED"; col="#9d0208"; sh="0 0 12px #9d0208"; }
+    else if(o.nico){ bg="linear-gradient(135deg,#1a0f0a,#2b1510)"; txt="Nico built the van!"; col="#e76f51"; }
+    else if(o.trish){ bg="linear-gradient(135deg,#1a1500,#2b2200)"; txt="Trish is charged up!"; col="#ffd700"; sh="0 0 8px #ffd700"; }
+    else if(o.lady){ bg="linear-gradient(135deg,#1a1000,#2b1a00)"; txt="Lady's loaded!"; col="#ffb703"; }
+    else if(o.v){ bg="linear-gradient(135deg,#141414,#2c1a4d)"; txt="V is here."; col="#9b5de5"; }
+    else if(o.dante && o.nero){ bg="linear-gradient(135deg,#2b0b1a,#0b1a2b)"; txt="Sparda Family assembled!"; col="#ffb703"; }
+    else if(o.nero){ bg="linear-gradient(135deg,#0b1c2b,#005f73)"; txt="Nero energy!"; col="#457b9d"; }
+    else if(o.dante){ bg="linear-gradient(135deg,#2b0b0b,#1c0b2b)"; txt="Dante party!"; col="#e63946"; }
+    else if(n>=50){ txt="MAXIMUM MOTIVATION!"; col="#00f5d4"; }
+    else if(n>=20){ txt="Feeling the Yamato..."; col="#9b5de5"; }
+    else if(n>=5){ txt="Motivation is rising..."; col="#00bbf9"; }
+    if(secretAura && !o.dt && !o.sdt && !isFullHouse() && !yamatoUnlocked){
+        txt="⚡ MOTIVATION AURA ACTIVE ⚡"; col="#ffd700"; sh="0 0 15px #ffd700";
     }
-
-    const grad = ctx.createRadialGradient(
-        c.x - c.radius * 0.35, c.y - c.radius * 0.35, c.radius * 0.15,
-        c.x, c.y, c.radius
-    );
-    grad.addColorStop(0, shade(c.color, 70));
-    grad.addColorStop(1, c.color);
-
-    ctx.beginPath();
-    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
-    ctx.fillStyle = grad;
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0,0,0,.35)';
-    ctx.stroke();
-
-    const ex = c.dirX * 3, ey = c.dirY * 3;
-    ctx.fillStyle = 'rgba(255,255,255,.92)';
-    ctx.beginPath(); ctx.arc(c.x - 5 + ex, c.y - 3 + ey, 3.4, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(c.x + 5 + ex, c.y - 3 + ey, 3.4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#111';
-    ctx.beginPath(); ctx.arc(c.x - 5 + ex * 1.4, c.y - 3 + ey * 1.4, 1.6, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(c.x + 5 + ex * 1.4, c.y - 3 + ey * 1.4, 1.6, 0, Math.PI * 2); ctx.fill();
-
-    if (c.freezeTimer > 0) {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(116,185,255,.45)';
-        ctx.fill();
-    }
-
-    if (isHolder) {
-        const bob = Math.sin(now / 150) * 3;
-        ctx.font = '22px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('🥔', c.x, c.y - c.radius - 14 + bob);
-        ctx.font = '14px Arial';
-        ctx.fillText('🔥', c.x - 15, c.y - c.radius - 16 + bob);
-    }
-
-    ctx.font = 'bold 12px Arial';
-    ctx.textAlign = 'center';
-    const tw = ctx.measureText(c.name).width;
-    const py = c.y + c.radius + 9;
-    ctx.fillStyle = 'rgba(0,0,0,.5)';
-    roundRect(c.x - tw / 2 - 6, py, tw + 12, 16, 8);
-    ctx.fill();
-    ctx.fillStyle = c.isBot ? '#d6d6e0' : '#7fffd4';
-    ctx.fillText(c.name, c.x, py + 12);
+    document.body.style.background = bg;
+    st.textContent = txt;
+    st.style.color = col;
+    st.style.textShadow = sh;
 }
 
-function drawParticles() {
-    for (const p of state.particles) {
-        ctx.globalAlpha = Math.max(0, p.life);
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-}
-
-function drawTexts() {
-    ctx.textAlign = 'center';
-    ctx.font = 'bold 16px Arial';
-    for (const t of state.texts) {
-        ctx.globalAlpha = Math.max(0, t.life);
-        ctx.fillStyle = t.color;
-        ctx.fillText(t.text, t.x, t.y);
-    }
-    ctx.globalAlpha = 1;
-}
-
-function render(now) {
-    ctx.save();
-    if (state.shake > 0.4) {
-        ctx.translate(
-            (Math.random() - 0.5) * state.shake,
-            (Math.random() - 0.5) * state.shake
-        );
-    }
-
-    drawBackground(now);
-    for (const it of state.items) drawItem(it, now);
-    for (const p of state.players) drawCharacter(p, now);
-    drawParticles();
-    drawTexts();
-
-    ctx.restore();
-    drawTimerBar(now);
-}
-
-/* ============================ ЦИКЛ ============================ */
-let lastTime = performance.now();
-
-function loop(now) {
-    const dt = Math.min(now - lastTime, 60);
-    lastTime = now;
-
-    if (state.active) update(dt);
-    updateParticles(dt);
-    render(now);
-
-    requestAnimationFrame(loop);
-}
-
-startBtn.addEventListener('click', initGame);
-requestAnimationFrame(loop);
-
-})();
+/* ===== BOOT ===== */
+if(!loadGame()) init(true);
 </script>
 </body>
 </html>
