@@ -1,804 +1,1388 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Фан-архив лора Devil May Cry: игры, манга, новеллы, персонажи и аниме.">
-    <title>Devil May Cry: Lore Archive</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@300;400;700&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Roboto', sans-serif;
-            min-height: 100vh;
-            overflow-x: clip;
-            background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(0, 0, 139, 0.1) 0%, transparent 50%);
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="rgba(139,0,0,0.03)"/></svg>');
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        header { text-align: center; padding: 40px 0 20px; position: relative; }
-
-        h1 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            color: #cc0000;
-            text-shadow:
-                0 0 20px rgba(204, 0, 0, 0.5),
-                0 0 40px rgba(204, 0, 0, 0.3),
-                0 0 80px rgba(204, 0, 0, 0.1);
-            letter-spacing: 4px;
-            animation: pulseGlow 3s ease-in-out infinite alternate;
-            line-height: 1.2;
-        }
-
-        h1 span {
-            display: block;
-            font-size: 0.4em;
-            color: #888;
-            letter-spacing: 12px;
-            text-shadow: none;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 300;
-            margin-top: 5px;
-        }
-
-        @keyframes pulseGlow {
-            from { text-shadow: 0 0 20px rgba(204, 0, 0, 0.5), 0 0 40px rgba(204, 0, 0, 0.3); }
-            to   { text-shadow: 0 0 30px rgba(204, 0, 0, 0.8), 0 0 60px rgba(204, 0, 0, 0.5), 0 0 100px rgba(204, 0, 0, 0.2); }
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .category-nav {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .cat-btn {
-            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-family: 'MedievalSharp', cursive;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-        }
-
-        .cat-btn:hover,
-        .cat-btn.active {
-            border-color: #cc0000;
-            color: #fff;
-            background: linear-gradient(135deg, #2a0000, #1a0000);
-            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
-        }
-
-        .cat-btn:focus-visible { outline: 2px solid #cc0000; outline-offset: 3px; }
-
-        .cat-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 2px;
-            background: #cc0000;
-            box-shadow: 0 0 10px #cc0000;
-        }
-
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-
-        .item-card {
-            display: block;
-            width: 100%;
-            background: linear-gradient(145deg, #111 0%, #0a0a0a 100%);
-            border: 1px solid #222;
-            padding: 25px 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            text-align: left;
-            appearance: none;
-            -webkit-appearance: none;
-            animation: cardIn 0.45s ease both;
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .item-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(204, 0, 0, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .item-card:hover::before,
-        .item-card:focus-visible::before { left: 100%; }
-
-        .item-card:hover,
-        .item-card:focus-visible {
-            border-color: #cc0000;
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 40px rgba(204, 0, 0, 0.2);
-            outline: none;
-        }
-
-        .item-card:focus-visible { outline: 2px solid #cc0000; outline-offset: 3px; }
-
-        .item-card .card-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
-            display: block;
-            filter: drop-shadow(0 0 8px rgba(204, 0, 0, 0.5));
-        }
-
-        .item-card h3 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.3rem;
-            color: #cc0000;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .item-card p { color: #777; font-size: 0.85rem; line-height: 1.5; }
-
-        .item-card .tag {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 4px 12px;
-            border: 1px solid #333;
-            font-size: 0.7rem;
-            color: #888;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .modal-overlay.active { visibility: visible; opacity: 1; }
-
-        .modal-content {
-            background: linear-gradient(145deg, #151515, #0a0a0a);
-            border: 1px solid #cc0000;
-            max-width: 800px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 0 60px rgba(204, 0, 0, 0.2);
-            clip-path: polygon(0 0, 100% 0, 100% 95%, 98% 100%, 0 100%);
-            animation: modalIn 0.4s ease;
-        }
-
-        @keyframes modalIn {
-            from { transform: scale(0.9) translateY(30px); opacity: 0; }
-            to   { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        .modal-content::-webkit-scrollbar { width: 6px; }
-        .modal-content::-webkit-scrollbar-track { background: #0a0a0a; }
-        .modal-content::-webkit-scrollbar-thumb { background: #cc0000; border-radius: 3px; }
-
-        .modal-close {
-            position: absolute;
-            top: 15px; right: 20px;
-            background: none;
-            border: 1px solid #333;
-            color: #888;
-            font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .modal-close:hover,
-        .modal-close:focus-visible {
-            border-color: #cc0000;
-            color: #cc0000;
-            transform: rotate(90deg);
-            outline: none;
-        }
-
-        .modal-content h2 {
-            font-family: 'MedievalSharp', cursive;
-            color: #cc0000;
-            font-size: 2rem;
-            margin-bottom: 5px;
-            letter-spacing: 2px;
-            padding-right: 50px;
-        }
-
-        .modal-content .modal-subtitle {
-            color: #666;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #222;
-        }
-
-        .modal-content .story-text {
-            color: #bbb;
-            line-height: 1.8;
-            font-size: 0.95rem;
-        }
-
-        .modal-content .story-text p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
-        .modal-content .story-text .highlight { color: #cc0000; font-weight: 700; }
-
-        .modal-content .story-text .quote {
-            border-left: 3px solid #cc0000;
-            padding-left: 15px;
-            margin: 20px 0;
-            color: #999;
-            font-style: italic;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 0 20px;
-            color: #333;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        @media (max-width: 600px) {
-            .modal-content { padding: 25px 20px; }
-            .modal-content h2 { font-size: 1.5rem; }
-            .items-grid { grid-template-columns: 1fr; }
-            h1 { letter-spacing: 2px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DMC: Pizza Clash</title>
+<style>
+:root{--bg:#0b0c10;--p:#1f2833;--r:#ff2a4b;--b:#00f0ff;--t:#c5c6c7;--gold:#f1c40f;--green:#2ecc71;--orange:#e67e22;--purple:#9b59b6;--blue:#3498db}
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{height:100%}
+body{background:radial-gradient(circle at 50% 0%,#161b25 0%,var(--bg) 70%);color:var(--t);font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;padding:8px;min-height:100vh;overflow-x:hidden}
+#g{width:100%;max-width:460px;background:var(--p);border:2px solid var(--r);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 20px rgba(255,42,75,.25),0 8px 30px rgba(0,0,0,.5)}
+header{background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.2));padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:2px solid #2f3e46}
+.s-box{font-size:16px;font-weight:800;color:#fff;text-shadow:0 0 8px var(--r)}
+.s-box small{font-size:10px;color:#8a8d92;font-weight:600;text-shadow:none;margin-left:3px;letter-spacing:.5px}
+.hdr-actions{display:flex;gap:5px}
+.hdr-btn{background:rgba(0,0,0,.5);border:1px solid #3a4454;color:#fff;width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
+.hdr-btn:hover{background:rgba(255,42,75,.2);border-color:var(--r)}
+.hdr-btn.dirty::after{content:'';position:absolute;top:2px;right:2px;width:6px;height:6px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold)}
+nav{display:flex;background:#151c24;border-bottom:1px solid #2f3e46}
+.tab{flex:1;padding:10px 2px;background:none;border:none;color:var(--t);font-weight:700;cursor:pointer;font-size:11px;text-transform:uppercase;border-bottom:3px solid transparent;transition:all .15s;letter-spacing:.3px}
+.tab.active{color:var(--r);border-bottom-color:var(--r);background:var(--p)}
+.sc{display:none;padding:10px;flex-direction:column;align-items:center;max-height:72vh;overflow-y:auto}
+.sc.active{display:flex}
+.ep{text-align:center;width:100%;margin-bottom:5px}
+.en{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:.5px;transition:color .2s}
+.en.boss{color:var(--r);text-shadow:0 0 10px var(--r);animation:bossPulse 1s infinite alternate}
+.en.final{color:var(--purple);text-shadow:0 0 15px var(--purple),0 0 25px var(--r);animation:finalPulse 1.5s infinite alternate}
+@keyframes bossPulse{from{text-shadow:0 0 6px var(--r)}to{text-shadow:0 0 16px var(--r),0 0 24px #ff6b81}}
+@keyframes finalPulse{from{text-shadow:0 0 8px var(--purple)}to{text-shadow:0 0 20px var(--purple),0 0 40px var(--r)}}
+.boss-timer{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:3px;letter-spacing:.5px;transition:color .2s}
+.boss-timer.urgent{color:var(--r);animation:timerBlink .4s infinite alternate}
+.boss-timer.open-phase{color:var(--green);text-shadow:0 0 8px var(--green)}
+@keyframes timerBlink{from{opacity:.5}to{opacity:1}}
+.atk-ind{font-size:10px;font-weight:700;color:var(--r);margin-bottom:5px;letter-spacing:.5px;min-height:12px}
+.hb-b{width:100%;height:14px;background:#000;border-radius:7px;overflow:hidden;position:relative;border:1px solid #333;margin-bottom:5px}
+.hb-f{height:100%;background:linear-gradient(90deg,var(--r),#ff6b81);width:100%;transition:width .2s ease-out;box-shadow:inset 0 0 10px rgba(255,255,255,.15)}
+.hb-f.php{background:linear-gradient(90deg,#27ae60,#2ecc71)}
+.hb-f.php.low{background:linear-gradient(90deg,#c0392b,#e74c3c);animation:pulse .6s infinite alternate}
+@keyframes pulse{from{opacity:.6}to{opacity:1}}
+.hb-f.pizza{background:linear-gradient(90deg,var(--orange),var(--gold))}
+.hb-t{position:absolute;width:100%;text-align:center;top:50%;left:0;transform:translateY(-50%);font-size:10px;font-weight:800;color:#fff;text-shadow:0 1px 2px #000}
+.php-row{display:flex;align-items:center;gap:6px;width:100%;margin-bottom:6px}
+.php-label{font-size:9px;font-weight:900;color:var(--green);min-width:38px;text-align:right;letter-spacing:.5px}
+.php-row .hb-b{flex:1;margin-bottom:0}
+/* Timing bar - BIGGER AND CLEARER */
+.timing-wrap{width:100%;margin-bottom:8px;padding:10px 10px;background:rgba(0,0,0,.6);border:2px solid var(--green);border-radius:10px;box-shadow:0 0 15px rgba(46,204,113,.4)}
+.timing-wrap.final{border-color:var(--purple);box-shadow:0 0 15px rgba(155,89,182,.4)}
+.tw-label{font-size:11px;font-weight:900;color:var(--green);text-align:center;margin-bottom:6px;letter-spacing:.5px}
+.timing-wrap.final .tw-label{color:var(--purple)}
+.tb-track{height:32px;background:#0a0a0a;border-radius:16px;position:relative;overflow:hidden;border:2px solid #2a2a2a}
+.tb-zone{position:absolute;top:0;height:100%;background:linear-gradient(180deg,#3ef07e,#27ae60);border-left:3px solid #a7ffc4;border-right:3px solid #a7ffc4;box-shadow:inset 0 0 20px rgba(255,255,255,.6),0 0 15px rgba(46,204,113,.8);animation:zoneGlow 0.7s infinite alternate;z-index:1}
+@keyframes zoneGlow{from{filter:brightness(1)}to{filter:brightness(1.4);box-shadow:inset 0 0 20px rgba(255,255,255,.8),0 0 25px rgba(46,204,113,1)}}
+.timing-wrap.final .tb-zone{background:linear-gradient(180deg,#c084fc,#9b59b6);border-color:#e0c7f5;box-shadow:inset 0 0 20px rgba(255,255,255,.6),0 0 15px rgba(155,89,182,.8)}
+.tb-indicator{position:absolute;top:0;width:5px;height:100%;background:#fff;box-shadow:0 0 15px #fff,0 0 25px var(--r);transform:translateX(-50%);will-change:left;z-index:3;border-radius:2px}
+.hidden{display:none!important}
+#cc{width:100%;aspect-ratio:4/3;background:#0b0c10;border-radius:10px;border:1px solid #2f3e46;margin-bottom:8px;cursor:pointer;position:relative;overflow:hidden;box-shadow:inset 0 0 30px rgba(0,0,0,.8)}
+canvas{width:100%;height:100%;display:block}
+.btn{width:100%;padding:11px;font-size:14px;font-weight:800;background:linear-gradient(135deg,#27ae60,#2ecc71);border:none;border-radius:10px;color:#fff;cursor:pointer;text-transform:uppercase;display:none;letter-spacing:.5px;box-shadow:0 4px 0 rgba(0,0,0,.3);transition:transform .05s}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.combo{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);color:var(--gold);font-weight:900;font-size:16px;padding:4px 10px;border-radius:8px;border:1px solid var(--gold);opacity:0;transition:opacity .2s;pointer-events:none;text-shadow:0 0 10px var(--gold)}
+.combo.on{opacity:1;animation:comboPulse .3s}
+@keyframes comboPulse{0%{transform:scale(1.3)}100%{transform:scale(1)}}
+.si{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:8px;padding:9px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.si.special{border-color:var(--gold);background:rgba(241,196,15,.06)}
+.si.legendary{border-color:var(--purple);background:rgba(155,89,182,.08);box-shadow:0 0 12px rgba(155,89,182,.2)}
+.i-n{font-weight:800;color:#fff;font-size:12px}
+.i-d{font-size:10px;color:#aaa;margin-top:2px}
+.i-d.sp{color:var(--gold);font-weight:700}
+.i-d.lg{color:var(--purple);font-weight:700}
+.buy-btn{padding:6px 10px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:800;font-size:10px;cursor:pointer;white-space:nowrap;letter-spacing:.3px}
+.buy-btn:disabled{opacity:.4;cursor:not-allowed}
+.buy-btn.owned{background:#2c3e50}
+.buy-btn.owned:disabled{opacity:1;background:#1a2633;color:#666}
+.st-b{width:100%;background:#11161d;border-radius:8px;padding:11px;border:1px solid var(--b);margin-bottom:10px;font-size:12px;line-height:1.5;color:#dde1e7}
+.story-card{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:10px;padding:9px 11px;margin-bottom:7px;transition:all .15s}
+.story-card.current{border-color:var(--r);background:rgba(255,42,75,.07);box-shadow:0 0 14px rgba(255,42,75,.25)}
+.story-card.defeated{border-color:var(--green);background:rgba(46,204,113,.04);opacity:.7}
+.story-card.locked{opacity:.4}
+.story-card.final-card{border-color:var(--purple);background:rgba(155,89,182,.08)}
+.story-card.final-card.current{box-shadow:0 0 20px rgba(155,89,182,.5)}
+.sc-head{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.sc-num{background:var(--r);color:#fff;font-weight:900;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.story-card.defeated .sc-num{background:var(--green)}
+.story-card.locked .sc-num{background:#444}
+.story-card.final-card .sc-num{background:var(--purple)}
+.sc-name{font-weight:800;font-size:12px;color:#fff;flex:1}
+.story-card.final-card .sc-name{color:var(--purple);text-shadow:0 0 8px var(--purple)}
+.sc-info{font-size:10px;color:#aaa;margin-bottom:3px;line-height:1.4}
+.sc-ability{font-size:10px;color:var(--gold);font-weight:700;margin-bottom:3px}
+.sc-ability.final{color:var(--purple)}
+.sc-parry{font-size:10px;color:var(--green);font-weight:700;margin-bottom:4px}
+.sc-reward{font-size:10px;color:var(--gold);font-weight:700;margin-bottom:6px}
+.sc-btn-row{display:flex;gap:5px}
+.sc-btn{flex:1;padding:8px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:900;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
+.sc-btn:active{transform:scale(.98)}
+.sc-btn:disabled{background:#2c3e50;color:#666;cursor:not-allowed}
+.story-card.defeated .sc-btn{background:var(--green)}
+.story-card.final-card .sc-btn.fight-btn{background:var(--purple)}
+.sc-btn.story-btn{background:var(--blue);flex:0 0 auto;padding:8px 10px;font-size:10px}
+.rule h3{color:var(--r);margin:10px 0 4px;font-size:12px}
+.rule p{font-size:11px;line-height:1.5;color:#b0b5bd;margin-bottom:4px}
+.rule .gold{color:var(--gold);font-weight:700}
+.rule .purple{color:var(--purple);font-weight:700}
+.rule .green{color:var(--green);font-weight:700}
+.rule .blue{color:var(--blue);font-weight:700}
+.dmg-pop{position:absolute;font-weight:900;pointer-events:none;font-size:18px;text-shadow:0 2px 4px #000;animation:dmgFloat .7s ease-out forwards;transform:translate(-50%,0);z-index:5;white-space:nowrap}
+@keyframes dmgFloat{0%{transform:translate(-50%,0) scale(.5);opacity:1}30%{transform:translate(-50%,-20px) scale(1.3);opacity:1}100%{transform:translate(-50%,-60px) scale(1);opacity:0}}
+.shake{animation:shake .25s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;border-radius:10px;color:#fff;text-align:center;padding:20px}
+.overlay.show{display:flex}
+.overlay h2{color:var(--r);font-size:22px;margin-bottom:8px;text-shadow:0 0 20px var(--r);letter-spacing:2px}
+.overlay p{font-size:12px;margin-bottom:14px;color:#ccc;line-height:1.5}
+.overlay button{padding:10px 22px;background:var(--r);border:none;color:#fff;border-radius:8px;font-weight:800;cursor:pointer;font-size:13px;letter-spacing:1px}
+#finale{background:radial-gradient(circle,rgba(155,89,182,.3) 0%,rgba(0,0,0,.95) 70%)}
+#finale h2{color:var(--purple);font-size:32px;text-shadow:0 0 30px var(--purple),0 0 60px var(--purple);letter-spacing:6px;animation:finaleGlow 1.5s infinite alternate}
+@keyframes finaleGlow{from{text-shadow:0 0 20px var(--purple)}to{text-shadow:0 0 40px var(--purple),0 0 80px var(--r)}}
+#finale p{color:#ccc;max-width:320px;line-height:1.6}
+#finale .jackpot{color:var(--gold);font-weight:900;font-size:20px;letter-spacing:3px;text-shadow:0 0 15px var(--gold);margin:8px 0}
+.special-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;pointer-events:none;animation:specialPop 1.2s ease-out;z-index:20;text-align:center;padding:10px}
+@keyframes specialPop{0%{transform:scale(.3) rotate(-5deg);opacity:0}20%{transform:scale(1.2) rotate(2deg);opacity:1}60%{transform:scale(1);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.judgement-cut{animation:jc .4s}
+@keyframes jc{0%{filter:brightness(1)}30%{filter:brightness(3) hue-rotate(270deg)}100%{filter:brightness(1)}}
+.boss-flash{animation:bossFlash .6s}
+@keyframes bossFlash{0%{box-shadow:inset 0 0 0 rgba(255,42,75,0)}50%{box-shadow:inset 0 0 80px rgba(255,42,75,.7)}100%{box-shadow:inset 0 0 0 rgba(255,42,75,0)}}
+.final-aura{animation:finalAura 2s infinite alternate}
+@keyframes finalAura{from{box-shadow:inset 0 0 40px rgba(155,89,182,.3)}to{box-shadow:inset 0 0 80px rgba(155,89,182,.6)}}
+.open-phase-aura{animation:openAura 1s infinite alternate}
+@keyframes openAura{from{box-shadow:inset 0 0 40px rgba(46,204,113,.3)}to{box-shadow:inset 0 0 80px rgba(46,204,113,.6)}}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,.95);color:#fff;padding:10px 18px;border-radius:8px;font-weight:800;font-size:12px;z-index:1000;transition:transform .3s;border:1px solid var(--green);letter-spacing:.5px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.warn{border-color:var(--r);color:#ff8a9a}
+.story-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px}
+.story-modal.show{display:flex}
+.story-modal-content{background:linear-gradient(180deg,#1a1f2a,#0f1218);border:2px solid var(--blue);border-radius:14px;padding:20px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 0 40px rgba(52,152,219,.4)}
+.story-modal-content h2{color:var(--blue);font-size:20px;margin-bottom:12px;text-align:center;letter-spacing:1px;text-shadow:0 0 12px var(--blue)}
+.story-modal-content .sm-icon{text-align:center;font-size:36px;margin-bottom:8px}
+.story-modal-content p{font-size:13px;line-height:1.7;color:#dde1e7;margin-bottom:14px;text-align:left}
+.story-modal-content p strong{color:var(--gold)}
+.story-modal-content button{width:100%;padding:11px;background:var(--blue);border:none;color:#fff;border-radius:8px;font-weight:900;font-size:13px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.tutorial-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2500;padding:20px}
+.tutorial-modal.show{display:flex}
+.tutorial-content{background:linear-gradient(180deg,#1a2230,#0f1218);border:2px solid var(--green);border-radius:14px;padding:22px;max-width:400px;width:100%;box-shadow:0 0 40px rgba(46,204,113,.5)}
+.tutorial-content h2{color:var(--green);font-size:20px;margin-bottom:14px;text-align:center;letter-spacing:1px;text-shadow:0 0 12px var(--green)}
+.tutorial-content p{font-size:13px;line-height:1.7;color:#dde1e7;margin-bottom:12px}
+.tutorial-content p strong{color:var(--gold)}
+.tutorial-content .tc-step{background:rgba(0,0,0,.4);padding:8px 12px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--green)}
+.tutorial-content button{width:100%;padding:12px;background:var(--green);border:none;color:#fff;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:8px}
+</style>
 </head>
 <body>
-
-    <div class="container">
-        <header>
-            <h1>Devil May Cry<span>Lore Archive</span></h1>
-            <p class="subtitle">Хроники охотника на демонов</p>
-        </header>
-
-        <nav class="category-nav">
-            <button class="cat-btn active" data-category="games">ИГРЫ (1–5)</button>
-            <button class="cat-btn" data-category="manga">МАНГА</button>
-            <button class="cat-btn" data-category="novels">НОВЕЛЛЫ</button>
-            <button class="cat-btn" data-category="characters">ПЕРСОНАЖИ</button>
-            <button class="cat-btn" data-category="anime">АНИМЕ</button>
-        </nav>
-
-        <div class="items-grid" id="itemsGrid"></div>
-
-        <footer>Devil May Cry &copy; Capcom | Fan-made Lore Archive</footer>
+<div id="g">
+  <header>
+    <div class="s-box">🍕 <span id="m-d">0</span></div>
+    <div class="hdr-actions">
+      <button id="save-btn" class="hdr-btn" title="Сохранить">💾</button>
+      <button id="reset-btn-h" class="hdr-btn" title="Сбросить всё">🗑</button>
     </div>
-
-    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose" aria-label="Закрыть">&times;</button>
-            <h2 id="modalTitle"></h2>
-            <div class="modal-subtitle" id="modalSubtitle"></div>
-            <div class="story-text" id="modalStory"></div>
-        </div>
+    <div class="s-box" style="font-size:12px;text-shadow:none">
+      <span id="mode-lbl" style="color:#8a8d92">ВОЛНА</span> 
+      <span id="wave" style="color:#fff;text-shadow:0 0 8px var(--r)">1</span>
     </div>
+  </header>
+  <nav>
+    <button class="tab active" data-sc="battle">Битва</button>
+    <button class="tab" data-sc="shop">Скины</button>
+    <button class="tab" data-sc="story">Сюжет</button>
+    <button class="tab" data-sc="rules">Инфо</button>
+  </nav>
 
-    <script>
-        const loreData = {
-            games: [
-                {
-                    id: 'dmc1', icon: '🗡️', title: 'Devil May Cry', year: '2001', tag: 'PlayStation 2',
-                    subtitle: 'Начало легенды',
-                    story: `
-                        <p>Данте — <span class="highlight">получеловек-полудемон</span>, сын легендарного Тёмного Рыцаря Спарды, который много веков назад изгнал Владыку Тьмы Мундуса в подземный мир. Данте владеет частным агентством по истреблению демонов, и однажды получает загадочное приглашение от женщины по имени <span class="highlight">Триш</span> — отправиться на остров Маллет и сразиться с Мундусом.</p>
-                        <p>Мундус, пробуждаясь, посылает своих слуг уничтожить Данте. Пробиваясь через орды демонов, Данте попадает в огромный замок, где сталкивается со своим братом <span class="highlight">Вергилием</span>, превращённым в демона Нело Анджело. Тяжкая участь брата наполняет душу Данте раскаянием и яростью.</p>
-                        <p>В финальной битве против Мундуса Данте использует силу истинного Сына Спарды. Триш, изначально созданная Мундусом как приманка, встаёт на сторону Данте, и вместе они одерживают победу. Мундус запечатан, но Данте теряет брата — и обретает верного союзника в лице Триш, которая становится его напарницей.</p>
-                        <div class="quote">«Я — Данте, сын Спарды. И я здесь, чтобы отправить тебя обратно в ад.»</div>
-                    `
-                },
-                {
-                    id: 'dmc2', icon: '🌑', title: 'Devil May Cry 2', year: '2003', tag: 'PlayStation 2',
-                    subtitle: 'Тени прошлого',
-                    story: `
-                        <p>События разворачиваются в городе <span class="highlight">Вьё-де-Марли</span>. Данте получает заказ на поиск таинственной печати, которая может открыть врата между миром людей и демонов. В этом ему помогает <span class="highlight">Люсия</span> — член клана хранителей с демонической кровью.</p>
-                        <p>Их противник — безумный бизнесмен <span class="highlight">Ариус</span>, который стремится освободить демоническое божество <span class="highlight">Аргосака</span>. Люсия играет ключевую роль в противостоянии, а Данте, объединив с ней усилия, останавливает Ариуса и сражается с Аргосаксом в финальной битве.</p>
-                        <p>После победы Данте отправляется в измерение демонов, оставляя Люсии свой меч и монету — символ того, что он вернётся. Эта часть часто считается самой мрачной и философской в серии, исследующей тему одиночества и предназначения.</p>
-                        <div class="quote">«Демоны не плачут. Но иногда... даже они чувствуют боль.»</div>
-                    `
-                },
-                {
-                    id: 'dmc3', icon: '🔥', title: "Devil May Cry 3: Dante's Awakening", year: '2005', tag: 'PlayStation 2',
-                    subtitle: 'Пробуждение',
-                    story: `
-                        <p>Хронологически первая часть серии. Молодой Данте, ещё не открывший агентство, получает визит таинственного <span class="highlight">Аркхама</span> — учёного-демонолога, который убил свою жену. Аркхам сообщает Данте, что его брат <span class="highlight">Вергилий</span> строит башню <span class="highlight">Темен-ни-гру</span>, чтобы получить силу Спарды.</p>
-                        <p>Данте отправляется остановить брата. В башне он встречает <span class="highlight">Леди</span> — дочь Аркхама, которая охотится на собственного отца. Братья сражаются несколько раз: их конфликт строится на противоположных жизненных целях — Вергилий стремится к абсолютной силе, Данте — к защите человечества.</p>
-                        <p>Аркхам предаёт Вергилия и забирает силу Спарды себе, но объединёнными усилиями Данте, Вергилий и Леди побеждают его. В финале Вергилий уходит в портал между мирами, где проигрывает Мундусу и становится его рабом — Нело Анджело. Данте остаётся в мире людей, открывает агентство «Devil May Cry» и начинает свой путь охотника на демонов.</p>
-                        <div class="quote">«Сила — это всё. Без силы ты ничто. Без силы ты не можешь защитить даже то, что тебе дорого.» — Вергилий</div>
-                    `
-                },
-                {
-                    id: 'dmc4', icon: '⚔️', title: 'Devil May Cry 4', year: '2008', tag: 'PlayStation 3 / Xbox 360',
-                    subtitle: 'Орден Меча',
-                    story: `
-                        <p>Действие происходит на острове <span class="highlight">Фортуна</span>, где правит Орден Меча. Главный герой — <span class="highlight">Неро</span>, молодой рыцарь Ордена, обладающий демонической рукой <span class="highlight">Devil Bringer</span>. Во время фестиваля Ордена <span class="highlight">Данте</span> убивает Верховного Жреца Санктуса на глазах у Неро, и Неро отправляется в погоню.</p>
-                        <p>Постепенно раскрывается истинная суть Ордена: Санктус стремится использовать силу Спарды для создания <span class="highlight">Спасителя</span> — гигантской статуи-оружия. Неро узнаёт, что его рука — наследие Вергилия, его истинного отца. Данте и Неро объединяются, чтобы остановить Санктуса.</p>
-                        <p>Неро освобождает Кирие, свою возлюбленную, и уничтожает Санктуса. Данте забирает Ямато — меч Вергилия — и передаёт его Неро, признавая его силу. Неро остаётся защитником Фортуны, а Данте возвращается в своё агентство.</p>
-                        <div class="quote">«Я не собираюсь быть как ты. Я сам решу, каким мне быть.» — Неро</div>
-                    `
-                },
-                {
-                    id: 'dmc-reboot', icon: '🌀', title: 'DmC: Devil May Cry', year: '2013', tag: 'PS3 / Xbox 360 / PC',
-                    subtitle: 'Перезапуск',
-                    story: `
-                        <p><span class="highlight">DmC: Devil May Cry</span> — перезапуск серии, разработанный студией <span class="highlight">Ninja Theory</span> и изданный Capcom в 2013 году. Действие происходит в совершенно новой вселенной, не связанной с предыдущими играми.</p>
-                        <p>Главный герой — <span class="highlight">Данте</span>, <span class="highlight">напфилим</span> (гибрид ангела и демона), который не помнит своего прошлого. Он скрывается от демонов в мире людей, пока его не находит <span class="highlight">Кэт</span> и не приводит в организацию «Орден» к своему брату <span class="highlight">Вергилию</span>.</p>
-                        <p>Выясняется, что 9000 лет назад демон <span class="highlight">Мундус</span> победил в войне, а отец Данте — демон <span class="highlight">Спарда</span> — полюбил ангела <span class="highlight">Еву</span>, и у них родились близнецы. Мундус убил Еву, и теперь Данте стремится отомстить, но постепенно задумывается, за что именно он сражается.</p>
-                        <p>Ключевая особенность — измерение <span class="highlight">Лимбо</span>, параллельная реальность, отражающая мир людей, которая постоянно разрушается и атакует Данте. Демоны могут в любой момент затянуть его туда.</p>
-                        <div class="quote">«Меня зовут Данте. И я не тот, кем ты меня считаешь.»</div>
-                    `
-                },
-                {
-                    id: 'dmc5', icon: '🌳', title: 'Devil May Cry 5', year: '2019', tag: 'PS4 / Xbox One / PC',
-                    subtitle: 'Королевская битва',
-                    story: `
-                        <p>Прошло несколько лет после событий DMC4. <span class="highlight">Неро</span> лишается демонической руки — её отрубает таинственный незнакомец. Тем временем <span class="highlight">Данте</span> получает заказ от загадочного мужчины по имени <span class="highlight">V</span> на уничтожение демона, которого тот называет «твоя причина».</p>
-                        <p>Все трое — Данте, Неро и V — сходятся в <span class="highlight">Редгрейв-Сити</span>, над которым вырос демонический <span class="highlight">Древо Клифот</span>, высасывающее кровь людей. Выясняется, что незнакомец, отрубивший руку Неро, — это <span class="highlight">Уризен</span>, демоническая половина Вергилия, отделившаяся от него с помощью Ямато. V — человеческая половина Вергилия, его совесть и слабость.</p>
-                        <p>Вергилий разделил себя, чтобы избавиться от человеческих слабостей и обрести силу. Данте сражается с Уризеном, Неро — с Вергилием. В финале братья Данте и Вергилий объединяются, чтобы срубить Древо Клифот и закрыть портал в мир демонов. Они остаются в аду, а Неро, Люсия и Триш продолжают защищать мир людей.</p>
-                        <div class="quote">«Я — V. Я — то, что осталось от Вергилия. Его человеческая часть... его слабость.»</div>
-                    `
-                }
-            ],
-            manga: [
-                {
-                    id: 'vov', icon: '📖', title: 'Devil May Cry 5: Visions of V', year: '2019–2021', tag: 'Манга / 5 томов',
-                    subtitle: 'Глазами V',
-                    story: `
-                        <p>Спин-офф манга, рассказывающая историю <span class="highlight">V</span> — загадочного мужчины, появившегося в Devil May Cry 5. Это приквел к событиям игры, раскрывающий то, что осталось за кадром.</p>
-                        <p>V родился из <span class="highlight">человеческой половины Вергилия</span>, отделённой с помощью Ямато. Слабый и умирающий, он заключает контракты с тремя демоническими фамильярами: <span class="highlight">Грифоном</span> (птица-демон), <span class="highlight">Шэдоу</span> (пантера) и <span class="highlight">Найтмер</span> (гигантский голем). Каждый из них — часть его самого, его страхи и сожаления.</p>
-                        <p>Манга показывает путь V от момента его рождения до встречи с Данте. Он использует всех — Данте, Неро — как инструменты для достижения своей цели: уничтожить Уризена и воссоединиться с Вергилием. Но постепенно V начинает ценить человеческие связи и понимать, что значит быть человеком.</p>
-                        <p>Финал манги подводит к кульминации DMC5, где V сливается с Уризеном, вновь становясь Вергилием. Это история о слабости, которая оказывается силой, и о том, что даже демон может обрести человечность.</p>
-                        <div class="quote">«Я не могу позволить себе роскошь быть человеком. Но... возможно, это и есть моя сила.»</div>
-                    `
-                },
-                {
-                    id: 'dmc3manga', icon: '📕', title: 'Devil May Cry 3 Manga', year: '2005–2006', tag: 'Манга / 2 тома',
-                    subtitle: 'Код Данте и Вергилия',
-                    story: `
-                        <p>Манга, являющаяся приквелом к Devil May Cry 3. Сюжет разворачивается незадолго до событий игры и раскрывает предысторию конфликта братьев.</p>
-                        <p>Молодой Данте, только начинающий карьеру охотника, получает необычный заказ от своего посредника <span class="highlight">Энзо</span>. Первоначально отказавшись, он оказывается втянут в события демонического характера, которые приводят его к противостоянию с Вергилием.</p>
-                        <p>Манга раскрывает важные детали: причины возведения <span class="highlight">Темен-ни-гру</span>, мотивацию Вергилия в его поисках силы, сложные взаимоотношения братьев. Планировалась как трилогия, но были выпущены только две части — «Код Данте» и «Код Вергилия».</p>
-                        <p>Это произведение органично дополняет игровую историю, не раскрывая критических сюжетных поворотов, но углубляя понимание вселенной.</p>
-                    `
-                }
-            ],
-            novels: [
-                {
-                    id: 'dmc1novel', icon: '📘', title: 'Devil May Cry Novel', year: '2002', tag: 'Ранобэ / 2 тома',
-                    subtitle: 'Начало пути',
-                    story: `
-                        <p>Ранобэ-приквел к оригинальной игре, написанное <span class="highlight">Син-я Гойкедой</span> в сотрудничестве с создателем серии Хидеки Камией. Иллюстрации выполнил Сиро Мива.</p>
-                        <p>Сюжет разворачивается примерно за <span class="highlight">три года до событий Devil May Cry 3</span>. Данте около 16–17 лет, он только начинает карьеру наёмника. История рассказывает о его первых серьёзных отношениях и важных моментах, связанных с братом Вергилием.</p>
-                        <p>Новелла содержит множество небольших, но значимых деталей, которые позже нашли отражение в игровой серии. Особое влияние произведение оказало на пятую часть игры, что делает его важным материалом для понимания общей истории Devil May Cry.</p>
-                        <div class="quote">«Данте ещё не знал, что его ждёт. Но он уже чувствовал — это только начало.»</div>
-                    `
-                },
-                {
-                    id: 'dmc4novel', icon: '📙', title: 'Devil May Cry 4: Deadly Fortune', year: '2009', tag: 'Ранобэ / 2 тома',
-                    subtitle: 'Смертельная удача',
-                    story: `
-                        <p>Новелизация Devil May Cry 4, написанная <span class="highlight">Бинго Морихаси</span>. События пересказываются с двух точек зрения: Неро и Данте.</p>
-                        <p>Книга углубляется в предысторию <span class="highlight">Неро</span> и Ордена Меча в Фортуне. Раскрываются сцены, которые в игре были лишь намёками: Неро, найденный младенцем в чёрном одеяле (отсюда его имя — «чёрный»), его первые встречи с Кирие и Кредо, намёки на то, что Вергилий посещал Фортуну.</p>
-                        <p>Также более подробно прописаны антагонисты — Санктус и Агнус. Показаны параллельные расследования Данте и его путь через Фортуну, что делает историю более полной и многогранной.</p>
-                    `
-                },
-                {
-                    id: 'dmc5novel', icon: '📗', title: 'Devil May Cry 5: Before the Nightmare', year: '2019', tag: 'Ранобэ',
-                    subtitle: 'Перед кошмаром',
-                    story: `
-                        <p>Приквел-новелла к Devil May Cry 5, написанная <span class="highlight">Бинго Морихаси</span>. Действие происходит за несколько лет до событий игры.</p>
-                        <p>Неро живёт вместе с Кирие, и однажды встречает девушку <span class="highlight">Нико</span>, которая мечтает стать оружейником. Её дерзкий характер сначала настораживает Неро, но постепенно они сближаются. Именно Нико станет той, кто создаст для Неро новые руки-протезы после потери Devil Bringer.</p>
-                        <p>Параллельно Данте получает заказ от таинственного мужчины по имени <span class="highlight">V</span> через информатора Моррисона. V просит убить демона, которого называет «твоя причина». Так начинается цепочка событий, ведущая в Редгрейв-Сити.</p>
-                        <p>Новелла подробно описывает, как Неро потерял демоническую руку, и как Данте, V и Неро оказались втянуты в историю с Древом Клифот.</p>
-                        <div class="quote">«Иногда прошлое возвращается не для того, чтобы простить. А для того, чтобы забрать своё.»</div>
-                    `
-                }
-            ],
-            characters: [
-                {
-                    id: 'dante', icon: '🗡️', title: 'Данте', year: 'DMC 1–5', tag: 'Главный герой',
-                    subtitle: 'Сын Спарды, охотник на демонов',
-                    story: `
-                        <p><span class="highlight">Данте</span> — центральный персонаж серии, сын легендарного Тёмного Рыцаря <span class="highlight">Спарды</span> и человеческой женщины <span class="highlight">Евы</span>, младший брат-близнец Вергилия и дядя Неро. После гибели матери от рук демонов Мундуса он посвятил жизнь истреблению нечисти и открыл агентство «Devil May Cry».</p>
-                        <p>Данте — полудемон, унаследовавший колоссальную силу отца. Он владеет двуручным мечом <span class="highlight">Rebellion</span> (позже — мечом Спарды) и парой пистолетов «Эбони и Айвори», а его демоническая форма называется <span class="highlight">Devil Trigger</span>. Несмотря на внешнюю беспечность и любовь к пицце, за шутками скрывается глубокое чувство ответственности за человечество.</p>
-                        <p>На протяжении серии Данте побеждает Мундуса, Аркхама, Ариуса, Санктуса и Уризена. В финале DMC5 он вместе с Вергилием остаётся в аду, чтобы срубить Древо Клифот и защитить мир людей.</p>
-                        <div class="quote">«Я — Данте, сын Спарды. И я здесь, чтобы отправить тебя обратно в ад.»</div>
-                    `
-                },
-                {
-                    id: 'vergil', icon: '🌀', title: 'Вергилий', year: 'DMC 1, 3, 5', tag: 'Брат-близнец / Антагонист',
-                    subtitle: 'Тот, кто жаждет силы',
-                    story: `
-                        <p><span class="highlight">Вергилий</span> — старший брат-близнец Данте, также сын Спарды и Евы, и биологический отец Неро. В детстве он пережил ту же травму потери матери, но выбрал путь абсолютной силы, считая, что только она может защитить то, что дорого.</p>
-                        <p>Вергилий — мастер катаны <span class="highlight">Ямато</span>, способной разрезать пространство и отделять человеческое от демонического. В DMC3 он пытается открыть врата в мир демонов, чтобы получить силу Спарды, но терпит поражение и становится рабом Мундуса — <span class="highlight">Нело Анджело</span>.</p>
-                        <p>В DMC5 Вергилий разделяет себя Ямато на демоническую половину <span class="highlight">Уризена</span> и человеческую — <span class="highlight">V</span>. После воссоединения он принимает свою человечность и вместе с Данте остаётся в аду, чтобы уничтожить Древо Клифот.</p>
-                        <div class="quote">«Сила — это всё. Без силы ты ничто.»</div>
-                    `
-                },
-                {
-                    id: 'nero', icon: '🐺', title: 'Неро', year: 'DMC 4–5', tag: 'Главный герой',
-                    subtitle: 'Рыцарь Ордена Меча',
-                    story: `
-                        <p><span class="highlight">Неро</span> — сын Вергилия и племянник Данте, выросший сиротой на острове Фортуна. Он был принят в семью Кирие и Кредо и вступил в Орден Меча, где стал единственным рыцарем, обладающим демонической рукой — <span class="highlight">Devil Bringer</span>.</p>
-                        <p>В DMC4 Неро раскрывает заговор Санктуса и вместе с Данте останавливает Орден. В DMC5 он теряет демоническую руку, но получает кибернетические протезы <span class="highlight">Devil Breaker</span>, созданные Нико. Неро осознаёт своё происхождение, но выбирает защищать людей по собственному желанию, а не из-за наследия крови.</p>
-                        <p>После событий DMC5 он основывает передвижной филиал агентства «Devil May Cry», чтобы обеспечивать свою семью с Кирие.</p>
-                        <div class="quote">«Я не собираюсь быть как ты. Я сам решу, каким мне быть.»</div>
-                    `
-                },
-                {
-                    id: 'trish', icon: '⚡', title: 'Триш', year: 'DMC 1–5', tag: 'Союзник / Демон',
-                    subtitle: 'Создана по образу Евы',
-                    story: `
-                        <p><span class="highlight">Триш</span> — демон, созданный Мундусом по образу матери Данте, <span class="highlight">Евы</span>, чтобы заманить его в ловушку. Изначально она была врагом, но после того, как Данте спас её, Триш переосмыслила своё существование и встала на его сторону.</p>
-                        <p>Она стала напарницей Данте и работает в его агентстве. Триш обладает демонической силой, контролирует молнии и использует пистолеты. В DMC4 она маскируется под <span class="highlight">Глорию</span>, чтобы проникнуть в Орден Меча.</p>
-                        <p>Несмотря на своё происхождение, Триш проявляет человеческие эмоции и глубоко привязана к Данте, хотя их отношения остаются неоднозначными.</p>
-                        <div class="quote">«Демоны не плачут. Но иногда... даже они чувствуют боль.»</div>
-                    `
-                },
-                {
-                    id: 'lady', icon: '🔫', title: 'Леди (Мэри)', year: 'DMC 3–5', tag: 'Союзник / Охотница',
-                    subtitle: 'Дочь Аркхама',
-                    story: `
-                        <p><span class="highlight">Леди</span>, настоящее имя <span class="highlight">Мэри</span>, — человек и охотница на демонов, впервые появившаяся в DMC3. Она — дочь безумного учёного <span class="highlight">Аркхама</span>, который убил её мать ради демонической силы.</p>
-                        <p>Леди поклялась отомстить отцу и выследила его. Вместе с Данте она участвовала в битве на башне Темен-ни-гру. После гибели Аркхама она стала союзницей и партнёром Данте, часто появляясь в его агентстве.</p>
-                        <p>Она не обладает демоническими силами, но компенсирует это великолепным владением огнестрельным оружием (особенно дробовиком <span class="highlight">Kalina Ann</span>, названным в честь матери) и невероятной решимостью.</p>
-                    `
-                },
-                {
-                    id: 'lucia', icon: '🦋', title: 'Люсия', year: 'DMC 2', tag: 'Главная героиня',
-                    subtitle: 'Искусственный демон',
-                    story: `
-                        <p><span class="highlight">Люсия</span> — искусственный демон, созданный бизнесменом <span class="highlight">Ариусом</span>, но позже сбежавшая от него и ставшая членом клана <span class="highlight">Вьё-де-Марли</span> на острове Думари. Её удочерила <span class="highlight">Матиер</span>, лидер клана.</p>
-                        <p>Люсия — ловкая и смертоносная охотница, сражающаяся с демонами. В DMC2 она помогает Данте остановить Ариуса и не дать ему освободить <span class="highlight">Аргосака</span>. Она борется с комплексом из-за своего искусственного происхождения, но Данте помогает ей принять себя.</p>
-                        <p>После победы над Ариусом Люсия остаётся защищать остров, а Данте оставляет ей свой меч и монету в знак того, что вернётся.</p>
-                    `
-                },
-                {
-                    id: 'nico', icon: '🔧', title: 'Нико', year: 'DMC 5', tag: 'Союзник / Оружейник',
-                    subtitle: 'Гений-изобретатель',
-                    story: `
-                        <p><span class="highlight">Нико</span> (полное имя — <span class="highlight">Николетта Гольдштейн</span>) — талантливый инженер и оружейник, внучка легендарной Нелл Гольдштейн и дочь безумного учёного Агнуса. Она помогает Неро в его охоте на демонов и создаёт для него кибернетические протезы <span class="highlight">Devil Breaker</span> после потери руки.</p>
-                        <p>Нико — эксцентричная, дерзкая, с своеобразным чувством юмора. Она ездит на фургоне, который служит мобильным филиалом агентства «Devil May Cry». Несмотря на сложные отношения с отцом, она унаследовала его гениальность, но направила её на защиту людей.</p>
-                    `
-                },
-                {
-                    id: 'v', icon: '📖', title: 'V', year: 'DMC 5', tag: 'Главный герой',
-                    subtitle: 'Человеческая половина Вергилия',
-                    story: `
-                        <p><span class="highlight">V</span> — загадочный мужчина, появившийся в DMC5. Он выглядит слабым и передвигается с тростью, но на самом деле является <span class="highlight">человеческой половиной Вергилия</span>, отделённой с помощью Ямато. Его тело слабо, но он командует тремя демоническими фамильярами.</p>
-                        <p>V нанимает Данте, чтобы тот убил «его причину» — Уризена, демоническую половину самого Вергилия. По мере развития сюжета V осознаёт ценность человеческих связей и жертвует собой, чтобы вновь слиться с Уризеном и восстановить Вергилия.</p>
-                        <p>Его фамильяры — <span class="highlight">Грифон</span> (птица, контролирующая молнии), <span class="highlight">Шэдоу</span> (пантера, использующая шипы) и <span class="highlight">Найтмер</span> (гигантский голем) — являются воплощениями его страхов и воспоминаний.</p>
-                    `
-                },
-                {
-                    id: 'patty', icon: '👧', title: 'Пэтти Лоуэлл', year: 'Аниме 2007 / DMC 5', tag: 'Союзник',
-                    subtitle: 'Девочка, которую спас Данте',
-                    story: `
-                        <p><span class="highlight">Пэтти Лоуэлл</span> (Patty Lowell) — ключевой персонаж аниме-сериала 2007 года. На момент событий аниме ей около <span class="highlight">8–10 лет</span>. Данте изначально принимает её за наследницу огромного состояния с таким же именем и берётся охранять, но позже выясняется, что это ошибка.</p>
-                        <p>Пэтти — сирота, которая после спасения начинает жить в офисе «Devil May Cry», берёт на себя уборку и готовку, присматривая за неряшливым Данте. Несмотря на юный возраст, она обладает живым характером и не боится говорить Данте всё, что думает о его лени.</p>
-                        <p>На самом деле Пэтти — потомок могущественного волшебника <span class="highlight">Алана Лоуэлла</span>, а её мать, <span class="highlight">Нина Лоуэлл</span>, также обладает магической кровью. В DMC5 Пэтти уже <span class="highlight">18 лет</span>, она звонит Данте по телефону, но физически в игре не появляется.</p>
-                        <p>Пэтти — один из самых человечных персонажей франшизы, напоминающий Данте о его человеческой стороне.</p>
-                    `
-                },
-                {
-                    id: 'sparda', icon: '🛡️', title: 'Спарда', year: 'Легенда', tag: 'Тёмный Рыцарь',
-                    subtitle: 'Отец Данте и Вергилия',
-                    story: `
-                        <p><span class="highlight">Спарда</span> — легендарный демон-мечник, отец Данте и Вергилия. Два тысячелетия назад он был одним из генералов Мундуса, но предал демонического императора и встал на защиту человечества.</p>
-                        <p>Спарда победил Мундуса и запечатал врата в мир демонов, пожертвовав частью своей силы. Позже он встретил человеческую женщину <span class="highlight">Еву</span>, влюбился в неё, и у них родились близнецы. После этого Спарда исчез, и его судьба остаётся неизвестной.</p>
-                        <p>Его наследие — мечи Rebellion и Yamato, а также амулеты, подаренные сыновьям, — играет ключевую роль во всей серии.</p>
-                    `
-                },
-                {
-                    id: 'eva', icon: '👼', title: 'Ева', year: 'Легенда', tag: 'Мать',
-                    subtitle: 'Человеческая женщина',
-                    story: `
-                        <p><span class="highlight">Ева</span> — человеческая женщина, жена Спарды и мать Данте и Вергилия. Она была убита демонами Мундуса, когда близнецам было около восьми лет. Её смерть стала катализатором: Вергилий выбрал путь силы, а Данте — путь мести и защиты.</p>
-                        <p>Её образ был использован Мундусом для создания Триш. Ева также фигурирует в воспоминаниях и видениях братьев на протяжении всей серии.</p>
-                    `
-                },
-                {
-                    id: 'mundus', icon: '😈', title: 'Мундус', year: 'DMC 1', tag: 'Антагонист',
-                    subtitle: 'Князь Тьмы',
-                    story: `
-                        <p><span class="highlight">Мундус</span> — главный антагонист первой игры и повелитель демонов. Два тысячелетия назад он был побеждён и запечатан Спардой. Он ответственен за смерть Евы и создание Триш.</p>
-                        <p>Мундус обладает колоссальной демонической силой и тремя глазами. В DMC1 Данте побеждает его и запечатывает снова. В DMC5 упоминается, что Мундус был ослаблен и свергнут, что позволило Уризену занять его место.</p>
-                    `
-                },
-                {
-                    id: 'urizen', icon: '🔥', title: 'Уризен', year: 'DMC 5', tag: 'Антагонист',
-                    subtitle: 'Демоническая половина Вергилия',
-                    story: `
-                        <p><span class="highlight">Уризен</span> — демоническая половина Вергилия, отделённая от него с помощью Ямато. Он — гигантский, невероятно сильный демон, олицетворяющий жажду силы и жестокость Вергилия без человеческих сомнений.</p>
-                        <p>Уризен захватывает власть в аду, свергнув ослабленного Мундуса, и выращивает <span class="highlight">Древо Клифот</span>, чтобы поглотить человеческий мир. Данте сражается с ним несколько раз и в итоге побеждает.</p>
-                        <p>В финале Уризен вновь сливается с V, восстанавливая Вергилия — целостную личность, принявшую и силу, и человечность.</p>
-                    `
-                },
-                {
-                    id: 'arkham', icon: '🦉', title: 'Аркхам', year: 'DMC 3', tag: 'Антагонист',
-                    subtitle: 'Безумный учёный',
-                    story: `
-                        <p><span class="highlight">Аркхам</span> — главный антагонист DMC3, отец Леди. Талантливый учёный-демонолог, он убил свою жену Калину Анн ради получения демонической силы.</p>
-                        <p>Аркхам манипулирует Вергилием, чтобы получить меч Спарды, но в итоге превращается в бесформенного демона и погибает от рук Данте, Вергилия и Леди.</p>
-                    `
-                },
-                {
-                    id: 'sanctus', icon: '⛪', title: 'Санктус', year: 'DMC 4', tag: 'Антагонист',
-                    subtitle: 'Верховный Жрец Ордена',
-                    story: `
-                        <p><span class="highlight">Санктус</span> — главный антагонист DMC4, лидер Ордена Меча. Он стремится использовать силу Спарды для создания <span class="highlight">Спасителя</span> — гигантского оружия, чтобы уничтожить всех демонов и установить контроль над миром.</p>
-                        <p>Санктус погибает от руки Данте в начале игры, но воскресает с демонической силой. В финале он сливается со Спасителем, но Неро уничтожает его.</p>
-                    `
-                },
-                {
-                    id: 'agnus', icon: '🧪', title: 'Агнус', year: 'DMC 4', tag: 'Антагонист',
-                    subtitle: 'Безумный алхимик',
-                    story: `
-                        <p><span class="highlight">Агнус</span> — главный учёный Ордена Меча, создатель демонического оружия и искусственных демонов. Он также пытался восстановить Ямато и создать «Анжело Агнуса».</p>
-                        <p>Агнус — отец Нико, хотя она его ненавидит. Он погибает от рук Данте.</p>
-                    `
-                },
-                {
-                    id: 'arius', icon: '💼', title: 'Ариус', year: 'DMC 2', tag: 'Антагонист',
-                    subtitle: 'Безумный бизнесмен',
-                    story: `
-                        <p><span class="highlight">Ариус</span> — главный антагонист DMC2, глава корпорации «Уроборос». Он одержим идеей получить силу демонического божества <span class="highlight">Аргосака</span> и стать бессмертным.</p>
-                        <p>Ариус создал Люсию как искусственного демона, но она сбежала. В финале он сливается с силой Аргосака, но терпит поражение от Люсии и Данте.</p>
-                    `
-                },
-                {
-                    id: 'credo', icon: '⚔️', title: 'Кредо', year: 'DMC 4', tag: 'Союзник / Антагонист',
-                    subtitle: 'Капитан Святых Рыцарей',
-                    story: `
-                        <p><span class="highlight">Кредо</span> — капитан Святых Рыцарей Ордена Меча, старший брат Кирие и наставник Неро. Изначально он противостоит Неро, но позже осознаёт обман Санктуса и помогает ему.</p>
-                        <p>Кредо принимает «Вознесение» и становится демоном <span class="highlight">Анджело Кредо</span>, но сохраняет контроль. Он погибает, защищая Неро и Кирие от Санктуса.</p>
-                    `
-                },
-                {
-                    id: 'kyrie', icon: '🎤', title: 'Кирие', year: 'DMC 4–5', tag: 'Союзник',
-                    subtitle: 'Певица Ордена',
-                    story: `
-                        <p><span class="highlight">Кирие</span> — добрая и мягкая девушка, сестра Кредо и возлюбленная Неро. Она выросла вместе с Неро после того, как их родители погибли.</p>
-                        <p>Кирие — певица Ордена Меча. В DMC4 её похищают, чтобы использовать в ритуале, но Неро спасает её. После событий DMC5 она живёт с Неро и поддерживает его.</p>
-                    `
-                },
-                {
-                    id: 'griffon', icon: '🦅', title: 'Грифон', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
-                    subtitle: 'Птица-демон',
-                    story: `
-                        <p><span class="highlight">Грифон</span> — в DMC1 был генералом Мундуса, сражавшимся с Данте. В DMC5 он появляется как фамильяр V, воплощая часть воспоминаний Вергилия.</p>
-                        <p>Грифон болтлив, саркастичен и любит подшучивать над окружающими, но предан V.</p>
-                    `
-                },
-                {
-                    id: 'shadow', icon: '🐆', title: 'Шэдоу', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
-                    subtitle: 'Пантера',
-                    story: `
-                        <p><span class="highlight">Шэдоу</span> — демоническая пантера, фамильяр V. Она сражается, манипулируя своим телом и создавая шипы. Шэдоу — молчаливая и смертоносная, воплощает инстинкты и воспоминания Вергилия.</p>
-                    `
-                },
-                {
-                    id: 'nightmare', icon: '🗿', title: 'Найтмер', year: 'DMC 1, 5', tag: 'Демон / Фамильяр',
-                    subtitle: 'Живое оружие',
-                    story: `
-                        <p><span class="highlight">Найтмер</span> — гигантский демонический голем, созданный Мундусом как биологическое оружие. В DMC5 он становится фамильяром V, воплощая его самые глубокие страхи.</p>
-                        <p>Найтмер медлителен, но обладает огромной силой и выносливостью.</p>
-                    `
-                },
-                {
-                    id: 'matier', icon: '🧝', title: 'Матиер', year: 'DMC 2', tag: 'Союзник',
-                    subtitle: 'Лидер клана Вьё-де-Марли',
-                    story: `
-                        <p><span class="highlight">Матиер</span> — пожилая женщина, лидер клана охотников на демонов на острове Думари. В молодости она сражалась бок о бок со Спардой.</p>
-                        <p>Она удочерила Люсию и обучила её пути охотницы. Именно Матиер нанимает Данте в DMC2, чтобы остановить Ариуса.</p>
-                    `
-                },
-                {
-                    id: 'morrison', icon: '🕶️', title: 'Моррисон', year: 'DMC 5', tag: 'Союзник',
-                    subtitle: 'Информатор Данте',
-                    story: `
-                        <p><span class="highlight">Моррисон</span> — информатор и посредник Данте, который находит для него заказы и передаёт сведения. В DMC5 именно он связывает Данте с V.</p>
-                        <p>Спокойный, деловой и невозмутимый, Моррисон знает о демоническом мире больше, чем кажется обычному человеку.</p>
-                    `
-                },
-                {
-                    id: 'enzo', icon: '💼', title: 'Энзо', year: 'Манга / Новеллы', tag: 'Союзник',
-                    subtitle: 'Первый информатор Данте',
-                    story: `
-                        <p><span class="highlight">Энзо Ферино</span> — информатор и посредник Данте, появляющийся в ранних новеллах и манге. Именно он находит для молодого Данте первые заказы, когда тот ещё работал под именем Тони Рэдгрейва.</p>
-                    `
-                }
-            ],
-            anime: [
-                {
-                    id: 'dmc-anime', icon: '📺', title: 'Devil May Cry: The Animated Series', year: '2007', tag: 'Аниме / 12 серий',
-                    subtitle: 'Демон против демонов',
-                    story: `
-                        <p>Аниме-сериал студии <span class="highlight">Madhouse</span>, снятый по мотивам одноимённой игры. Премьера состоялась в 2007 году, всего вышло 12 серий по 25 минут. В России сериал известен под названием «Демон против демонов».</p>
-                        <p>Сюжет вращается вокруг <span class="highlight">Данте</span> — охотника на демонов, который едва сводит концы с концами. В его офисе, бывшем ресторане, поселяется <span class="highlight">Пэтти Лоуэлл</span> — девочка, которую он спас. Она берёт на себя уборку и готовку, пока Данте спит или ест пиццу.</p>
-                        <p>Главным антагонистом выступает демон <span class="highlight">Сид</span>, который постепенно собирает силу, чтобы переродиться в могущественного огнедышащего демона. В финале Данте предстоит сразиться с ним в решающей битве.</p>
-                        <p>Аниме также включает таких персонажей, как <span class="highlight">Триш</span>, <span class="highlight">Леди</span> и <span class="highlight">Моррисон</span>, и расширяет повседневную жизнь Данте за пределами игр.</p>
-                    `
-                },
-                {
-                    id: 'dmc-netflix', icon: '🎬', title: 'Devil May Cry (Netflix)', year: '2025–2027', tag: 'Аниме / 3 сезона',
-                    subtitle: 'Адаптация от Adi Shankar',
-                    story: `
-                        <p><span class="highlight">Devil May Cry</span> от Netflix — второй аниме-сериал по франшизе, созданный шоураннером <span class="highlight">Ади Шанкаром</span> (известен по «Castlevania») и анимированный южнокорейской студией <span class="highlight">Studio Mir</span> («Легенда о Корре», «Ведьмак: Кошмар Волка»).</p>
-                        <p>Первый сезон вышел <span class="highlight">3 апреля 2025 года</span> и состоит из 8 серий. Сюжет разворачивается вокруг молодого <span class="highlight">Данте</span> — наёмного охотника на демонов, который оказывается втянут в заговор сил, стремящихся открыть портал между миром людей и демонов. Адаптация вольно основана на событиях DMC3 и представляет собой альтернативный приквел к играм.</p>
-                        <p>Второй сезон вышел <span class="highlight">12 мая 2026 года</span> и сосредоточен на противостоянии Данте с его братом-близнецом <span class="highlight">Вергилием</span>. В числе антагонистов также появляются <span class="highlight">Мундус</span> и Ариус. Шоураннер подтвердил, что сериал задуман как трилогия: первый сезон — «Inferno», второй — «Purgatorio», третий — «Paradiso». Третий сезон станет финальным и завершит «Сагу Force Edge».</p>
-                        <p>Озвучка: <span class="highlight">Johnny Yong Bosch</span> — Данте (он же был голосом Неро в DMC4–5), <span class="highlight">Robbie Daymond</span> — Вергилий, <span class="highlight">Scout Taylor-Compton</span> — Леди. Один из персонажей, вице-президент Бейнс, стал последней ролью легендарного <span class="highlight">Кевина Конроя</span> (Бэтмен из DCAU).</p>
-                        <div class="quote">«Для тех, кто следил за названиями эпизодов: я показывал структуру всё это время. Это всегда была "Божественная комедия" Данте с пушками и красным плащом.» — Ади Шанкар</div>
-                    `
-                }
-            ]
-        };
+  <div id="battle-sc" class="sc active">
+    <div class="ep">
+      <div class="en" id="e-n">Ленивец</div>
+      <div id="boss-timer" class="boss-timer hidden">⏱ <span id="bt-val">60</span>с</div>
+      <div class="atk-ind" id="atk-ind"></div>
+      <div class="hb-b"><div id="e-f" class="hb-f"></div><div id="e-t" class="hb-t">10 / 10</div></div>
+    </div>
+    <div class="php-row">
+      <div class="php-label">ДАНТЕ</div>
+      <div class="hb-b"><div id="p-f" class="hb-f php"></div><div id="p-t" class="hb-t">100 / 100</div></div>
+    </div>
+    <div id="timing-wrap" class="timing-wrap hidden">
+      <div class="tw-label" id="tw-label">🎯 ПАРИРУЙ!</div>
+      <div class="tb-track">
+        <div id="tb-zones"></div>
+        <div id="tb-ind" class="tb-indicator" style="left:0%"></div>
+      </div>
+    </div>
+    <div id="cc">
+      <canvas id="cv"></canvas>
+      <div class="combo" id="combo">x1.0</div>
+      <div class="overlay" id="go">
+        <h2>ТЫ СТЁРТ</h2>
+        <p id="go-msg">Данте переварен. Вернись сильнее!</p>
+        <button id="revive-btn">ВОЗРОДИТЬСЯ</button>
+      </div>
+      <div class="overlay" id="finale">
+        <h2>СТЁРТ</h2>
+        <p>Ты победил Стёртого Данте. Но цена победы — всё, что ты построил. Всё стёрто.</p>
+        <div class="jackpot">JACKPOT.</div>
+        <button id="reset-btn" style="background:var(--purple)">НАЧАТЬ С НУЛЯ</button>
+      </div>
+    </div>
+    <button id="e-b" class="btn">🍕 ЖРАТЬ ПИЦЦУ!</button>
+  </div>
 
-        const itemsGrid = document.getElementById('itemsGrid');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalSubtitle = document.getElementById('modalSubtitle');
-        const modalStory = document.getElementById('modalStory');
-        const modalClose = document.getElementById('modalClose');
+  <div id="shop-sc" class="sc"><div id="s-c" style="width:100%"></div></div>
+  <div id="story-sc" class="sc"><div id="st-t" class="st-b"></div><div id="st-c" style="width:100%"></div></div>
+  <div id="rules-sc" class="sc rule" style="font-size:11px;line-height:1.5">
+    <h3>💾 Сохранение</h3>
+    <p><b>Автосейва нет!</b> Жми <b>💾</b> чтобы сохранить. <b>🗑</b> — сброс.</p>
+    <h3>🎯 Парирование (все боссы)</h3>
+    <p>У <b>всех</b> боссов (сюжетных и обычных) появляется полоска с <b class="green">яркими зелёными зонами</b>. Тапни, когда белая линия в зоне → <b>парируешь</b> удар и наносишь врагу большой урон.</p>
+    <p>Собери <b class="green">2 парирования</b> → босс <b>ОТКРЫТ 8 секунд</b>. Полоска исчезает, твои удары наносят <b>×3 урона</b>, проки <b>×10</b>!</p>
+    <h3>📖 Story</h3>
+    <p><b class="blue">Синяя кнопка</b> — история босса.</p>
+    <h3>⏱ Таймер</h3>
+    <p>Сюжетные боссы ограничены. Не успел — проигрыш.</p>
+    <h3>⚔️ Проки</h3>
+    <p><b class="purple">Ямато</b>: 0.5% JC. <b class="gold">Неро</b>: 10% EXCEED. <b class="purple">Спарда</b>: 8% DT. <b class="purple">Пустота</b>: 5% мангл.</p>
+    <h3>👹 Способности боссов</h3>
+    <p><b>Неро</b>: каждый 3-й ×2. <b>Кирие</b>: реген 1%/сек (только в защите). <b>Вергилий</b>: 20% JC. <b>Аргосакс</b>: ускоряется. <b>Мундус</b>: щит -50%. <b>Спаситель</b>: отражает 10% (макс 3% твоего HP). <b>Уризен</b>: отключает проки.</p>
+    <h3 style="color:var(--purple)">☠ СТЁРТЫЙ ДАНТЕ</h3>
+    <p>Узкие зоны, HP 1.5М, 120с, 15% JC по тебе.</p>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
 
-        let lastFocusedElement = null;
+<div class="story-modal" id="story-modal">
+  <div class="story-modal-content">
+    <div class="sm-icon" id="sm-icon">👹</div>
+    <h2 id="sm-title">Имя босса</h2>
+    <p id="sm-text">История...</p>
+    <button id="sm-close">ЗАКРЫТЬ</button>
+  </div>
+</div>
 
-        function renderItems(category) {
-            const items = loreData[category] || [];
-            itemsGrid.innerHTML = '';
+<div class="tutorial-modal" id="tutorial-modal">
+  <div class="tutorial-content">
+    <h2>🎯 КАК ПАРИРОВАТЬ</h2>
+    <div class="tc-step"><strong>1.</strong> Внизу появилась полоска с <strong style="color:#2ecc71">яркими зелёными зонами</strong>.</div>
+    <div class="tc-step"><strong>2.</strong> По полоске бегает белая линия. Тапни по стулу, когда линия <strong>ВНУТРИ зелёной зоны</strong>.</div>
+    <div class="tc-step"><strong>3.</strong> Успех → <strong>PARRIED!</strong> и большой урон врагу.</div>
+    <div class="tc-step"><strong>4.</strong> Собери <strong>2 парирования</strong> → босс <strong>ОТКРЫТ 8 секунд</strong>. Полоска исчезает — бей в полную силу!</div>
+    <button id="tut-close">ПОНЯТНО</button>
+  </div>
+</div>
 
-            items.forEach((item, index) => {
-                const card = document.createElement('button');
-                card.type = 'button';
-                card.className = 'item-card';
-                card.style.animationDelay = `${index * 0.04}s`;
-                card.innerHTML = `
-                    <span class="card-icon">${item.icon}</span>
-                    <h3>${item.title}</h3>
-                    <p>${item.subtitle}</p>
-                    <span class="tag">${item.year} · ${item.tag}</span>
-                `;
-                card.addEventListener('click', () => openModal(item, card));
-                itemsGrid.appendChild(card);
-            });
+<script>
+(() => {
+'use strict';
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+// ===== DATA =====
+const CHAIRS = {
+  c1: { n: 'Стул Икея',    p: 0,       w: 1,     crit: 0.10, c: '#fff',    desc: 'Обычный стул.' },
+  c2: { n: 'Пицца-Стул',   p: 300,     w: 3,     crit: 0.12, c: '#e74c3c', desc: '🍕 Убитые враги → пицца', sp: true },
+  c3: { n: 'Трон Верга',   p: 2500,    w: 10,    crit: 0.18, c: '#00f0ff', desc: 'Мощный стул.' },
+  c4: { n: 'Стул v2.0',    p: 25000,   w: 40,    crit: 0.22, c: '#f1c40f', desc: 'Высокий крит.' },
+  c5: { n: 'Ямато-Стул',   p: 200000,  w: 150,   crit: 0.28, c: '#9b59b6', desc: '⚔️ 0.5% → Judgement Cut', sp: true },
+  c6: { n: 'Стул Неро',    p: 1500000, w: 600,   crit: 0.30, c: '#e67e22', desc: '🔧 10% → EXCEED ×2', sp: true },
+  c7: { n: 'Стул Спарды',  p: 0,       w: 600,   crit: 0.35, c: '#ff2a4b', desc: '😈 8% → Devil Trigger', sp: true, lg: true, storyOnly: true },
+  c8: { n: 'Трон Триады',  p: 5000000, w: 12000, crit: 0.40, c: '#f1c40f', desc: '👑 Крит ×2.5' },
+  c9: { n: 'Стул Пустоты', p: 0,       w: 8000,  crit: 0.50, c: '#000',    desc: '🌀 5% → мангл', sp: true, lg: true, storyOnly: true },
+};
 
-        function openModal(item, trigger) {
-            lastFocusedElement = trigger || null;
-            modalTitle.textContent = item.title;
-            modalSubtitle.textContent = `${item.year} · ${item.tag}`;
-            modalStory.innerHTML = item.story;
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            modalClose.focus();
-        }
+const ENEMIES = [
+  { n: 'Ленивец',         h: 10,    dmg: 3,  atk: 4.0, r: 30 },
+  { n: 'Демон Апатии',    h: 50,    dmg: 5,  atk: 3.5, r: 80 },
+  { n: 'Неро-Кальцоне',   h: 180,   dmg: 8,  atk: 3.0, r: 200 },
+  { n: 'Кирие-Маргарита', h: 500,   dmg: 10, atk: 2.8, r: 500 },
+  { n: 'Вергилий-Король', h: 1200,  dmg: 12, atk: 2.5, r: 1200 },
+  { n: 'Аргосакс',        h: 2500,  dmg: 15, atk: 1.8, r: 2500,  boss: true,
+    story: 'Древний демон, запечатанный в стуле. Предал Мундуса ради силы.' },
+  { n: 'Мундус',          h: 5000,  dmg: 20, atk: 2.0, r: 5000,  boss: true,
+    story: 'Император демонов. Щит — сама тьма между измерениями.' },
+  { n: 'Спаситель',       h: 10000, dmg: 25, atk: 2.5, r: 10000, boss: true,
+    story: 'Гигантская статуя, ожившая от Qliphoth. Отражает часть урона.' },
+  { n: 'Уризен',          h: 20000, dmg: 30, atk: 2.0, r: 20000, boss: true,
+    story: 'Корень Qliphoth, источник силы. Отключает способности.' },
+  { n: 'Стёртый Данте',   h: 35000, dmg: 35, atk: 1.5, r: 50000, boss: true,
+    story: 'Твоё отражение. Помнит каждый твой приём.' },
+];
 
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-            if (lastFocusedElement) {
-                lastFocusedElement.focus();
-                lastFocusedElement = null;
-            }
-        }
+const STORY_BOSSES = [
+  { n: 'Неро Разъярённый', h: 150,     dmg: 5,  atk: 3.0, reward: 3000,     rtype: 'money',
+    ability: 'exceed', abilityDesc: 'Каждый 3-й удар ×2',
+    timing: { speed: 0.004, zones: [[0.22, 0.60], [0.65, 0.97]] }, timer: 60,
+    icon: '🔥',
+    story: 'После Fortuna Неро узнал правду: его отец — Вергилий. Но он не принял это. Ярость затмила разум. <strong>Мотивация отца течёт в его крови.</strong>' },
+  { n: 'Кирие Ангел',      h: 600,     dmg: 8,  atk: 3.0, reward: 15000,    rtype: 'money',
+    ability: 'regen', abilityDesc: 'Реген 1% HP/сек',
+    timing: { speed: 0.0045, zones: [[0.24, 0.60], [0.65, 0.96]] }, timer: 65,
+    icon: '👼',
+    story: 'Молитвы Кирие исказились — стали псалмами стирания. Её вера лечит её саму.' },
+  { n: 'Вергилий Ямато',   h: 2500,    dmg: 12, atk: 2.5, reward: 0,        rtype: 'chair', chair: 'c7',
+    ability: 'jc', abilityDesc: '20% Judgement Cut по тебе',
+    timing: { speed: 0.005, zones: [[0.26, 0.60], [0.65, 0.95]] }, timer: 70,
+    icon: '⚔️',
+    story: 'Вергилий слился с Ямато-стулом. "I need more power" — приговор. <strong>Каждый пятый удар — Judgement Cut.</strong>' },
+  { n: 'Аргосакс Демон',   h: 10000,   dmg: 15, atk: 2.5, reward: 300000,   rtype: 'money',
+    ability: 'rage', abilityDesc: 'Ускоряется со временем',
+    timing: { speed: 0.0055, zones: [[0.28, 0.60], [0.65, 0.94]] }, timer: 80,
+    icon: '💀',
+    story: 'Ярость, ставшая плотью. Чем дольше бой — тем быстрее он становится.' },
+  { n: 'Мундус Император', h: 30000,   dmg: 20, atk: 2.0, reward: 0,        rtype: 'chair', chair: 'c9',
+    ability: 'shield', abilityDesc: 'Щит -50% (2с/15с)',
+    timing: { speed: 0.006, zones: [[0.30, 0.60], [0.65, 0.93]] }, timer: 90,
+    icon: '👑',
+    story: 'Император демонов на троне из пустоты. Щит — тьма между мирами.' },
+  { n: 'Спаситель Колосс', h: 150000,  dmg: 25, atk: 2.5, reward: 3000000,  rtype: 'money',
+    ability: 'reflect', abilityDesc: 'Отражает 10% (макс 3% HP)',
+    timing: { speed: 0.0065, zones: [[0.32, 0.60], [0.65, 0.92]] }, timer: 100,
+    icon: '🗿',
+    story: 'Статуя Спасителя ожила. Отражает часть урона. Битва с собственной жадностью.' },
+  { n: 'Уризен Бог',       h: 600000,  dmg: 30, atk: 2.0, reward: 15000000, rtype: 'money',
+    ability: 'procdisable', abilityDesc: 'Отключает проки 2с/20с',
+    timing: { speed: 0.007, zones: [[0.34, 0.60], [0.65, 0.91]] }, timer: 110,
+    icon: '🌳',
+    story: 'Корень Qliphoth, источник силы. Отключает твои проки.' },
+  { n: 'Стёртый Данте',    h: 1500000, dmg: 50, atk: 2.0, reward: 0,        rtype: 'erase', finalBoss: true,
+    ability: 'allparry', abilityDesc: 'ПАРИРУЕТ без тайминга!',
+    timing: { speed: 0.008, zones: [[0.38, 0.60], [0.65, 0.88]] }, timer: 120,
+    icon: '☠',
+    story: 'Это ты. Не копия — <strong>настоящий ты</strong>. Помнит каждый приём. Парирует всё, что не пробито таймингом.' },
+];
 
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderItems(btn.dataset.category);
-            });
-        });
+const STORY_INTRO = [
+  'Триада запустила <b>Motivation END</b>. Неро в ярости — первый босс.',
+  'Кирие благословляет стулья псалмами удаления.',
+  'Вергилий обнажает Ямато.',
+  'Аргосакс — демон без мотивации.',
+  'Мундус — император тьмы.',
+  'Спаситель — колосс из стульев.',
+  'Уризен — корень миров.',
+  '<b style="color:var(--purple)">СТЁРТЫЙ ДАНТЕ.</b> Финальная битва.',
+];
 
-        modalClose.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
+const COMBO_MAX = 5;
+const COMBO_STEP = 0.1;
+const CRIT_MULT = 1.5;
+const JC_CHANCE = 0.005;
+const COMBO_WINDOW = 1200;
+const MONEY_PER_DMG = 0.15;
+const FINAL_PROC_PCT = { jc: 0.15, exceed: 0.04, dt: 0.06, void: 0.12 };
+const PARRY_REQUIRED = 2;
+const OPEN_DURATION = 8;
+const OPEN_MULT = 3;
+const OPEN_PROC_MULT = 10;
+const PARRY_MIN_PCT = 0.08;
+const REFLECT_CAP_PCT = 0.03;
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
-            if (e.key === 'Tab' && modalOverlay.classList.contains('active')) {
-                const focusable = modalOverlay.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
-                if (!focusable.length) return;
-                const first = focusable[0];
-                const last = focusable[focusable.length - 1];
-                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-            }
-        });
+// ===== STATE =====
+let S = {
+  m: 0, c: 'c1', o: ['c1'], e: 0,
+  hp: 10, emax: 10,
+  pm: 0, pt: 0, pmax: 15,
+  php: 100, phpmax: 100,
+  combo: 0, comboT: 0,
+  atkCd: 4, atkCdMax: 4,
+  wave: 1, loop: 0,
+  storyIdx: 0, storyActive: false, storyHP: 0,
+};
 
-        renderItems('games');
-    </script>
+let isDirty = false;
+let timing = { active: false, pos: 0, dir: 1, speed: 0.006, zones: [], hits: 0, open: false, openTimer: 0 };
+let bossState = {
+  attackCount: 0, elapsed: 0, timer: 0,
+  mundusShieldCd: 0, mundusShieldActive: 0,
+  urizenCd: 0, urizenActive: 0,
+};
+let tutorialShown = false;
+
+// ===== DOM =====
+const $ = id => document.getElementById(id);
+const cc = $('cc'), cv = $('cv'), cx = cv.getContext('2d');
+const eN = $('e-n'), eF = $('e-f'), eT = $('e-t');
+const pF = $('p-f'), pT = $('p-t');
+const mD = $('m-d'), eB = $('e-b'), aInd = $('atk-ind');
+const comboEl = $('combo'), goEl = $('go'), finaleEl = $('finale');
+const modeLbl = $('mode-lbl'), waveEl = $('wave');
+const saveBtn = $('save-btn'), resetBtnH = $('reset-btn-h');
+const toastEl = $('toast');
+const bossTimerEl = $('boss-timer'), btValEl = $('bt-val');
+const timingWrap = $('timing-wrap'), twLabel = $('tw-label');
+const tbZones = $('tb-zones'), tbInd = $('tb-ind');
+const goMsg = $('go-msg');
+const storyModal = $('story-modal'), smTitle = $('sm-title'), smText = $('sm-text'), smIcon = $('sm-icon');
+const tutorialModal = $('tutorial-modal');
+
+// ===== AUDIO =====
+let AC = null;
+function beep(freq, dur, type = 'square', vol = 0.05) {
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(); o.stop(AC.currentTime + dur);
+  } catch (e) {}
+}
+
+// ===== TOAST =====
+let toastTimer = null;
+function showToast(msg, warn) {
+  toastEl.textContent = msg;
+  toastEl.className = 'toast' + (warn ? ' warn' : '');
+  void toastEl.offsetWidth;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+}
+
+// ===== SAVE/LOAD =====
+function save() {
+  try {
+    localStorage.setItem('dmc_v9', JSON.stringify(S));
+    isDirty = false;
+    updateSaveIndicator();
+    beep(1000, 0.1, 'sine', 0.05);
+    setTimeout(() => beep(1300, 0.1, 'sine', 0.05), 80);
+    showToast('💾 Сохранено!', false);
+  } catch (e) { showToast('⚠ Ошибка', true); }
+}
+function markDirty() { isDirty = true; updateSaveIndicator(); }
+function updateSaveIndicator() { saveBtn.classList.toggle('dirty', isDirty); }
+
+function load() {
+  try {
+    const l = localStorage.getItem('dmc_v9') || localStorage.getItem('dmc_v8') || localStorage.getItem('dmc_v7');
+    if (l) S = Object.assign({}, S, JSON.parse(l));
+  } catch (e) {}
+  if (!CHAIRS[S.c]) S.c = 'c1';
+  if (!S.o.includes(S.c)) S.o.push(S.c);
+  if (S.e >= ENEMIES.length) S.e = 0;
+  if (typeof S.storyIdx !== 'number' || S.storyIdx < 0) S.storyIdx = 0;
+  if (S.storyIdx > STORY_BOSSES.length) S.storyIdx = STORY_BOSSES.length;
+  S.storyActive = false; S.storyHP = 0;
+  const scale = 1 + (S.loop || 0) * 0.3;
+  S.emax = Math.round(ENEMIES[S.e].h * scale);
+  if (S.hp <= 0 || S.hp > S.emax) S.hp = S.emax;
+  if (S.php <= 0 || S.php > S.phpmax) S.php = S.phpmax;
+  S.pm = 0; S.pt = 0; S.combo = 0; S.comboT = 0;
+  S.atkCdMax = ENEMIES[S.e].atk;
+  S.atkCd = S.atkCdMax;
+  isDirty = false;
+  updateSaveIndicator();
+  setupTimingForBoss(null);
+  resetBossState();
+  tutorialShown = localStorage.getItem('dmc_tut') === '1';
+}
+
+function resetAll() {
+  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  S = {
+    m: 0, c: 'c1', o: ['c1'], e: 0, hp: 10, emax: 10,
+    pm: 0, pt: 0, pmax: 15, php: 100, phpmax: 100,
+    combo: 0, comboT: 0, atkCd: 4, atkCdMax: 4,
+    wave: 1, loop: 0, storyIdx: 0, storyActive: false, storyHP: 0,
+  };
+  isDirty = false; tutorialShown = false;
+  updateSaveIndicator(); updateAll();
+  setupTimingForBoss(null); resetBossState();
+  beep(400, 0.1, 'square', 0.05);
+  setTimeout(() => beep(300, 0.15, 'square', 0.05), 100);
+}
+
+// ===== HELPERS =====
+function currentBoss() { return S.storyActive ? STORY_BOSSES[S.storyIdx] : ENEMIES[S.e]; }
+function currentBossMax() { return S.storyActive ? currentBoss().h : S.emax; }
+function getBossHP() { return S.storyActive ? S.storyHP : S.hp; }
+function setBossHP(v) { if (S.storyActive) S.storyHP = Math.max(0, v); else S.hp = Math.max(0, v); }
+function isBossFight() { return S.storyActive || currentBoss().boss; }
+function isFinalBoss() { return S.storyActive && currentBoss().finalBoss; }
+function rewardScale() { return 1 + (S.loop || 0) * 0.5; }
+
+// ===== TIMING =====
+function setupTimingForBoss(boss) {
+  // FIX: сюжетные боссы тоже имеют .timing, поэтому проверяем через него
+  const isBoss = boss && (boss.boss || boss.finalBoss || boss.timing);
+  if (isBoss) {
+    timing.active = true;
+    timing.hits = 0;
+    timing.open = false;
+    timing.openTimer = 0;
+    if (boss.timing) {
+      timing.speed = boss.timing.speed;
+      timing.zones = boss.timing.zones.map(z => z.slice());
+    } else {
+      timing.speed = 0.006;
+      timing.zones = [[0.30, 0.60], [0.65, 0.93]];
+    }
+    timing.pos = 0;
+    timing.dir = 1;
+    tbInd.style.left = '0%';
+    renderTimingZones();
+    timingWrap.classList.remove('hidden');
+    timingWrap.classList.toggle('final', !!boss.finalBoss);
+    updateTimingLabel();
+  } else {
+    timing.active = false;
+    timing.open = false;
+    timing.hits = 0;
+    timing.zones = [];
+    timingWrap.classList.add('hidden');
+  }
+}
+
+function updateTimingLabel() {
+  if (!timing.active) return;
+  const boss = currentBoss();
+  const isFinal = boss && boss.finalBoss;
+  const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentBossMax() * PARRY_MIN_PCT));
+  twLabel.textContent = (isFinal ? '☠ ' : '🎯 ') + 'ПАРИРУЙ! (' + timing.hits + '/' + PARRY_REQUIRED + ') · Парирование: ' + parryDmg.toLocaleString('ru') + ' урона';
+  twLabel.style.color = isFinal ? 'var(--purple)' : 'var(--green)';
+}
+
+function renderTimingZones() {
+  tbZones.innerHTML = '';
+  if (!timing.zones || timing.zones.length === 0) return;
+  timing.zones.forEach(([start, end]) => {
+    const d = document.createElement('div');
+    d.className = 'tb-zone';
+    d.style.left = (start * 100) + '%';
+    d.style.width = ((end - start) * 100) + '%';
+    tbZones.appendChild(d);
+  });
+}
+
+function isTimingHit() {
+  if (!timing.active) return true;
+  if (!timing.zones || timing.zones.length === 0) return false;
+  for (const z of timing.zones) {
+    if (timing.pos >= z[0] && timing.pos <= z[1]) return true;
+  }
+  return false;
+}
+
+function openBoss() {
+  timing.open = true;
+  timing.openTimer = OPEN_DURATION;
+  timing.active = false;
+  timingWrap.classList.add('hidden');
+  S.atkCd = currentBoss().atk;
+  showSpecialText('ВРАГ ОТКРЫТ! ' + OPEN_DURATION + 'с', '#2ecc71');
+  beep(1500, 0.15, 'sine', 0.1);
+  setTimeout(() => beep(1800, 0.15, 'sine', 0.1), 100);
+  setTimeout(() => beep(2200, 0.2, 'sine', 0.1), 200);
+  cc.classList.add('open-phase-aura');
+  setTimeout(() => cc.classList.remove('open-phase-aura'), 1000);
+}
+
+function closeBoss() {
+  timing.open = false;
+  timing.openTimer = 0;
+  timing.hits = 0;
+  timing.pos = 0;
+  timing.dir = 1;
+  timing.active = true;
+  timingWrap.classList.remove('hidden');
+  renderTimingZones();
+  updateTimingLabel();
+  showSpecialText('ЗАЩИТА ВРАГА!', '#ff2a4b');
+  beep(300, 0.2, 'sawtooth', 0.08);
+  cc.classList.remove('open-phase-aura');
+}
+
+function resetBossState() {
+  bossState = {
+    attackCount: 0, elapsed: 0, timer: 0,
+    mundusShieldCd: 0, mundusShieldActive: 0,
+    urizenCd: 0, urizenActive: 0,
+  };
+}
+
+// ===== UPDATE UI =====
+function updateBattle() {
+  mD.textContent = Math.floor(S.m).toLocaleString('ru');
+  if (S.storyActive) {
+    modeLbl.textContent = 'СЮЖЕТ';
+    modeLbl.style.color = 'var(--purple)';
+    waveEl.textContent = (S.storyIdx + 1) + '/' + STORY_BOSSES.length;
+    waveEl.style.color = 'var(--purple)';
+    waveEl.style.textShadow = '0 0 8px var(--purple)';
+  } else {
+    modeLbl.textContent = 'ВОЛНА';
+    modeLbl.style.color = '#8a8d92';
+    waveEl.textContent = S.wave;
+    waveEl.style.color = '#fff';
+    waveEl.style.textShadow = '0 0 8px var(--r)';
+  }
+
+  pF.style.width = Math.max(0, (S.php / S.phpmax) * 100) + '%';
+  pT.textContent = Math.ceil(S.php).toLocaleString('ru') + ' / ' + S.phpmax.toLocaleString('ru');
+  pF.classList.toggle('low', S.php / S.phpmax < 0.3);
+
+  const en = currentBoss();
+  const finalFight = isFinalBoss();
+  eN.classList.remove('boss', 'final');
+  if (finalFight) eN.classList.add('final');
+  else if (isBossFight()) eN.classList.add('boss');
+
+  if (S.pm) {
+    eN.textContent = '🍕 ' + en.n + ' (ТАЕТ!)';
+    eF.style.width = Math.max(0, (S.pt / S.pmax) * 100) + '%';
+    eF.className = 'hb-f pizza';
+    eT.textContent = 'Испарение: ' + Math.max(0, S.pt).toFixed(1) + 'с';
+    eB.style.display = 'block';
+    aInd.textContent = 'ЖРИ! Кликай по пицце!';
+    aInd.style.color = 'var(--gold)';
+  } else {
+    const bhp = getBossHP(), bmax = currentBossMax();
+    eN.textContent = (finalFight ? '☠ ' : (isBossFight() ? '👑 ' : '')) + en.n;
+    eF.style.width = Math.max(0, (bhp / bmax) * 100) + '%';
+    eF.className = 'hb-f';
+    eT.textContent = Math.ceil(bhp).toLocaleString('ru') + ' / ' + bmax.toLocaleString('ru');
+    eB.style.display = 'none';
+
+    if (timing.open) {
+      aInd.textContent = '🔥 ОТКРЫТ! БЕЙ ×' + OPEN_MULT + '! Осталось: ' + timing.openTimer.toFixed(1) + 'с';
+      aInd.style.color = 'var(--green)';
+    } else if (isBossFight() && timing.active) {
+      aInd.textContent = '🛡 ПАРИРУЙ! ' + timing.hits + '/' + PARRY_REQUIRED + ' · Тапни в зелёную зону';
+      aInd.style.color = isFinalBoss() ? 'var(--purple)' : 'var(--green)';
+    } else {
+      aInd.textContent = '⚠ Атака врага через ' + Math.max(0, S.atkCd).toFixed(1) + 'с';
+      aInd.style.color = 'var(--r)';
+    }
+  }
+
+  if (S.storyActive && en.timer) {
+    bossTimerEl.classList.remove('hidden');
+    const t = Math.max(0, bossState.timer);
+    btValEl.textContent = t.toFixed(1);
+    bossTimerEl.classList.toggle('urgent', t < 20);
+    bossTimerEl.classList.toggle('open-phase', !!timing.open);
+  } else {
+    bossTimerEl.classList.add('hidden');
+  }
+
+  if (S.combo >= 2) {
+    const mult = (1 + Math.min(S.combo - 1, COMBO_MAX - 1) * COMBO_STEP).toFixed(2);
+    comboEl.classList.add('on');
+    comboEl.textContent = 'x' + mult;
+  } else {
+    comboEl.classList.remove('on');
+  }
+
+  cc.classList.toggle('final-aura', finalFight && !goEl.classList.contains('show'));
+}
+
+function renderShop() {
+  const c = $('s-c');
+  c.innerHTML = '';
+  Object.keys(CHAIRS).forEach(id => {
+    const k = CHAIRS[id];
+    const own = S.o.includes(id);
+    const act = S.c === id;
+    if (k.storyOnly && !own) return;
+    const canBuy = !own && S.m >= k.p;
+    const disabled = act || (!own && !canBuy);
+    const label = act ? 'В БОЮ' : (own ? 'НАДЕТЬ' : (canBuy ? 'КУПИТЬ' : 'НЕ ХВАТАЕТ'));
+    const div = document.createElement('div');
+    let cls = 'si';
+    if (k.lg) cls += ' legendary';
+    else if (k.sp) cls += ' special';
+    div.className = cls;
+    const descCls = k.lg ? 'lg' : (k.sp ? 'sp' : '');
+    div.innerHTML =
+      '<div>' +
+        '<div class="i-n">' + k.n + '</div>' +
+        '<div class="i-d ' + descCls + '">' + k.desc + '</div>' +
+        '<div class="i-d">Урон: ' + k.w.toLocaleString('ru') + ' · Крит: ' + Math.round(k.crit * 100) + '%' + (own ? '' : ' · ' + k.p.toLocaleString('ru') + '💎') + '</div>' +
+      '</div>' +
+      '<button class="buy-btn ' + (own ? 'owned' : '') + '" ' + (disabled ? 'disabled' : '') + '>' + label + '</button>';
+    div.querySelector('button').addEventListener('click', () => buyChair(id));
+    c.appendChild(div);
+  });
+}
+
+function buyChair(id) {
+  if (S.pm) { beep(200, 0.1, 'sawtooth', 0.05); return; }
+  const k = CHAIRS[id];
+  if (k.storyOnly && !S.o.includes(id)) return;
+  if (S.o.includes(id)) { S.c = id; beep(600, 0.08, 'sine', 0.04); }
+  else if (S.m >= k.p) {
+    S.m -= k.p; S.o.push(id); S.c = id;
+    beep(800, 0.15, 'sine', 0.06);
+    setTimeout(() => beep(1000, 0.15, 'sine', 0.06), 80);
+  } else return;
+  updateAll(); markDirty();
+}
+
+function renderStory() {
+  const intro = $('st-t');
+  if (S.storyIdx >= STORY_BOSSES.length) {
+    intro.innerHTML = '☠ <b style="color:var(--purple)">ВСЕ БОССЫ ПОВЕРЖЕНЫ!</b>';
+  } else {
+    intro.innerHTML = STORY_INTRO[S.storyIdx] || STORY_INTRO[0];
+  }
+  const c = $('st-c');
+  c.innerHTML = '';
+  STORY_BOSSES.forEach((boss, idx) => {
+    const defeated = idx < S.storyIdx;
+    const current = idx === S.storyIdx;
+    const locked = idx > S.storyIdx;
+    const card = document.createElement('div');
+    let cls = 'story-card';
+    if (current) cls += ' current';
+    if (defeated) cls += ' defeated';
+    if (locked) cls += ' locked';
+    if (boss.finalBoss) cls += ' final-card';
+    card.className = cls;
+    let rewardText;
+    if (boss.rtype === 'money') rewardText = '💰 ' + boss.reward.toLocaleString('ru') + ' мотов';
+    else if (boss.rtype === 'chair') rewardText = '🏆 ' + CHAIRS[boss.chair].n;
+    else if (boss.rtype === 'erase') rewardText = '☠ ФИНАЛ · прогресс сотрётся';
+    else rewardText = '🏆 ФИНАЛ';
+    const btnLabel = defeated ? '✓ ПРОЙДЕНО' : (locked ? '🔒 ЗАКРЫТО' : (boss.finalBoss ? '☠ БИТВА' : '⚔️ БОЙ'));
+    const parryDmg = Math.max(boss.dmg * 5, Math.floor(boss.h * PARRY_MIN_PCT));
+    card.innerHTML =
+      '<div class="sc-head"><span class="sc-num">' + (idx + 1) + '</span><span class="sc-name">' + boss.n + '</span></div>' +
+      '<div class="sc-info">HP: ' + boss.h.toLocaleString('ru') + ' · Атака: ' + boss.dmg + ' · ' + boss.atk + 'с · ⏱ ' + (boss.timer || '—') + 'с</div>' +
+      '<div class="sc-ability' + (boss.finalBoss ? ' final' : '') + '">👹 ' + (boss.abilityDesc || '—') + '</div>' +
+      '<div class="sc-parry">⚔️ Парирование: ' + parryDmg.toLocaleString('ru') + ' урона врагу</div>' +
+      '<div class="sc-reward">🎁 ' + rewardText + '</div>' +
+      '<div class="sc-btn-row">' +
+        '<button class="sc-btn fight-btn" ' + (locked || defeated ? 'disabled' : '') + '>' + btnLabel + '</button>' +
+        '<button class="sc-btn story-btn">📖 STORY</button>' +
+      '</div>';
+    if (current && !defeated) {
+      card.querySelector('.fight-btn').addEventListener('click', startStoryBattle);
+    }
+    card.querySelector('.story-btn').addEventListener('click', () => showBossStory(boss));
+    c.appendChild(card);
+  });
+}
+
+function showBossStory(boss) {
+  smIcon.textContent = boss.icon || '👹';
+  smTitle.textContent = boss.n;
+  smText.innerHTML = boss.story || 'История неизвестна...';
+  storyModal.classList.add('show');
+  beep(700, 0.1, 'sine', 0.05);
+}
+
+function updateAll() { updateBattle(); renderShop(); renderStory(); }
+
+// ===== TABS =====
+let battleActive = true;
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    $('' + btn.dataset.sc + '-sc').classList.add('active');
+    battleActive = btn.dataset.sc === 'battle';
+    S.combo = 0;
+    if (battleActive) setTimeout(resizeCanvas, 20);
+    updateAll();
+  });
+});
+
+// ===== CANVAS =====
+function resizeCanvas() {
+  const w = cc.clientWidth, h = cc.clientHeight;
+  if (w > 0 && (cv.width !== w || cv.height !== h)) { cv.width = w; cv.height = h; }
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ===== PARTICLES =====
+const particles = [];
+function spawnParticles(x, y, count, color, opts) {
+  opts = opts || {};
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const spd = (opts.spd || 3) * (0.4 + Math.random());
+    particles.push({
+      x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
+      a: 1, z: (opts.size || 3) * (0.5 + Math.random()),
+      color, gravity: opts.gravity || 0, life: opts.life || 0.03,
+    });
+  }
+  if (particles.length > 400) particles.splice(0, particles.length - 400);
+}
+
+function damagePop(x, y, dmg, crit, color, label) {
+  const el = document.createElement('div');
+  el.className = 'dmg-pop';
+  el.textContent = label || ((crit ? '💥' : '') + dmg.toLocaleString('ru'));
+  el.style.color = color || (crit ? '#f1c40f' : '#fff');
+  el.style.fontSize = crit ? '24px' : '18px';
+  el.style.left = x + 'px'; el.style.top = y + 'px';
+  cc.appendChild(el);
+  setTimeout(() => el.remove(), 750);
+}
+
+function showSpecialText(text, color) {
+  const el = document.createElement('div');
+  el.className = 'special-text';
+  el.textContent = text;
+  el.style.color = color;
+  el.style.textShadow = '0 0 20px ' + color + ',0 0 40px ' + color;
+  cc.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}
+
+// ===== COMBAT =====
+function attack(ev) {
+  if (S.pm) { eat(); return; }
+  if (goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
+
+  const now = performance.now();
+  const r = cv.getBoundingClientRect();
+  const x = ev.clientX - r.left;
+  const y = ev.clientY - r.top;
+  const bossFight = isBossFight();
+
+  // === PARRY PHASE ===
+  if (bossFight && timing.active) {
+    if (isTimingHit()) {
+      const boss = currentBoss();
+      const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentBossMax() * PARRY_MIN_PCT));
+      timing.hits++;
+      updateTimingLabel();
+
+      applyBossDamage(parryDmg, x, y, true, true, 'PARRIED!', '#2ecc71');
+
+      if (timing.hits >= PARRY_REQUIRED && getBossHP() > 0) {
+        openBoss();
+      }
+    } else {
+      damagePop(x, y, 0, false, '#555', 'MISS');
+      beep(120, 0.08, 'square', 0.03);
+      spawnParticles(x, y, 3, '#555', { spd: 2, size: 2 });
+    }
+    updateBattle(); markDirty();
+    return;
+  }
+
+  // === NORMAL ATTACK ===
+  if (now - S.comboT < COMBO_WINDOW) S.combo = Math.min(S.combo + 1, COMBO_MAX);
+  else S.combo = 1;
+  S.comboT = now;
+
+  const chair = CHAIRS[S.c];
+  const comboMult = 1 + Math.min(S.combo - 1, COMBO_MAX - 1) * COMBO_STEP;
+  let isCrit = Math.random() < chair.crit;
+  let critMult = CRIT_MULT;
+  if (S.c === 'c8') critMult = 2.5;
+  if (S.c === 'c9') critMult = 3;
+
+  const openMult = timing.open ? OPEN_MULT : 1;
+  let dmg = chair.w * comboMult * (isCrit ? critMult : 1) * openMult;
+
+  let isProc = false, procText = '', procColor = '#fff';
+  if (S.c === 'c5' && Math.random() < JC_CHANCE) { isProc = true; procText = 'JUDGEMENT CUT!'; procColor = '#9b59b6'; }
+  else if (S.c === 'c6' && Math.random() < 0.10) { isProc = true; procText = 'EXCEED!'; procColor = '#e67e22'; }
+  else if (S.c === 'c7' && Math.random() < 0.08) { isProc = true; procText = 'DEVIL TRIGGER!'; procColor = '#ff2a4b'; S.php = Math.min(S.phpmax, S.php + Math.floor(S.phpmax * 0.1)); }
+  else if (S.c === 'c9' && Math.random() < 0.05) { isProc = true; procText = 'VOID!'; procColor = '#9b59b6'; }
+
+  const finalBoss = isFinalBoss();
+  if (isProc) {
+    if (finalBoss) {
+      if (S.c === 'c5') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.jc);
+      else if (S.c === 'c6') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.exceed);
+      else if (S.c === 'c7') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.dt);
+      else if (S.c === 'c9') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.void);
+    } else {
+      const procBase = chair.w * 50;
+      if (S.c === 'c5') dmg = Math.max(procBase, Math.floor(getBossHP() * 0.5));
+      else if (S.c === 'c6') dmg *= 2;
+      else if (S.c === 'c7') dmg *= 3;
+      else if (S.c === 'c9') dmg = getBossHP();
+    }
+    if (timing.open) dmg = Math.floor(dmg * OPEN_PROC_MULT);
+  }
+
+  if (isProc && bossState.urizenActive > 0 && currentBoss().ability === 'procdisable') {
+    isProc = false;
+    dmg = Math.max(1, Math.floor(chair.w * comboMult * openMult));
+    showSpecialText('ПРОК ОТКЛЮЧЁН!', '#888');
+  }
+
+  if (bossState.mundusShieldActive > 0 && currentBoss().ability === 'shield') {
+    dmg = Math.floor(dmg * 0.5);
+  }
+
+  const finalDmg = Math.max(1, Math.round(dmg));
+  applyBossDamage(finalDmg, x, y, isCrit, isProc, procText, procColor);
+
+  // FIX: Спаситель отражает с капом 3% макс HP
+  if (currentBoss().ability === 'reflect' && !S.pm) {
+    const rawReflect = Math.floor(finalDmg * 0.10);
+    const cappedReflect = Math.min(rawReflect, Math.floor(S.phpmax * REFLECT_CAP_PCT));
+    if (cappedReflect > 0) applyPlayerDamage(cappedReflect, '#9b59b6');
+  }
+
+  updateBattle(); markDirty();
+}
+
+function applyBossDamage(dmg, x, y, isCrit, isProc, procText, procColor) {
+  setBossHP(getBossHP() - dmg);
+  S.m += dmg * MONEY_PER_DMG;
+
+  if (isProc) {
+    showSpecialText(procText, procColor);
+    beep(1400, 0.2, 'sawtooth', 0.08);
+    setTimeout(() => beep(1800, 0.15, 'sawtooth', 0.06), 100);
+    spawnParticles(x, y, 25, procColor, { spd: 8, size: 4, life: 0.02 });
+    damagePop(x, y, dmg, true, procColor);
+    shakeScreen();
+    if (S.c === 'c5') {
+      cc.classList.add('judgement-cut');
+      setTimeout(() => cc.classList.remove('judgement-cut'), 400);
+    }
+  } else {
+    spawnParticles(x, y, isCrit ? 15 : 8, isCrit ? '#f1c40f' : '#2ecc71', { spd: isCrit ? 5 : 4, size: isCrit ? 4 : 3 });
+    damagePop(x, y, dmg, isCrit, '#2ecc71');
+    beep(isCrit ? 900 : 600, 0.05, 'sine', 0.04);
+  }
+
+  if (getBossHP() <= 0) {
+    setBossHP(0);
+    onEnemyDefeated();
+  }
+}
+
+function applyPlayerDamage(dmg, color) {
+  if (dmg <= 0 || S.php <= 0) return;
+  S.php -= dmg;
+  shakeScreen();
+  beep(180, 0.15, 'sawtooth', 0.05);
+  damagePop(cv.width / 2, 20, dmg, false, color || '#ff2a4b');
+  if (S.php <= 0) { S.php = 0; gameOver(); }
+}
+
+function onEnemyDefeated() {
+  if (S.storyActive) { defeatStoryBoss(); return; }
+  if (S.c === 'c2') {
+    S.pm = 1; S.pt = S.pmax; S.combo = 0;
+    beep(1200, 0.2, 'sine', 0.08);
+    spawnParticles(cv.width / 2, cv.height / 2, 30, '#f1c40f', { spd: 8, size: 5, life: 0.02 });
+    markDirty();
+    return;
+  }
+  S.m += Math.round(ENEMIES[S.e].r * rewardScale());
+  S.php = Math.min(S.phpmax, S.php + Math.floor(S.phpmax * 0.25));
+  S.wave++;
+  S.phpmax += 20;
+  beep(800, 0.15, 'sine', 0.06);
+  spawnParticles(cv.width / 2, cv.height / 2, 15, '#2ecc71', { spd: 5, size: 4 });
+  nextEnemy();
+}
+
+function nextEnemy() {
+  S.e++;
+  if (S.e >= ENEMIES.length) { S.e = 0; S.loop = (S.loop || 0) + 1; }
+  const en = ENEMIES[S.e];
+  const scale = 1 + (S.loop || 0) * 0.3;
+  S.emax = Math.round(en.h * scale);
+  S.hp = S.emax;
+  S.atkCdMax = en.atk;
+  S.atkCd = S.atkCdMax;
+  resetBossState();
+  setupTimingForBoss(en);
+  if (en.boss) {
+    cc.classList.add('boss-flash');
+    setTimeout(() => cc.classList.remove('boss-flash'), 600);
+    beep(100, 0.4, 'sawtooth', 0.1);
+  }
+  markDirty();
+}
+
+// ===== STORY =====
+function startStoryBattle() {
+  if (S.storyIdx >= STORY_BOSSES.length) return;
+  if (S.pm) return;
+  const boss = STORY_BOSSES[S.storyIdx];
+  S.storyActive = true;
+  S.storyHP = boss.h;
+  S.atkCdMax = boss.atk;
+  S.atkCd = boss.atk;
+  resetBossState();
+  bossState.timer = boss.timer || 60;
+  setupTimingForBoss(boss);
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
+  document.querySelector('.tab[data-sc="battle"]').classList.add('active');
+  $('battle-sc').classList.add('active');
+  battleActive = true;
+  setTimeout(resizeCanvas, 20);
+  cc.classList.add('boss-flash');
+  setTimeout(() => cc.classList.remove('boss-flash'), 600);
+  beep(boss.finalBoss ? 80 : 200, 0.5, 'sawtooth', 0.12);
+  if (boss.finalBoss) {
+    setTimeout(() => beep(60, 0.8, 'sawtooth', 0.12), 300);
+    setTimeout(() => beep(40, 1.0, 'sawtooth', 0.12), 700);
+    showSpecialText('☠ СТЁРТЫЙ ДАНТЕ ☠', '#9b59b6');
+  }
+  if (!tutorialShown) {
+    setTimeout(() => {
+      tutorialModal.classList.add('show');
+      tutorialShown = true;
+      try { localStorage.setItem('dmc_tut', '1'); } catch (e) {}
+    }, 800);
+  }
+  updateAll(); markDirty();
+}
+
+function defeatStoryBoss() {
+  const boss = STORY_BOSSES[S.storyIdx];
+  if (!boss) return;
+  if (boss.finalBoss || boss.rtype === 'erase') { showFinale(); return; }
+  let rewardMsg = '';
+  if (boss.rtype === 'money') { S.m += boss.reward; rewardMsg = boss.reward.toLocaleString('ru') + ' мотов'; }
+  else if (boss.rtype === 'chair') {
+    if (!S.o.includes(boss.chair)) S.o.push(boss.chair);
+    rewardMsg = CHAIRS[boss.chair].n;
+  }
+  S.storyIdx++;
+  S.storyActive = false;
+  S.storyHP = 0;
+  S.phpmax += 100;
+  S.php = S.phpmax;
+  S.pm = 0; S.pt = 0; S.combo = 0;
+  setupTimingForBoss(null);
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
+  document.querySelector('.tab[data-sc="story"]').classList.add('active');
+  $('story-sc').classList.add('active');
+  battleActive = false;
+  beep(1500, 0.3, 'sine', 0.1);
+  setTimeout(() => beep(2000, 0.4, 'sine', 0.1), 150);
+  if (rewardMsg) {
+    $('st-t').innerHTML = '🏆 <b>ПОБЕДА!</b> ' + boss.n + ' повержен! Награда: <b style="color:var(--gold)">' + rewardMsg + '</b>';
+  }
+  updateAll(); markDirty();
+}
+
+function showFinale() {
+  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  goEl.classList.remove('show');
+  cc.classList.remove('final-aura');
+  finaleEl.classList.add('show');
+  setupTimingForBoss(null);
+  beep(2000, 0.4, 'sine', 0.1);
+  setTimeout(() => beep(1500, 0.4, 'sine', 0.1), 200);
+  setTimeout(() => beep(1000, 0.6, 'sine', 0.1), 400);
+  setTimeout(() => beep(500, 1.2, 'sine', 0.15), 700);
+}
+
+function eat() {
+  if (!S.pm) return;
+  if (goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
+  const bite = Math.max(2, CHAIRS.c2.w * 1.5);
+  S.pt -= bite;
+  S.m += bite * 1.5;
+  S.php = Math.min(S.phpmax, S.php + bite * 2);
+  spawnParticles(cv.width / 2 + (Math.random() - 0.5) * 80, cv.height / 2 + (Math.random() - 0.5) * 80, 6, '#f1c40f', { spd: 3, size: 4, gravity: -0.1 });
+  beep(500, 0.05, 'sine', 0.04);
+  if (S.pt <= 0) {
+    S.m += Math.round(ENEMIES[S.e].r * rewardScale());
+    S.wave++;
+    S.phpmax += 20;
+    nextEnemy();
+    beep(1000, 0.1, 'sine', 0.06);
+    setTimeout(() => beep(1400, 0.15, 'sine', 0.06), 90);
+  }
+  updateBattle(); markDirty();
+}
+
+// ===== ABILITIES TICK =====
+function bossAbilityTick(dt) {
+  if (!isBossFight() || S.pm || goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
+  const boss = currentBoss();
+  const ability = boss.ability;
+  bossState.elapsed += dt;
+
+  if (ability === 'regen' && !timing.open) {
+    setBossHP(Math.min(currentBossMax(), getBossHP() + currentBossMax() * 0.01 * dt));
+  }
+  if (ability === 'shield') {
+    bossState.mundusShieldCd -= dt;
+    if (bossState.mundusShieldActive > 0) bossState.mundusShieldActive -= dt;
+    else if (bossState.mundusShieldCd <= 0) {
+      bossState.mundusShieldActive = 2;
+      bossState.mundusShieldCd = 15;
+      showSpecialText('ЩИТ МУНДУСА!', '#00f0ff');
+      beep(400, 0.2, 'sine', 0.06);
+    }
+  }
+  if (ability === 'procdisable') {
+    bossState.urizenCd -= dt;
+    if (bossState.urizenActive > 0) bossState.urizenActive -= dt;
+    else if (bossState.urizenCd <= 0) {
+      bossState.urizenActive = 2;
+      bossState.urizenCd = 20;
+      showSpecialText('ПРОКИ ОТКЛЮЧЕНЫ!', '#9b59b6');
+      beep(200, 0.3, 'sawtooth', 0.08);
+    }
+  }
+  if (S.storyActive && boss.timer) {
+    bossState.timer -= dt;
+    if (bossState.timer <= 0) { bossState.timer = 0; timeoutLoss(); }
+  }
+}
+
+function timeoutLoss() {
+  S.php = 0;
+  goMsg.textContent = '⏱ Время вышло! Босс тебя переварил.';
+  goEl.classList.add('show');
+  updateAll();
+}
+
+// ===== TICK =====
+let lastTick = performance.now();
+function gameTick(now) {
+  const dt = Math.min(100, now - lastTick) / 1000;
+  lastTick = now;
+  if (!battleActive || goEl.classList.contains('show') || finaleEl.classList.contains('show') || tutorialModal.classList.contains('show')) {
+    requestAnimationFrame(gameTick); return;
+  }
+
+  if (S.combo > 0 && now - S.comboT > COMBO_WINDOW) S.combo = 0;
+
+  if (timing.active) {
+    timing.pos += timing.speed * timing.dir * dt * 60;
+    if (timing.pos >= 1) { timing.pos = 1; timing.dir = -1; }
+    else if (timing.pos <= 0) { timing.pos = 0; timing.dir = 1; }
+    tbInd.style.left = (timing.pos * 100) + '%';
+  }
+
+  if (timing.open) {
+    timing.openTimer -= dt;
+    if (timing.openTimer <= 0) closeBoss();
+  }
+
+  bossAbilityTick(dt);
+
+  if (S.pm) {
+    S.pt -= dt;
+    if (S.pt <= 0) {
+      S.php -= 15;
+      beep(150, 0.3, 'sawtooth', 0.06);
+      shakeScreen();
+      S.pm = 0; S.pt = 0;
+      if (S.php <= 0) { gameOver(); requestAnimationFrame(gameTick); return; }
+      S.m += Math.round(ENEMIES[S.e].r * rewardScale());
+      S.wave++;
+      nextEnemy();
+    }
+  } else {
+    const canAttack = !isBossFight() || timing.open;
+    if (canAttack) {
+      S.atkCd -= dt;
+      if (S.atkCd <= 0) {
+        bossAttack();
+        if (S.php <= 0) { requestAnimationFrame(gameTick); return; }
+      }
+    }
+  }
+  updateBattle();
+  requestAnimationFrame(gameTick);
+}
+
+function bossAttack() {
+  const boss = currentBoss();
+  const ability = boss.ability;
+  let dmg = boss.dmg + Math.floor(Math.random() * 3);
+  let special = null;
+  bossState.attackCount++;
+
+  if (timing.open) dmg = Math.floor(dmg * 0.5);
+
+  if (isFinalBoss()) {
+    const roll = Math.random();
+    if (roll < 0.15) { dmg = Math.floor(S.phpmax * 0.15); special = { text: 'ВРАГ: JUDGEMENT CUT!', color: '#9b59b6' }; }
+    else if (roll < 0.30) { dmg = Math.floor(S.phpmax * 0.10); special = { text: 'ВРАГ: VOID!', color: '#9b59b6' }; }
+    else if (roll < 0.45) { dmg = Math.floor(S.phpmax * 0.08); special = { text: 'ВРАГ: DEVIL TRIGGER!', color: '#ff2a4b' }; }
+    else if (roll < 0.60) { dmg = Math.floor(S.phpmax * 0.06); special = { text: 'ВРАГ: EXCEED!', color: '#e67e22' }; }
+    else { dmg = Math.floor(S.phpmax * 0.05); }
+    if (timing.open) dmg = Math.floor(dmg * 0.7);
+  } else if (ability === 'exceed' && bossState.attackCount % 3 === 0) {
+    dmg *= 2;
+    special = { text: 'ВРАГ: EXCEED!', color: '#e67e22' };
+  } else if (ability === 'jc' && Math.random() < 0.20) {
+    dmg = Math.floor(S.phpmax * 0.15);
+    special = { text: 'ВРАГ: JUDGEMENT CUT!', color: '#9b59b6' };
+  }
+
+  let nextAtkCd = boss.atk;
+  if (ability === 'rage') {
+    const ramp = Math.min(1, bossState.elapsed / 60);
+    nextAtkCd = Math.max(1.2, boss.atk * (1 - ramp * 0.35));
+  }
+  if (timing.open) nextAtkCd *= 2;
+  S.atkCd = nextAtkCd;
+  S.atkCdMax = boss.atk;
+
+  applyPlayerDamage(dmg, isFinalBoss() ? '#9b59b6' : '#ff2a4b');
+  if (special) {
+    showSpecialText(special.text, special.color);
+    cc.classList.add('judgement-cut');
+    setTimeout(() => cc.classList.remove('judgement-cut'), 400);
+    beep(400, 0.3, 'sawtooth', 0.1);
+  }
+}
+
+function shakeScreen() {
+  cc.classList.remove('shake');
+  void cc.offsetWidth;
+  cc.classList.add('shake');
+}
+
+function gameOver() {
+  S.php = 0; S.pm = 0; S.pt = 0;
+  goMsg.textContent = 'Данте переварен. Вернись сильнее!';
+  goEl.classList.add('show');
+  updateAll();
+}
+
+function revive() {
+  goEl.classList.remove('show');
+  S.php = S.phpmax;
+  const boss = currentBoss();
+  if (S.storyActive) {
+    S.storyHP = boss.h;
+    resetBossState();
+    bossState.timer = boss.timer || 60;
+    setupTimingForBoss(boss);
+  } else {
+    S.hp = S.emax;
+    setupTimingForBoss(isBossFight() ? boss : null);
+  }
+  S.pm = 0; S.pt = 0; S.combo = 0;
+  S.atkCdMax = boss.atk;
+  S.atkCd = S.atkCdMax;
+  updateAll();
+}
+
+// ===== RENDER =====
+function render() {
+  resizeCanvas();
+  const w = cv.width, h = cv.height;
+  if (w === 0 || h === 0) { requestAnimationFrame(render); return; }
+
+  const isFinal = isFinalBoss() && !S.pm;
+  const isOpen = timing.open && !S.pm;
+  cx.fillStyle = isFinal ? '#120a1a' : (isOpen ? '#0f1a12' : (S.storyActive ? '#150f1a' : '#0f1218'));
+  cx.fillRect(0, 0, w, h);
+
+  cx.strokeStyle = isFinal ? 'rgba(155,89,182,0.1)' : (isOpen ? 'rgba(46,204,113,0.12)' : (S.storyActive ? 'rgba(155,89,182,0.08)' : 'rgba(0,240,255,0.05)'));
+  cx.lineWidth = 1;
+  for (let i = 0; i < w; i += 40) { cx.beginPath(); cx.moveTo(i, 0); cx.lineTo(i, h); cx.stroke(); }
+  for (let i = 0; i < h; i += 40) { cx.beginPath(); cx.moveTo(0, i); cx.lineTo(w, i); cx.stroke(); }
+
+  const cw = w / 2, ch = h / 2;
+  const t = performance.now();
+
+  if (isFinal) {
+    cx.save();
+    for (let ring = 0; ring < 3; ring++) {
+      const r = 70 + ring * 30 + Math.sin(t / (400 + ring * 100)) * 10;
+      cx.strokeStyle = 'rgba(155,89,182,' + (0.5 - ring * 0.12) + ')';
+      cx.lineWidth = 2;
+      cx.beginPath(); cx.arc(cw, ch, r, 0, Math.PI * 2); cx.stroke();
+    }
+    if (Math.random() < 0.3) spawnParticles(cw + (Math.random() - 0.5) * 140, ch + 40, 1, '#9b59b6', { spd: 1, size: 2, gravity: -0.15, life: 0.02 });
+    cx.restore();
+  } else if (isOpen) {
+    cx.save();
+    const pulse = 0.3 + Math.sin(t / 250) * 0.15;
+    cx.strokeStyle = 'rgba(46,204,113,' + pulse + ')';
+    cx.lineWidth = 3;
+    cx.beginPath(); cx.arc(cw, ch, 75 + Math.sin(t / 300) * 8, 0, Math.PI * 2); cx.stroke();
+    cx.restore();
+  } else if (!S.pm && isBossFight()) {
+    cx.save();
+    cx.strokeStyle = 'rgba(255,42,75,' + (0.4 + Math.sin(t / 300) * 0.2) + ')';
+    cx.lineWidth = 2;
+    cx.beginPath(); cx.arc(cw, ch, 70 + Math.sin(t / 400) * 8, 0, Math.PI * 2); cx.stroke();
+    cx.strokeStyle = 'rgba(46,204,113,' + (0.3 + Math.sin(t / 500) * 0.15) + ')';
+    cx.beginPath(); cx.arc(cw, ch, 90 + Math.sin(t / 600) * 10, 0, Math.PI * 2); cx.stroke();
+    cx.restore();
+  }
+
+  if (S.pm) {
+    const prog = Math.max(0, S.pt / S.pmax);
+    cx.save();
+    cx.translate(cw, ch);
+    cx.rotate(Math.sin(t / 500) * 0.08);
+    cx.fillStyle = '#c9822b';
+    cx.beginPath(); cx.arc(0, 0, 55, 0, Math.PI * 2); cx.fill();
+    cx.fillStyle = '#f39c12';
+    cx.beginPath(); cx.arc(0, 0, 48, 0, Math.PI * 2); cx.fill();
+    cx.fillStyle = '#c0392b';
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI / 3 + t / 3000;
+      cx.beginPath(); cx.arc(Math.cos(a) * 25, Math.sin(a) * 25, 6, 0, Math.PI * 2); cx.fill();
+    }
+    cx.restore();
+    cx.save();
+    cx.strokeStyle = prog < 0.3 ? '#ff2a4b' : '#f1c40f';
+    cx.lineWidth = 5;
+    cx.beginPath();
+    cx.arc(cw, ch, 70, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2);
+    cx.stroke();
+    cx.restore();
+  } else {
+    const chair = CHAIRS[S.c];
+    const bob = Math.sin(t / 400) * 3;
+    const scale = isOpen ? 1.2 : 1;
+    cx.save();
+    cx.translate(cw, ch + bob);
+    cx.scale(scale, scale);
+    cx.fillStyle = chair.c;
+    cx.shadowColor = isOpen ? '#2ecc71' : chair.c;
+    cx.shadowBlur = isOpen ? 30 : 15;
+    cx.fillRect(-22, -10, 44, 8);
+    cx.fillRect(-22, -40, 8, 30);
+    cx.fillRect(-18, -2, 5, 24);
+    cx.fillRect(13, -2, 5, 24);
+    cx.restore();
+  }
+
+  if (!S.pm && S.php / S.phpmax < 0.25) {
+    cx.save();
+    const grad = cx.createRadialGradient(cw, ch, 0, cw, ch, Math.max(w, h));
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, 'rgba(255,42,75,' + (0.15 + Math.sin(t / 200) * 0.1) + ')');
+    cx.fillStyle = grad;
+    cx.fillRect(0, 0, w, h);
+    cx.restore();
+  }
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= 0.98; p.vy *= 0.98;
+    p.a -= p.life;
+    if (p.a <= 0) { particles.splice(i, 1); continue; }
+    cx.save();
+    cx.globalAlpha = p.a;
+    cx.fillStyle = p.color;
+    cx.beginPath();
+    cx.arc(p.x, p.y, p.z, 0, Math.PI * 2);
+    cx.fill();
+    cx.restore();
+  }
+
+  requestAnimationFrame(render);
+}
+
+// ===== INPUT =====
+cc.addEventListener('pointerdown', e => { e.preventDefault(); attack(e); });
+eB.addEventListener('click', e => { e.preventDefault(); eat(); });
+$('revive-btn').addEventListener('click', revive);
+saveBtn.addEventListener('click', save);
+resetBtnH.addEventListener('click', () => {
+  if (!confirm('Сбросить весь прогресс? НЕОБРАТИМО!')) return;
+  if (!confirm('ТОЧНО? Всё пропадёт!')) return;
+  resetAll();
+  showToast('🗑 Прогресс сброшен', true);
+});
+$('reset-btn').addEventListener('click', () => {
+  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  location.reload();
+});
+$('sm-close').addEventListener('click', () => storyModal.classList.remove('show'));
+storyModal.addEventListener('click', e => { if (e.target === storyModal) storyModal.classList.remove('show'); });
+$('tut-close').addEventListener('click', () => tutorialModal.classList.remove('show'));
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+document.addEventListener('pointerdown', () => { if (!AC) beep(0, 0.001, 'sine', 0.001); }, { once: true });
+
+// ===== BOOT =====
+load();
+updateAll();
+resizeCanvas();
+requestAnimationFrame(render);
+requestAnimationFrame(gameTick);
+})();
+</script>
 </body>
 </html>
