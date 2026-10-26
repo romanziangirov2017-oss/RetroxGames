@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DMC: Pizza Clash</title>
+<title>DMC: Pizza Clash — Chapters</title>
 <style>
 :root{--bg:#0b0c10;--p:#1f2833;--r:#ff2a4b;--b:#00f0ff;--t:#c5c6c7;--gold:#f1c40f;--green:#2ecc71;--orange:#e67e22;--purple:#9b59b6;--blue:#3498db}
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
@@ -12,25 +12,23 @@ body{background:radial-gradient(circle at 50% 0%,#161b25 0%,var(--bg) 70%);color
 #g{width:100%;max-width:460px;background:var(--p);border:2px solid var(--r);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 20px rgba(255,42,75,.25),0 8px 30px rgba(0,0,0,.5)}
 header{background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.2));padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:2px solid #2f3e46}
 .s-box{font-size:16px;font-weight:800;color:#fff;text-shadow:0 0 8px var(--r)}
-.s-box small{font-size:10px;color:#8a8d92;font-weight:600;text-shadow:none;margin-left:3px;letter-spacing:.5px}
 .hdr-actions{display:flex;gap:5px}
 .hdr-btn{background:rgba(0,0,0,.5);border:1px solid #3a4454;color:#fff;width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
 .hdr-btn:hover{background:rgba(255,42,75,.2);border-color:var(--r)}
 .hdr-btn.dirty::after{content:'';position:absolute;top:2px;right:2px;width:6px;height:6px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px var(--gold)}
 nav{display:flex;background:#151c24;border-bottom:1px solid #2f3e46}
-.tab{flex:1;padding:10px 2px;background:none;border:none;color:var(--t);font-weight:700;cursor:pointer;font-size:11px;text-transform:uppercase;border-bottom:3px solid transparent;transition:all .15s;letter-spacing:.3px}
+.tab{flex:1;padding:10px 2px;background:none;border:none;color:var(--t);font-weight:700;cursor:pointer;font-size:16px;border-bottom:3px solid transparent;transition:all .15s}
 .tab.active{color:var(--r);border-bottom-color:var(--r);background:var(--p)}
 .sc{display:none;padding:10px;flex-direction:column;align-items:center;max-height:72vh;overflow-y:auto}
 .sc.active{display:flex}
 .ep{text-align:center;width:100%;margin-bottom:5px}
-.en{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:.5px;transition:color .2s}
+.en{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:.5px}
 .en.boss{color:var(--r);text-shadow:0 0 10px var(--r);animation:bossPulse 1s infinite alternate}
 .en.final{color:var(--purple);text-shadow:0 0 15px var(--purple),0 0 25px var(--r);animation:finalPulse 1.5s infinite alternate}
 @keyframes bossPulse{from{text-shadow:0 0 6px var(--r)}to{text-shadow:0 0 16px var(--r),0 0 24px #ff6b81}}
 @keyframes finalPulse{from{text-shadow:0 0 8px var(--purple)}to{text-shadow:0 0 20px var(--purple),0 0 40px var(--r)}}
-.boss-timer{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:3px;letter-spacing:.5px;transition:color .2s}
+.boss-timer{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:3px;letter-spacing:.5px}
 .boss-timer.urgent{color:var(--r);animation:timerBlink .4s infinite alternate}
-.boss-timer.open-phase{color:var(--green);text-shadow:0 0 8px var(--green)}
 @keyframes timerBlink{from{opacity:.5}to{opacity:1}}
 .atk-ind{font-size:10px;font-weight:700;color:var(--r);margin-bottom:5px;letter-spacing:.5px;min-height:12px}
 .hb-b{width:100%;height:14px;background:#000;border-radius:7px;overflow:hidden;position:relative;border:1px solid #333;margin-bottom:5px}
@@ -39,65 +37,92 @@ nav{display:flex;background:#151c24;border-bottom:1px solid #2f3e46}
 .hb-f.php.low{background:linear-gradient(90deg,#c0392b,#e74c3c);animation:pulse .6s infinite alternate}
 @keyframes pulse{from{opacity:.6}to{opacity:1}}
 .hb-f.pizza{background:linear-gradient(90deg,var(--orange),var(--gold))}
+.hb-f.dt{background:linear-gradient(90deg,#9b59b6,#ff2a4b)}
 .hb-t{position:absolute;width:100%;text-align:center;top:50%;left:0;transform:translateY(-50%);font-size:10px;font-weight:800;color:#fff;text-shadow:0 1px 2px #000}
 .php-row{display:flex;align-items:center;gap:6px;width:100%;margin-bottom:6px}
 .php-label{font-size:9px;font-weight:900;color:var(--green);min-width:38px;text-align:right;letter-spacing:.5px}
 .php-row .hb-b{flex:1;margin-bottom:0}
-/* Timing bar - BIGGER AND CLEARER */
-.timing-wrap{width:100%;margin-bottom:8px;padding:10px 10px;background:rgba(0,0,0,.6);border:2px solid var(--green);border-radius:10px;box-shadow:0 0 15px rgba(46,204,113,.4)}
+.dt-row{display:flex;align-items:center;gap:6px;width:100%;margin-bottom:6px}
+.dt-label{font-size:9px;font-weight:900;color:var(--purple);min-width:18px;text-align:right;letter-spacing:.5px}
+.dt-row .hb-b{flex:1;margin-bottom:0}
+.dt-btn{padding:5px 10px;background:linear-gradient(135deg,#9b59b6,#ff2a4b);border:none;color:#fff;border-radius:6px;font-weight:900;font-size:10px;cursor:pointer;white-space:nowrap}
+.dt-btn:disabled{opacity:.3;cursor:not-allowed}
+.dt-btn.ready{animation:dtReady 0.7s infinite alternate}
+@keyframes dtReady{from{box-shadow:0 0 5px #ff2a4b}to{box-shadow:0 0 20px #ff2a4b,0 0 30px #9b59b6}}
+.dt-btn.active{background:linear-gradient(135deg,#ff2a4b,#f1c40f);animation:dtPulse .4s infinite alternate}
+@keyframes dtPulse{from{box-shadow:0 0 8px #ff2a4b}to{box-shadow:0 0 20px #f1c40f}}
+.timing-wrap{width:100%;margin-bottom:8px;padding:10px;background:rgba(0,0,0,.6);border:2px solid var(--green);border-radius:10px;box-shadow:0 0 15px rgba(46,204,113,.4)}
 .timing-wrap.final{border-color:var(--purple);box-shadow:0 0 15px rgba(155,89,182,.4)}
 .tw-label{font-size:11px;font-weight:900;color:var(--green);text-align:center;margin-bottom:6px;letter-spacing:.5px}
 .timing-wrap.final .tw-label{color:var(--purple)}
 .tb-track{height:32px;background:#0a0a0a;border-radius:16px;position:relative;overflow:hidden;border:2px solid #2a2a2a}
 .tb-zone{position:absolute;top:0;height:100%;background:linear-gradient(180deg,#3ef07e,#27ae60);border-left:3px solid #a7ffc4;border-right:3px solid #a7ffc4;box-shadow:inset 0 0 20px rgba(255,255,255,.6),0 0 15px rgba(46,204,113,.8);animation:zoneGlow 0.7s infinite alternate;z-index:1}
-@keyframes zoneGlow{from{filter:brightness(1)}to{filter:brightness(1.4);box-shadow:inset 0 0 20px rgba(255,255,255,.8),0 0 25px rgba(46,204,113,1)}}
-.timing-wrap.final .tb-zone{background:linear-gradient(180deg,#c084fc,#9b59b6);border-color:#e0c7f5;box-shadow:inset 0 0 20px rgba(255,255,255,.6),0 0 15px rgba(155,89,182,.8)}
+@keyframes zoneGlow{from{filter:brightness(1)}to{filter:brightness(1.4)}}
+.timing-wrap.final .tb-zone{background:linear-gradient(180deg,#c084fc,#9b59b6);border-color:#e0c7f5}
 .tb-indicator{position:absolute;top:0;width:5px;height:100%;background:#fff;box-shadow:0 0 15px #fff,0 0 25px var(--r);transform:translateX(-50%);will-change:left;z-index:3;border-radius:2px}
 .hidden{display:none!important}
 #cc{width:100%;aspect-ratio:4/3;background:#0b0c10;border-radius:10px;border:1px solid #2f3e46;margin-bottom:8px;cursor:pointer;position:relative;overflow:hidden;box-shadow:inset 0 0 30px rgba(0,0,0,.8)}
 canvas{width:100%;height:100%;display:block}
-.btn{width:100%;padding:11px;font-size:14px;font-weight:800;background:linear-gradient(135deg,#27ae60,#2ecc71);border:none;border-radius:10px;color:#fff;cursor:pointer;text-transform:uppercase;display:none;letter-spacing:.5px;box-shadow:0 4px 0 rgba(0,0,0,.3);transition:transform .05s}
-.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.btn{width:100%;padding:11px;font-size:14px;font-weight:800;background:linear-gradient(135deg,#27ae60,#2ecc71);border:none;border-radius:10px;color:#fff;cursor:pointer;text-transform:uppercase;display:none;letter-spacing:.5px;box-shadow:0 4px 0 rgba(0,0,0,.3)}
 .combo{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);color:var(--gold);font-weight:900;font-size:16px;padding:4px 10px;border-radius:8px;border:1px solid var(--gold);opacity:0;transition:opacity .2s;pointer-events:none;text-shadow:0 0 10px var(--gold)}
 .combo.on{opacity:1;animation:comboPulse .3s}
 @keyframes comboPulse{0%{transform:scale(1.3)}100%{transform:scale(1)}}
 .si{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:8px;padding:9px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .si.special{border-color:var(--gold);background:rgba(241,196,15,.06)}
-.si.legendary{border-color:var(--purple);background:rgba(155,89,182,.08);box-shadow:0 0 12px rgba(155,89,182,.2)}
+.si.legendary{border-color:var(--purple);background:rgba(155,89,182,.08)}
 .i-n{font-weight:800;color:#fff;font-size:12px}
 .i-d{font-size:10px;color:#aaa;margin-top:2px}
 .i-d.sp{color:var(--gold);font-weight:700}
 .i-d.lg{color:var(--purple);font-weight:700}
-.buy-btn{padding:6px 10px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:800;font-size:10px;cursor:pointer;white-space:nowrap;letter-spacing:.3px}
+.buy-btn{padding:6px 10px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:800;font-size:10px;cursor:pointer;white-space:nowrap}
 .buy-btn:disabled{opacity:.4;cursor:not-allowed}
 .buy-btn.owned{background:#2c3e50}
-.buy-btn.owned:disabled{opacity:1;background:#1a2633;color:#666}
 .st-b{width:100%;background:#11161d;border-radius:8px;padding:11px;border:1px solid var(--b);margin-bottom:10px;font-size:12px;line-height:1.5;color:#dde1e7}
-.story-card{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:10px;padding:9px 11px;margin-bottom:7px;transition:all .15s}
-.story-card.current{border-color:var(--r);background:rgba(255,42,75,.07);box-shadow:0 0 14px rgba(255,42,75,.25)}
-.story-card.defeated{border-color:var(--green);background:rgba(46,204,113,.04);opacity:.7}
-.story-card.locked{opacity:.4}
-.story-card.final-card{border-color:var(--purple);background:rgba(155,89,182,.08)}
-.story-card.final-card.current{box-shadow:0 0 20px rgba(155,89,182,.5)}
-.sc-head{display:flex;align-items:center;gap:7px;margin-bottom:4px}
-.sc-num{background:var(--r);color:#fff;font-weight:900;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.story-card.defeated .sc-num{background:var(--green)}
-.story-card.locked .sc-num{background:#444}
-.story-card.final-card .sc-num{background:var(--purple)}
-.sc-name{font-weight:800;font-size:12px;color:#fff;flex:1}
-.story-card.final-card .sc-name{color:var(--purple);text-shadow:0 0 8px var(--purple)}
-.sc-info{font-size:10px;color:#aaa;margin-bottom:3px;line-height:1.4}
-.sc-ability{font-size:10px;color:var(--gold);font-weight:700;margin-bottom:3px}
-.sc-ability.final{color:var(--purple)}
-.sc-parry{font-size:10px;color:var(--green);font-weight:700;margin-bottom:4px}
-.sc-reward{font-size:10px;color:var(--gold);font-weight:700;margin-bottom:6px}
-.sc-btn-row{display:flex;gap:5px}
-.sc-btn{flex:1;padding:8px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:900;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
-.sc-btn:active{transform:scale(.98)}
-.sc-btn:disabled{background:#2c3e50;color:#666;cursor:not-allowed}
-.story-card.defeated .sc-btn{background:var(--green)}
-.story-card.final-card .sc-btn.fight-btn{background:var(--purple)}
-.sc-btn.story-btn{background:var(--blue);flex:0 0 auto;padding:8px 10px;font-size:10px}
+.chapter-card{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:10px;padding:10px 12px;margin-bottom:7px;transition:all .15s}
+.chapter-card.current{border-color:var(--r);background:rgba(255,42,75,.07);box-shadow:0 0 14px rgba(255,42,75,.25)}
+.chapter-card.defeated{border-color:var(--green);background:rgba(46,204,113,.04)}
+.chapter-card.locked{opacity:.4}
+.chapter-card.final-card{border-color:var(--purple);background:rgba(155,89,182,.08)}
+.chapter-card.final-card.current{box-shadow:0 0 20px rgba(155,89,182,.5)}
+.ch-head{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.ch-num{background:var(--r);color:#fff;font-weight:900;font-size:11px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chapter-card.defeated .ch-num{background:var(--green)}
+.chapter-card.locked .ch-num{background:#444}
+.chapter-card.final-card .ch-num{background:var(--purple)}
+.ch-name{font-weight:800;font-size:12px;color:#fff;flex:1}
+.chapter-card.final-card .ch-name{color:var(--purple)}
+.ch-icon{font-size:16px}
+.ch-info{font-size:10px;color:#aaa;margin-bottom:4px;line-height:1.4}
+.ch-demon-progress{font-size:11px;font-weight:800;color:var(--gold);margin-bottom:4px}
+.ch-demon-progress.done{color:var(--green)}
+.ch-boss-line{font-size:10px;color:var(--r);font-weight:700;margin-bottom:6px}
+.ch-boss-line.final{color:var(--purple)}
+.ch-btn-row{display:flex;gap:5px}
+.ch-btn{flex:1;padding:8px;background:var(--r);border:none;color:#fff;border-radius:6px;font-weight:900;font-size:11px;cursor:pointer;letter-spacing:.3px}
+.ch-btn:active{transform:scale(.98)}
+.ch-btn:disabled{background:#2c3e50;color:#666;cursor:not-allowed}
+.chapter-card.defeated .ch-btn.fight-btn{background:var(--green)}
+.chapter-card.final-card .ch-btn.fight-btn{background:var(--purple)}
+.ch-btn.memory-btn{background:var(--blue);flex:0 0 auto;padding:8px 10px;font-size:10px}
+.ch-btn.rematch-btn{background:var(--orange);flex:0 0 auto;padding:8px 10px;font-size:10px}
+.skill-card{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.skill-card.maxed{border-color:var(--gold);background:rgba(241,196,15,.05)}
+.skill-icon{font-size:22px;flex-shrink:0}
+.skill-info{flex:1;min-width:0}
+.skill-name{font-weight:800;color:#fff;font-size:12px;margin-bottom:2px}
+.skill-desc{font-size:10px;color:#aaa;margin-bottom:2px}
+.skill-level{font-size:10px;color:var(--purple);font-weight:700}
+.skill-buy{padding:7px 10px;background:linear-gradient(135deg,#9b59b6,#6c3483);border:none;color:#fff;border-radius:6px;font-weight:800;font-size:10px;cursor:pointer;white-space:nowrap;min-width:60px}
+.skill-buy:disabled{opacity:.4;cursor:not-allowed}
+.skill-buy.maxed{background:#2c3e50;color:var(--gold)}
+.ach-card{width:100%;background:rgba(0,0,0,.25);border:1px solid #3a4454;border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;opacity:.6}
+.ach-card.done{border-color:var(--green);background:rgba(46,204,113,.06);opacity:1}
+.ach-icon{font-size:22px}
+.ach-info{flex:1;min-width:0}
+.ach-name{font-weight:800;color:#fff;font-size:12px;margin-bottom:2px}
+.ach-desc{font-size:10px;color:#aaa;margin-bottom:2px}
+.ach-reward{font-size:10px;color:var(--gold);font-weight:700}
+.ach-check{font-size:18px;color:var(--green)}
 .rule h3{color:var(--r);margin:10px 0 4px;font-size:12px}
 .rule p{font-size:11px;line-height:1.5;color:#b0b5bd;margin-bottom:4px}
 .rule .gold{color:var(--gold);font-weight:700}
@@ -108,16 +133,17 @@ canvas{width:100%;height:100%;display:block}
 @keyframes dmgFloat{0%{transform:translate(-50%,0) scale(.5);opacity:1}30%{transform:translate(-50%,-20px) scale(1.3);opacity:1}100%{transform:translate(-50%,-60px) scale(1);opacity:0}}
 .shake{animation:shake .25s}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-.overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;border-radius:10px;color:#fff;text-align:center;padding:20px}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;border-radius:10px;color:#fff;text-align:center;padding:20px;gap:6px}
 .overlay.show{display:flex}
 .overlay h2{color:var(--r);font-size:22px;margin-bottom:8px;text-shadow:0 0 20px var(--r);letter-spacing:2px}
 .overlay p{font-size:12px;margin-bottom:14px;color:#ccc;line-height:1.5}
 .overlay button{padding:10px 22px;background:var(--r);border:none;color:#fff;border-radius:8px;font-weight:800;cursor:pointer;font-size:13px;letter-spacing:1px}
 #finale{background:radial-gradient(circle,rgba(155,89,182,.3) 0%,rgba(0,0,0,.95) 70%)}
-#finale h2{color:var(--purple);font-size:32px;text-shadow:0 0 30px var(--purple),0 0 60px var(--purple);letter-spacing:6px;animation:finaleGlow 1.5s infinite alternate}
-@keyframes finaleGlow{from{text-shadow:0 0 20px var(--purple)}to{text-shadow:0 0 40px var(--purple),0 0 80px var(--r)}}
+#finale h2{color:var(--purple);font-size:32px;text-shadow:0 0 30px var(--purple),0 0 60px var(--purple);letter-spacing:6px}
 #finale p{color:#ccc;max-width:320px;line-height:1.6}
 #finale .jackpot{color:var(--gold);font-weight:900;font-size:20px;letter-spacing:3px;text-shadow:0 0 15px var(--gold);margin:8px 0}
+#pause-overlay{background:rgba(0,0,0,.92)}
+#pause-overlay h2{color:var(--b);text-shadow:0 0 20px var(--b)}
 .special-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;pointer-events:none;animation:specialPop 1.2s ease-out;z-index:20;text-align:center;padding:10px}
 @keyframes specialPop{0%{transform:scale(.3) rotate(-5deg);opacity:0}20%{transform:scale(1.2) rotate(2deg);opacity:1}60%{transform:scale(1);opacity:1}100%{transform:scale(1.4);opacity:0}}
 .judgement-cut{animation:jc .4s}
@@ -128,9 +154,12 @@ canvas{width:100%;height:100%;display:block}
 @keyframes finalAura{from{box-shadow:inset 0 0 40px rgba(155,89,182,.3)}to{box-shadow:inset 0 0 80px rgba(155,89,182,.6)}}
 .open-phase-aura{animation:openAura 1s infinite alternate}
 @keyframes openAura{from{box-shadow:inset 0 0 40px rgba(46,204,113,.3)}to{box-shadow:inset 0 0 80px rgba(46,204,113,.6)}}
-.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,.95);color:#fff;padding:10px 18px;border-radius:8px;font-weight:800;font-size:12px;z-index:1000;transition:transform .3s;border:1px solid var(--green);letter-spacing:.5px}
+.dt-aura{animation:dtAura 0.5s infinite alternate}
+@keyframes dtAura{from{box-shadow:inset 0 0 40px rgba(255,42,75,.4)}to{box-shadow:inset 0 0 90px rgba(241,196,15,.6),inset 0 0 40px rgba(255,42,75,.5)}}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,.95);color:#fff;padding:10px 18px;border-radius:8px;font-weight:800;font-size:12px;z-index:1000;transition:transform .3s;border:1px solid var(--green);letter-spacing:.5px;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.warn{border-color:var(--r);color:#ff8a9a}
+.toast.ach{border-color:var(--gold);color:var(--gold)}
 .story-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px}
 .story-modal.show{display:flex}
 .story-modal-content{background:linear-gradient(180deg,#1a1f2a,#0f1218);border:2px solid var(--blue);border-radius:14px;padding:20px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 0 40px rgba(52,152,219,.4)}
@@ -138,15 +167,22 @@ canvas{width:100%;height:100%;display:block}
 .story-modal-content .sm-icon{text-align:center;font-size:36px;margin-bottom:8px}
 .story-modal-content p{font-size:13px;line-height:1.7;color:#dde1e7;margin-bottom:14px;text-align:left}
 .story-modal-content p strong{color:var(--gold)}
-.story-modal-content button{width:100%;padding:11px;background:var(--blue);border:none;color:#fff;border-radius:8px;font-weight:900;font-size:13px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.story-modal-content button{width:100%;padding:11px;background:var(--blue);border:none;color:#fff;border-radius:8px;font-weight:900;font-size:13px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.story-modal-content .rematch-btn{background:var(--orange)}
 .tutorial-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2500;padding:20px}
 .tutorial-modal.show{display:flex}
 .tutorial-content{background:linear-gradient(180deg,#1a2230,#0f1218);border:2px solid var(--green);border-radius:14px;padding:22px;max-width:400px;width:100%;box-shadow:0 0 40px rgba(46,204,113,.5)}
-.tutorial-content h2{color:var(--green);font-size:20px;margin-bottom:14px;text-align:center;letter-spacing:1px;text-shadow:0 0 12px var(--green)}
-.tutorial-content p{font-size:13px;line-height:1.7;color:#dde1e7;margin-bottom:12px}
-.tutorial-content p strong{color:var(--gold)}
-.tutorial-content .tc-step{background:rgba(0,0,0,.4);padding:8px 12px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--green)}
+.tutorial-content h2{color:var(--green);font-size:20px;margin-bottom:14px;text-align:center;letter-spacing:1px}
+.tutorial-content .tc-step{background:rgba(0,0,0,.4);padding:8px 12px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--green);font-size:12px;line-height:1.6}
 .tutorial-content button{width:100%;padding:12px;background:var(--green);border:none;color:#fff;border-radius:8px;font-weight:900;font-size:14px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:8px}
+.settings-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2600;padding:20px}
+.settings-modal.show{display:flex}
+.settings-content{background:linear-gradient(180deg,#1a2230,#0f1218);border:2px solid var(--b);border-radius:14px;padding:22px;max-width:380px;width:100%}
+.settings-content h2{color:var(--b);font-size:20px;margin-bottom:16px;text-align:center}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #2a3340;font-size:13px;color:#dde1e7}
+.setting-btn{padding:7px 14px;background:var(--b);border:none;color:#000;border-radius:6px;font-weight:800;font-size:11px;cursor:pointer;min-width:70px}
+.setting-btn.off{background:#2c3e50;color:#888}
+.setting-btn.danger{background:var(--r);color:#fff;width:100%;padding:10px}
 </style>
 </head>
 <body>
@@ -154,8 +190,9 @@ canvas{width:100%;height:100%;display:block}
   <header>
     <div class="s-box">🍕 <span id="m-d">0</span></div>
     <div class="hdr-actions">
-      <button id="save-btn" class="hdr-btn" title="Сохранить">💾</button>
-      <button id="reset-btn-h" class="hdr-btn" title="Сбросить всё">🗑</button>
+      <button id="pause-btn" class="hdr-btn">⏸</button>
+      <button id="save-btn" class="hdr-btn">💾</button>
+      <button id="settings-btn" class="hdr-btn">⚙</button>
     </div>
     <div class="s-box" style="font-size:12px;text-shadow:none">
       <span id="mode-lbl" style="color:#8a8d92">ВОЛНА</span> 
@@ -163,10 +200,12 @@ canvas{width:100%;height:100%;display:block}
     </div>
   </header>
   <nav>
-    <button class="tab active" data-sc="battle">Битва</button>
-    <button class="tab" data-sc="shop">Скины</button>
-    <button class="tab" data-sc="story">Сюжет</button>
-    <button class="tab" data-sc="rules">Инфо</button>
+    <button class="tab active" data-sc="battle">⚔️</button>
+    <button class="tab" data-sc="chapters">📖</button>
+    <button class="tab" data-sc="shop">🛒</button>
+    <button class="tab" data-sc="skills">🌟</button>
+    <button class="tab" data-sc="ach">🏆</button>
+    <button class="tab" data-sc="rules">ℹ️</button>
   </nav>
 
   <div id="battle-sc" class="sc active">
@@ -174,11 +213,16 @@ canvas{width:100%;height:100%;display:block}
       <div class="en" id="e-n">Ленивец</div>
       <div id="boss-timer" class="boss-timer hidden">⏱ <span id="bt-val">60</span>с</div>
       <div class="atk-ind" id="atk-ind"></div>
-      <div class="hb-b"><div id="e-f" class="hb-f"></div><div id="e-t" class="hb-t">10 / 10</div></div>
+      <div class="hb-b"><div id="e-f" class="hb-f"></div><div class="hb-t" id="e-t">10 / 10</div></div>
     </div>
     <div class="php-row">
       <div class="php-label">ДАНТЕ</div>
-      <div class="hb-b"><div id="p-f" class="hb-f php"></div><div id="p-t" class="hb-t">100 / 100</div></div>
+      <div class="hb-b"><div id="p-f" class="hb-f php"></div><div class="hb-t" id="p-t">100 / 100</div></div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">DT</div>
+      <div class="hb-b"><div id="dt-f" class="hb-f dt"></div><div class="hb-t" id="dt-t">0%</div></div>
+      <button id="dt-btn" class="dt-btn" disabled>😈 DT</button>
     </div>
     <div id="timing-wrap" class="timing-wrap hidden">
       <div class="tw-label" id="tw-label">🎯 ПАРИРУЙ!</div>
@@ -195,34 +239,54 @@ canvas{width:100%;height:100%;display:block}
         <p id="go-msg">Данте переварен. Вернись сильнее!</p>
         <button id="revive-btn">ВОЗРОДИТЬСЯ</button>
       </div>
+      <div class="overlay" id="pause-overlay">
+        <h2>⏸ ПАУЗА</h2>
+        <p>Игра приостановлена</p>
+        <button id="pause-resume">ПРОДОЛЖИТЬ</button>
+      </div>
       <div class="overlay" id="finale">
         <h2>СТЁРТ</h2>
-        <p>Ты победил Стёртого Данте. Но цена победы — всё, что ты построил. Всё стёрто.</p>
-        <div class="jackpot">JACKPOT.</div>
-        <button id="reset-btn" style="background:var(--purple)">НАЧАТЬ С НУЛЯ</button>
+        <p>Ты победил Стёртого Данте. Мир стёрт — но ты помнишь.</p>
+        <div class="jackpot">PRESTIGE +1</div>
+        <p style="font-size:11px;color:#aaa">Души, навыки, достижения сохранятся.</p>
+        <button id="prestige-btn" style="background:var(--purple)">⭐ NEW GAME+</button>
+        <button id="finale-reset" style="background:#444;margin-top:8px;font-size:11px;padding:8px 16px">Сброс всего</button>
       </div>
     </div>
     <button id="e-b" class="btn">🍕 ЖРАТЬ ПИЦЦУ!</button>
   </div>
 
+  <div id="chapters-sc" class="sc">
+    <div class="st-b" id="ch-info">📖 Главы</div>
+    <div id="ch-c" style="width:100%"></div>
+  </div>
+
   <div id="shop-sc" class="sc"><div id="s-c" style="width:100%"></div></div>
-  <div id="story-sc" class="sc"><div id="st-t" class="st-b"></div><div id="st-c" style="width:100%"></div></div>
+
+  <div id="skills-sc" class="sc">
+    <div class="st-b" id="sk-info">💀 Души: 0</div>
+    <div id="sk-c" style="width:100%"></div>
+  </div>
+
+  <div id="ach-sc" class="sc">
+    <div class="st-b" id="ach-info">🏆 Достижения: 0 / 10</div>
+    <div id="ach-c" style="width:100%"></div>
+  </div>
+
   <div id="rules-sc" class="sc rule" style="font-size:11px;line-height:1.5">
-    <h3>💾 Сохранение</h3>
-    <p><b>Автосейва нет!</b> Жми <b>💾</b> чтобы сохранить. <b>🗑</b> — сброс.</p>
-    <h3>🎯 Парирование (все боссы)</h3>
-    <p>У <b>всех</b> боссов (сюжетных и обычных) появляется полоска с <b class="green">яркими зелёными зонами</b>. Тапни, когда белая линия в зоне → <b>парируешь</b> удар и наносишь врагу большой урон.</p>
-    <p>Собери <b class="green">2 парирования</b> → босс <b>ОТКРЫТ 8 секунд</b>. Полоска исчезает, твои удары наносят <b>×3 урона</b>, проки <b>×10</b>!</p>
-    <h3>📖 Story</h3>
-    <p><b class="blue">Синяя кнопка</b> — история босса.</p>
-    <h3>⏱ Таймер</h3>
-    <p>Сюжетные боссы ограничены. Не успел — проигрыш.</p>
-    <h3>⚔️ Проки</h3>
-    <p><b class="purple">Ямато</b>: 0.5% JC. <b class="gold">Неро</b>: 10% EXCEED. <b class="purple">Спарда</b>: 8% DT. <b class="purple">Пустота</b>: 5% мангл.</p>
-    <h3>👹 Способности боссов</h3>
-    <p><b>Неро</b>: каждый 3-й ×2. <b>Кирие</b>: реген 1%/сек (только в защите). <b>Вергилий</b>: 20% JC. <b>Аргосакс</b>: ускоряется. <b>Мундус</b>: щит -50%. <b>Спаситель</b>: отражает 10% (макс 3% твоего HP). <b>Уризен</b>: отключает проки.</p>
-    <h3 style="color:var(--purple)">☠ СТЁРТЫЙ ДАНТЕ</h3>
-    <p>Узкие зоны, HP 1.5М, 120с, 15% JC по тебе.</p>
+    <h3>📖 Главы</h3>
+    <p>Открыта только <b>Глава 1</b>. В каждой главе: <b class="gold">демоны</b> (3 шт.) → <b class="gold">босс</b> → <b class="blue">воспоминание</b>.</p>
+    <p><b>⚔️ ДЕМОНЫ</b> — бой с демонами главы. Убил всех → открывается кнопка <b>👑 БОСС</b>.</p>
+    <p><b>👑 БОСС</b> — босс главы с парированием. Победа → следующая глава + воспоминание.</p>
+    <p>В пройденной главе: <b class="blue">📖 ВОСПОМИНАНИЕ</b> (история) и <b class="gold">⚔️ РЕВАНШ</b> (пересражаться с боссом ради фана).</p>
+    <h3>🎯 Парирование</h3>
+    <p>У боссов появляется полоска с <b class="green">зелёными зонами</b>. Тапни по стулу, когда белая линия в зоне. <b>2 парирования</b> → босс открыт 8с, урон ×3.</p>
+    <h3>😈 Devil Trigger</h3>
+    <p>Шкала DT заполняется уроном. На 100% → жми 😈 DT. 6с ×2 урона + вампиризм.</p>
+    <h3>💀 Души</h3>
+    <p>Падают с боссов. Трать на навыки в 🌟.</p>
+    <h3>⚔️ Свободная битва (⚔️)</h3>
+    <p>Обычные волны для фарма денег. Не влияет на главы.</p>
   </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -230,8 +294,9 @@ canvas{width:100%;height:100%;display:block}
 <div class="story-modal" id="story-modal">
   <div class="story-modal-content">
     <div class="sm-icon" id="sm-icon">👹</div>
-    <h2 id="sm-title">Имя босса</h2>
+    <h2 id="sm-title">Воспоминание</h2>
     <p id="sm-text">История...</p>
+    <button id="sm-rematch" class="rematch-btn" style="display:none">⚔️ РЕВАНШ</button>
     <button id="sm-close">ЗАКРЫТЬ</button>
   </div>
 </div>
@@ -239,11 +304,23 @@ canvas{width:100%;height:100%;display:block}
 <div class="tutorial-modal" id="tutorial-modal">
   <div class="tutorial-content">
     <h2>🎯 КАК ПАРИРОВАТЬ</h2>
-    <div class="tc-step"><strong>1.</strong> Внизу появилась полоска с <strong style="color:#2ecc71">яркими зелёными зонами</strong>.</div>
-    <div class="tc-step"><strong>2.</strong> По полоске бегает белая линия. Тапни по стулу, когда линия <strong>ВНУТРИ зелёной зоны</strong>.</div>
-    <div class="tc-step"><strong>3.</strong> Успех → <strong>PARRIED!</strong> и большой урон врагу.</div>
-    <div class="tc-step"><strong>4.</strong> Собери <strong>2 парирования</strong> → босс <strong>ОТКРЫТ 8 секунд</strong>. Полоска исчезает — бей в полную силу!</div>
+    <div class="tc-step"><strong>1.</strong> Внизу появилась полоска с <strong style="color:#2ecc71">зелёными зонами</strong>.</div>
+    <div class="tc-step"><strong>2.</strong> Тапни по <strong>стулу</strong>, когда белая линия <strong>ВНУТРИ зоны</strong>.</div>
+    <div class="tc-step"><strong>3.</strong> Успех → <strong>PARRIED!</strong> и большой урон.</div>
+    <div class="tc-step"><strong>4.</strong> <strong>2 парирования</strong> → босс <strong>ОТКРЫТ 8с</strong>, урон ×3!</div>
     <button id="tut-close">ПОНЯТНО</button>
+  </div>
+</div>
+
+<div class="settings-modal" id="settings-modal">
+  <div class="settings-content">
+    <h2>⚙ НАСТРОЙКИ</h2>
+    <div class="setting-row"><span>🔊 Звук</span><button id="set-sound" class="setting-btn">ВКЛ</button></div>
+    <div class="setting-row"><span>📳 Вибрация</span><button id="set-vibrate" class="setting-btn">ВКЛ</button></div>
+    <div class="setting-row"><span>💾 Автосейв</span><button id="set-autosave" class="setting-btn">ВЫКЛ</button></div>
+    <div class="setting-row"><span>⭐ Prestige</span><span id="set-prestige" style="color:var(--purple);font-weight:900">0</span></div>
+    <button id="set-reset" class="setting-btn danger" style="margin-top:10px">🗑 СБРОСИТЬ ВСЁ</button>
+    <button id="set-close" class="setting-btn" style="margin-top:6px">ЗАКРЫТЬ</button>
   </div>
 </div>
 
@@ -251,17 +328,86 @@ canvas{width:100%;height:100%;display:block}
 (() => {
 'use strict';
 
-// ===== DATA =====
+// ===== ГЛАВЫ: 9 глав, в каждой 3 демона + босс из STORY_BOSSES =====
+const CHAPTERS = [
+  { n: 'Мотивация', icon: '🔥', boss: 0,
+    memory: 'После Fortuna Неро узнал правду: его отец — Вергилий. Но он не принял это. <strong>Ярость затмила разум.</strong> Мотивация отца течёт в его крови.',
+    demons: [
+      { n: 'Ленивец', h: 20, dmg: 3, atk: 3.5, r: 25 },
+      { n: 'Ленивец-Двойник', h: 35, dmg: 3, atk: 3.3, r: 40 },
+      { n: 'Демон Сна', h: 60, dmg: 4, atk: 3.0, r: 60 },
+    ]},
+  { n: 'Вера', icon: '👼', boss: 1,
+    memory: 'Молитвы Кирие исказились — стали псалмами стирания. Её вера лечит её саму. <strong>Она молится — но не о спасении.</strong>',
+    demons: [
+      { n: 'Демон Апатии', h: 120, dmg: 5, atk: 3.0, r: 100 },
+      { n: 'Демон Апатии', h: 180, dmg: 5, atk: 2.8, r: 150 },
+      { n: 'Кальцоне', h: 300, dmg: 6, atk: 2.7, r: 250 },
+    ]},
+  { n: 'Сила', icon: '⚔️', boss: 2,
+    memory: 'Вергилий слился с Ямато-стулом. "I need more power" — приговор. <strong>Каждый пятый удар — Judgement Cut.</strong>',
+    demons: [
+      { n: 'Кальцоне', h: 600, dmg: 7, atk: 2.6, r: 500 },
+      { n: 'Демон Клинка', h: 1000, dmg: 8, atk: 2.4, r: 800 },
+      { n: 'Тень Ямато', h: 1800, dmg: 10, atk: 2.2, r: 1200 },
+    ]},
+  { n: 'Ярость', icon: '💀', boss: 3,
+    memory: 'Аргосакс — ярость, ставшая плотью. <strong>Чем дольше бой — тем быстрее он становится.</strong>',
+    demons: [
+      { n: 'Демон Ярости', h: 3000, dmg: 11, atk: 2.3, r: 2500 },
+      { n: 'Пламенный', h: 5000, dmg: 12, atk: 2.2, r: 4000 },
+      { n: 'Огненный Страж', h: 8000, dmg: 13, atk: 2.1, r: 6000 },
+    ]},
+  { n: 'Тьма', icon: '👑', boss: 4,
+    memory: 'Император демонов на троне из пустоты. <strong>Щит — тьма между мирами.</strong>',
+    demons: [
+      { n: 'Страж Тьмы', h: 15000, dmg: 14, atk: 2.0, r: 12000 },
+      { n: 'Страж Тьмы', h: 22000, dmg: 15, atk: 2.0, r: 18000 },
+      { n: 'Император-Страж', h: 30000, dmg: 16, atk: 1.9, r: 25000 },
+    ]},
+  { n: 'Колосс', icon: '🗿', boss: 5,
+    memory: 'Статуя Спасителя ожила. <strong>Отражает часть урона.</strong> Битва с собственной жадностью.',
+    demons: [
+      { n: 'Каменный Голем', h: 60000, dmg: 18, atk: 2.0, r: 50000 },
+      { n: 'Каменный Голем', h: 90000, dmg: 19, atk: 2.0, r: 80000 },
+      { n: 'Колосс', h: 130000, dmg: 20, atk: 1.9, r: 120000 },
+    ]},
+  { n: 'Корень', icon: '🌳', boss: 6,
+    memory: 'Корень Qliphoth, источник силы. <strong>Отключает твои проки.</strong>',
+    demons: [
+      { n: 'Древо-Демон', h: 250000, dmg: 22, atk: 1.9, r: 200000 },
+      { n: 'Корень-Отродье', h: 400000, dmg: 24, atk: 1.8, r: 350000 },
+      { n: 'Дитя Уризена', h: 500000, dmg: 26, atk: 1.8, r: 450000 },
+    ]},
+  { n: 'Легенда', icon: '🌩', boss: 7,
+    memory: 'Отец Данте. Легендарный тёмный рыцарь. <strong>Сын Спарды узнаёт свою судьбу.</strong>',
+    demons: [
+      { n: 'Рыцарь Спарды', h: 700000, dmg: 28, atk: 1.7, r: 600000 },
+      { n: 'Легион', h: 900000, dmg: 30, atk: 1.7, r: 800000 },
+      { n: 'Тёмный Рыцарь', h: 1200000, dmg: 32, atk: 1.6, r: 1000000 },
+    ]},
+  { n: 'Стёртый', icon: '☠', boss: 8,
+    memory: 'Это ты. Не копия — <strong>настоящий ты</strong>. Помнит каждый приём. Парирует всё, что не пробито таймингом.',
+    demons: [
+      { n: 'Двойник', h: 800000, dmg: 35, atk: 1.5, r: 600000 },
+      { n: 'Тень Данте', h: 1000000, dmg: 40, atk: 1.4, r: 800000 },
+      { n: 'Эхо', h: 1200000, dmg: 45, atk: 1.4, r: 1000000 },
+    ]},
+];
+
 const CHAIRS = {
-  c1: { n: 'Стул Икея',    p: 0,       w: 1,     crit: 0.10, c: '#fff',    desc: 'Обычный стул.' },
-  c2: { n: 'Пицца-Стул',   p: 300,     w: 3,     crit: 0.12, c: '#e74c3c', desc: '🍕 Убитые враги → пицца', sp: true },
-  c3: { n: 'Трон Верга',   p: 2500,    w: 10,    crit: 0.18, c: '#00f0ff', desc: 'Мощный стул.' },
-  c4: { n: 'Стул v2.0',    p: 25000,   w: 40,    crit: 0.22, c: '#f1c40f', desc: 'Высокий крит.' },
-  c5: { n: 'Ямато-Стул',   p: 200000,  w: 150,   crit: 0.28, c: '#9b59b6', desc: '⚔️ 0.5% → Judgement Cut', sp: true },
-  c6: { n: 'Стул Неро',    p: 1500000, w: 600,   crit: 0.30, c: '#e67e22', desc: '🔧 10% → EXCEED ×2', sp: true },
-  c7: { n: 'Стул Спарды',  p: 0,       w: 600,   crit: 0.35, c: '#ff2a4b', desc: '😈 8% → Devil Trigger', sp: true, lg: true, storyOnly: true },
-  c8: { n: 'Трон Триады',  p: 5000000, w: 12000, crit: 0.40, c: '#f1c40f', desc: '👑 Крит ×2.5' },
-  c9: { n: 'Стул Пустоты', p: 0,       w: 8000,  crit: 0.50, c: '#000',    desc: '🌀 5% → мангл', sp: true, lg: true, storyOnly: true },
+  c1: { n: 'Стул Икея',    p: 0,       w: 1,      crit: 0.10, c: '#fff',    desc: 'Обычный стул.' },
+  c2: { n: 'Пицца-Стул',   p: 300,     w: 3,      crit: 0.12, c: '#e74c3c', desc: '🍕 Убитые враги → пицца', sp: true },
+  c3: { n: 'Трон Верга',   p: 2500,    w: 10,     crit: 0.18, c: '#00f0ff', desc: 'Мощный стул.' },
+  c4: { n: 'Стул v2.0',    p: 25000,   w: 40,     crit: 0.22, c: '#f1c40f', desc: 'Высокий крит.' },
+  c5: { n: 'Ямато-Стул',   p: 200000,  w: 150,    crit: 0.28, c: '#9b59b6', desc: '⚔️ 0.5% → Judgement Cut', sp: true },
+  c6: { n: 'Стул Неро',    p: 1500000, w: 600,    crit: 0.30, c: '#e67e22', desc: '🔧 10% → EXCEED ×2', sp: true },
+  c7: { n: 'Стул Спарды',  p: 0,       w: 600,    crit: 0.35, c: '#ff2a4b', desc: '😈 8% → Devil Trigger', sp: true, lg: true, storyOnly: true },
+  c8: { n: 'Трон Триады',  p: 5000000, w: 12000,  crit: 0.40, c: '#f1c40f', desc: '👑 Крит ×2.5' },
+  c9: { n: 'Стул Пустоты', p: 0,       w: 8000,   crit: 0.50, c: '#000',    desc: '🌀 5% → мангл', sp: true, lg: true, storyOnly: true },
+  c10:{ n: '🔥 Огненный',  p: 10000000,w: 25000,  crit: 0.40, c: '#e67e22', desc: '🔥 20% → поджог (DOT)', sp: true },
+  c11:{ n: '❄️ Ледяной',   p: 30000000,w: 60000,  crit: 0.42, c: '#00f0ff', desc: '❄ 15% → заморозка', sp: true },
+  c12:{ n: '⚡ Громовой',  p: 100000000,w: 200000,crit: 0.48, c: '#f1c40f', desc: '⚡ 10% → цепной урон', sp: true, lg: true },
 };
 
 const ENEMIES = [
@@ -270,127 +416,117 @@ const ENEMIES = [
   { n: 'Неро-Кальцоне',   h: 180,   dmg: 8,  atk: 3.0, r: 200 },
   { n: 'Кирие-Маргарита', h: 500,   dmg: 10, atk: 2.8, r: 500 },
   { n: 'Вергилий-Король', h: 1200,  dmg: 12, atk: 2.5, r: 1200 },
-  { n: 'Аргосакс',        h: 2500,  dmg: 15, atk: 1.8, r: 2500,  boss: true,
-    story: 'Древний демон, запечатанный в стуле. Предал Мундуса ради силы.' },
-  { n: 'Мундус',          h: 5000,  dmg: 20, atk: 2.0, r: 5000,  boss: true,
-    story: 'Император демонов. Щит — сама тьма между измерениями.' },
-  { n: 'Спаситель',       h: 10000, dmg: 25, atk: 2.5, r: 10000, boss: true,
-    story: 'Гигантская статуя, ожившая от Qliphoth. Отражает часть урона.' },
-  { n: 'Уризен',          h: 20000, dmg: 30, atk: 2.0, r: 20000, boss: true,
-    story: 'Корень Qliphoth, источник силы. Отключает способности.' },
-  { n: 'Стёртый Данте',   h: 35000, dmg: 35, atk: 1.5, r: 50000, boss: true,
-    story: 'Твоё отражение. Помнит каждый твой приём.' },
+  { n: 'Триш-Молния',     h: 1800,  dmg: 13, atk: 2.3, r: 1800 },
+  { n: 'Аргосакс',        h: 2500,  dmg: 15, atk: 1.8, r: 2500,  boss: true },
+  { n: 'Мундус',          h: 5000,  dmg: 20, atk: 2.0, r: 5000,  boss: true },
+  { n: 'Спаситель',       h: 10000, dmg: 25, atk: 2.5, r: 10000, boss: true },
+  { n: 'Уризен',          h: 20000, dmg: 30, atk: 2.0, r: 20000, boss: true },
+  { n: 'Стёртый Данте',   h: 35000, dmg: 35, atk: 1.5, r: 50000, boss: true },
 ];
 
 const STORY_BOSSES = [
-  { n: 'Неро Разъярённый', h: 150,     dmg: 5,  atk: 3.0, reward: 3000,     rtype: 'money',
+  { n: 'Неро Разъярённый', h: 150,     dmg: 5,  atk: 3.0, reward: 3000,     rtype: 'money', souls: 5,
     ability: 'exceed', abilityDesc: 'Каждый 3-й удар ×2',
-    timing: { speed: 0.004, zones: [[0.22, 0.60], [0.65, 0.97]] }, timer: 60,
-    icon: '🔥',
-    story: 'После Fortuna Неро узнал правду: его отец — Вергилий. Но он не принял это. Ярость затмила разум. <strong>Мотивация отца течёт в его крови.</strong>' },
-  { n: 'Кирие Ангел',      h: 600,     dmg: 8,  atk: 3.0, reward: 15000,    rtype: 'money',
+    timing: { speed: 0.004, zones: [[0.22, 0.60], [0.65, 0.97]] }, timer: 60, icon: '🔥' },
+  { n: 'Кирие Ангел',      h: 600,     dmg: 8,  atk: 3.0, reward: 15000,    rtype: 'money', souls: 5,
     ability: 'regen', abilityDesc: 'Реген 1% HP/сек',
-    timing: { speed: 0.0045, zones: [[0.24, 0.60], [0.65, 0.96]] }, timer: 65,
-    icon: '👼',
-    story: 'Молитвы Кирие исказились — стали псалмами стирания. Её вера лечит её саму.' },
-  { n: 'Вергилий Ямато',   h: 2500,    dmg: 12, atk: 2.5, reward: 0,        rtype: 'chair', chair: 'c7',
+    timing: { speed: 0.0045, zones: [[0.24, 0.60], [0.65, 0.96]] }, timer: 65, icon: '👼' },
+  { n: 'Вергилий Ямато',   h: 2500,    dmg: 12, atk: 2.5, reward: 0,        rtype: 'chair', chair: 'c7', souls: 8,
     ability: 'jc', abilityDesc: '20% Judgement Cut по тебе',
-    timing: { speed: 0.005, zones: [[0.26, 0.60], [0.65, 0.95]] }, timer: 70,
-    icon: '⚔️',
-    story: 'Вергилий слился с Ямато-стулом. "I need more power" — приговор. <strong>Каждый пятый удар — Judgement Cut.</strong>' },
-  { n: 'Аргосакс Демон',   h: 10000,   dmg: 15, atk: 2.5, reward: 300000,   rtype: 'money',
+    timing: { speed: 0.005, zones: [[0.26, 0.60], [0.65, 0.95]] }, timer: 70, icon: '⚔️' },
+  { n: 'Аргосакс Демон',   h: 10000,   dmg: 15, atk: 2.5, reward: 300000,   rtype: 'money', souls: 10,
     ability: 'rage', abilityDesc: 'Ускоряется со временем',
-    timing: { speed: 0.0055, zones: [[0.28, 0.60], [0.65, 0.94]] }, timer: 80,
-    icon: '💀',
-    story: 'Ярость, ставшая плотью. Чем дольше бой — тем быстрее он становится.' },
-  { n: 'Мундус Император', h: 30000,   dmg: 20, atk: 2.0, reward: 0,        rtype: 'chair', chair: 'c9',
+    timing: { speed: 0.0055, zones: [[0.28, 0.60], [0.65, 0.94]] }, timer: 80, icon: '💀' },
+  { n: 'Мундус Император', h: 30000,   dmg: 20, atk: 2.0, reward: 0,        rtype: 'chair', chair: 'c9', souls: 12,
     ability: 'shield', abilityDesc: 'Щит -50% (2с/15с)',
-    timing: { speed: 0.006, zones: [[0.30, 0.60], [0.65, 0.93]] }, timer: 90,
-    icon: '👑',
-    story: 'Император демонов на троне из пустоты. Щит — тьма между мирами.' },
-  { n: 'Спаситель Колосс', h: 150000,  dmg: 25, atk: 2.5, reward: 3000000,  rtype: 'money',
+    timing: { speed: 0.006, zones: [[0.30, 0.60], [0.65, 0.93]] }, timer: 90, icon: '👑' },
+  { n: 'Спаситель Колосс', h: 150000,  dmg: 25, atk: 2.5, reward: 3000000,  rtype: 'money', souls: 15,
     ability: 'reflect', abilityDesc: 'Отражает 10% (макс 3% HP)',
-    timing: { speed: 0.0065, zones: [[0.32, 0.60], [0.65, 0.92]] }, timer: 100,
-    icon: '🗿',
-    story: 'Статуя Спасителя ожила. Отражает часть урона. Битва с собственной жадностью.' },
-  { n: 'Уризен Бог',       h: 600000,  dmg: 30, atk: 2.0, reward: 15000000, rtype: 'money',
+    timing: { speed: 0.0065, zones: [[0.32, 0.60], [0.65, 0.92]] }, timer: 100, icon: '🗿' },
+  { n: 'Уризен Бог',       h: 600000,  dmg: 30, atk: 2.0, reward: 15000000, rtype: 'money', souls: 20,
     ability: 'procdisable', abilityDesc: 'Отключает проки 2с/20с',
-    timing: { speed: 0.007, zones: [[0.34, 0.60], [0.65, 0.91]] }, timer: 110,
-    icon: '🌳',
-    story: 'Корень Qliphoth, источник силы. Отключает твои проки.' },
-  { n: 'Стёртый Данте',    h: 1500000, dmg: 50, atk: 2.0, reward: 0,        rtype: 'erase', finalBoss: true,
+    timing: { speed: 0.007, zones: [[0.34, 0.60], [0.65, 0.91]] }, timer: 110, icon: '🌳' },
+  { n: 'Спарда Легенда',   h: 1000000, dmg: 40, atk: 1.8, reward: 0,        rtype: 'souls', souls: 25,
+    ability: 'legend', abilityDesc: 'Лечится 2%/сек + ускоряется',
+    timing: { speed: 0.0075, zones: [[0.36, 0.60], [0.65, 0.89]] }, timer: 115, icon: '🌩' },
+  { n: 'Стёртый Данте',    h: 1500000, dmg: 50, atk: 2.0, reward: 0,        rtype: 'erase', finalBoss: true, souls: 30,
     ability: 'allparry', abilityDesc: 'ПАРИРУЕТ без тайминга!',
-    timing: { speed: 0.008, zones: [[0.38, 0.60], [0.65, 0.88]] }, timer: 120,
-    icon: '☠',
-    story: 'Это ты. Не копия — <strong>настоящий ты</strong>. Помнит каждый приём. Парирует всё, что не пробито таймингом.' },
+    timing: { speed: 0.008, zones: [[0.38, 0.60], [0.65, 0.88]] }, timer: 120, icon: '☠' },
 ];
 
-const STORY_INTRO = [
-  'Триада запустила <b>Motivation END</b>. Неро в ярости — первый босс.',
-  'Кирие благословляет стулья псалмами удаления.',
-  'Вергилий обнажает Ямато.',
-  'Аргосакс — демон без мотивации.',
-  'Мундус — император тьмы.',
-  'Спаситель — колосс из стульев.',
-  'Уризен — корень миров.',
-  '<b style="color:var(--purple)">СТЁРТЫЙ ДАНТЕ.</b> Финальная битва.',
+const SKILLS = {
+  hp:    { n: 'Живучесть',   icon: '❤️', desc: '+50 макс HP',          max: 5, cost: lv => 3 + lv * 2 },
+  dmg:   { n: 'Сила',        icon: '⚔️', desc: '+8% урона',            max: 5, cost: lv => 3 + lv * 2 },
+  crit:  { n: 'Точность',    icon: '🎯', desc: '+3% крита',            max: 5, cost: lv => 4 + lv * 2 },
+  money: { n: 'Жадность',    icon: '💰', desc: '+15% денег',           max: 5, cost: lv => 2 + lv * 2 },
+  dt:    { n: 'Дьявол',      icon: '😈', desc: '+20% скорости DT',     max: 3, cost: lv => 5 + lv * 3 },
+  regen: { n: 'Регенерация', icon: '💚', desc: '+1 HP/сек',            max: 3, cost: lv => 8 + lv * 4 },
+};
+
+const ACHIEVEMENTS = [
+  { id: 'first_blood', n: 'Первая кровь',  desc: 'Убей первого врага',     icon: '💥', check: s => s.kills >= 1,              reward: { m: 500 } },
+  { id: 'first_boss',  n: 'Убийца боссов', desc: 'Убей первого босса',     icon: '👑', check: s => s.bossKills >= 1,          reward: { m: 2000, souls: 1 } },
+  { id: 'parry_5',     n: 'Парир-мастер',  desc: 'Парируй 5 раз',          icon: '🛡', check: s => s.parries >= 5,            reward: { m: 1000 } },
+  { id: 'chapter1',    n: 'Глава 1',       desc: 'Пройди Главу 1',         icon: '📖', check: s => s.chapterIdx >= 1,         reward: { m: 3000, souls: 2 } },
+  { id: 'chapter5',    n: 'Полпути',       desc: 'Пройди Главу 5',         icon: '🌟', check: s => s.chapterIdx >= 5,         reward: { m: 100000, souls: 5 } },
+  { id: 'rich',        n: 'Богач',         desc: 'Накопи 1M мотов',        icon: '💎', check: s => s.m >= 1000000,           reward: { souls: 3 } },
+  { id: 'dt_first',    n: 'Первый Дьявол', desc: 'Активируй DT',           icon: '😈', check: s => s.dtUsed >= 1,            reward: { m: 2000 } },
+  { id: 'dt_master',   n: 'Дьявол внутри', desc: 'Активируй DT 10 раз',    icon: '🔥', check: s => s.dtUsed >= 10,           reward: { souls: 5 } },
+  { id: 'all_story',   n: 'Сюжет пройден', desc: 'Победи Стёртого Данте',  icon: '☠', check: s => s.chapterIdx >= CHAPTERS.length, reward: { souls: 10 } },
+  { id: 'collector',   n: 'Коллекционер',  desc: 'Собери все стулья',      icon: '🪑', check: s => s.o.length >= Object.keys(CHAIRS).length, reward: { souls: 50 } },
 ];
 
-const COMBO_MAX = 5;
-const COMBO_STEP = 0.1;
-const CRIT_MULT = 1.5;
-const JC_CHANCE = 0.005;
-const COMBO_WINDOW = 1200;
-const MONEY_PER_DMG = 0.15;
+const COMBO_MAX = 5, COMBO_STEP = 0.1, CRIT_MULT = 1.5, JC_CHANCE = 0.005, COMBO_WINDOW = 1200, MONEY_PER_DMG = 0.15;
 const FINAL_PROC_PCT = { jc: 0.15, exceed: 0.04, dt: 0.06, void: 0.12 };
-const PARRY_REQUIRED = 2;
-const OPEN_DURATION = 8;
-const OPEN_MULT = 3;
-const OPEN_PROC_MULT = 10;
-const PARRY_MIN_PCT = 0.08;
-const REFLECT_CAP_PCT = 0.03;
+const PARRY_REQUIRED = 2, OPEN_DURATION = 8, OPEN_MULT = 3, OPEN_PROC_MULT = 10, PARRY_MIN_PCT = 0.08, REFLECT_CAP_PCT = 0.03;
+const DT_MAX = 100, DT_DURATION = 6, DT_FILL_DMG = 60, DT_FILL_TAKEN = 30;
 
-// ===== STATE =====
-let S = {
-  m: 0, c: 'c1', o: ['c1'], e: 0,
-  hp: 10, emax: 10,
-  pm: 0, pt: 0, pmax: 15,
-  php: 100, phpmax: 100,
-  combo: 0, comboT: 0,
-  atkCd: 4, atkCdMax: 4,
-  wave: 1, loop: 0,
-  storyIdx: 0, storyActive: false, storyHP: 0,
-};
+function defaultState() {
+  return {
+    m: 0, c: 'c1', o: ['c1'], e: 0, hp: 10, emax: 10,
+    pm: 0, pt: 0, pmax: 15, php: 100, phpmax: 100,
+    combo: 0, comboT: 0, atkCd: 4, atkCdMax: 4,
+    wave: 1, loop: 0,
+    chapterIdx: 0,
+    chapterKilled: CHAPTERS.map(() => 0),
+    battleMode: 'free',
+    storyActive: false, storyHP: 0, storyBossIdx: 0,
+    souls: 0, skills: { hp: 0, dmg: 0, crit: 0, money: 0, dt: 0, regen: 0 },
+    ach: [], prestige: 0,
+    sound: true, vibrate: true, autosave: false,
+    kills: 0, bossKills: 0, maxWave: 1, parries: 0,
+    dt: 0, dtActive: 0, dtUsed: 0,
+  };
+}
 
-let isDirty = false;
+let S = defaultState();
+let isDirty = false, paused = false, autosaveTimer = 0;
 let timing = { active: false, pos: 0, dir: 1, speed: 0.006, zones: [], hits: 0, open: false, openTimer: 0 };
-let bossState = {
-  attackCount: 0, elapsed: 0, timer: 0,
-  mundusShieldCd: 0, mundusShieldActive: 0,
-  urizenCd: 0, urizenActive: 0,
-};
+let bossState = { attackCount: 0, elapsed: 0, timer: 0, mundusShieldCd: 0, mundusShieldActive: 0, urizenCd: 0, urizenActive: 0, burn: null };
 let tutorialShown = false;
 
-// ===== DOM =====
 const $ = id => document.getElementById(id);
 const cc = $('cc'), cv = $('cv'), cx = cv.getContext('2d');
 const eN = $('e-n'), eF = $('e-f'), eT = $('e-t');
 const pF = $('p-f'), pT = $('p-t');
 const mD = $('m-d'), eB = $('e-b'), aInd = $('atk-ind');
-const comboEl = $('combo'), goEl = $('go'), finaleEl = $('finale');
+const comboEl = $('combo'), goEl = $('go'), finaleEl = $('finale'), pauseOverlay = $('pause-overlay');
 const modeLbl = $('mode-lbl'), waveEl = $('wave');
-const saveBtn = $('save-btn'), resetBtnH = $('reset-btn-h');
+const saveBtn = $('save-btn'), pauseBtn = $('pause-btn'), settingsBtn = $('settings-btn');
 const toastEl = $('toast');
 const bossTimerEl = $('boss-timer'), btValEl = $('bt-val');
 const timingWrap = $('timing-wrap'), twLabel = $('tw-label');
 const tbZones = $('tb-zones'), tbInd = $('tb-ind');
 const goMsg = $('go-msg');
-const storyModal = $('story-modal'), smTitle = $('sm-title'), smText = $('sm-text'), smIcon = $('sm-icon');
+const storyModal = $('story-modal'), smTitle = $('sm-title'), smText = $('sm-text'), smIcon = $('sm-icon'), smRematch = $('sm-rematch');
 const tutorialModal = $('tutorial-modal');
+const settingsModal = $('settings-modal');
+const dtF = $('dt-f'), dtT = $('dt-t'), dtBtn = $('dt-btn');
+const skInfo = $('sk-info'), achInfo = $('ach-info'), chInfo = $('ch-info');
 
-// ===== AUDIO =====
 let AC = null;
 function beep(freq, dur, type = 'square', vol = 0.05) {
+  if (!S.sound) return;
   try {
     if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
     const o = AC.createOscillator(), g = AC.createGain();
@@ -401,119 +537,203 @@ function beep(freq, dur, type = 'square', vol = 0.05) {
     o.start(); o.stop(AC.currentTime + dur);
   } catch (e) {}
 }
+function vibrate(ms) { if (!S.vibrate) return; try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
 
-// ===== TOAST =====
 let toastTimer = null;
-function showToast(msg, warn) {
+function showToast(msg, type) {
   toastEl.textContent = msg;
-  toastEl.className = 'toast' + (warn ? ' warn' : '');
+  toastEl.className = 'toast' + (type ? ' ' + type : '');
   void toastEl.offsetWidth;
   toastEl.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2500);
 }
 
-// ===== SAVE/LOAD =====
-function save() {
+function save(silent) {
   try {
-    localStorage.setItem('dmc_v9', JSON.stringify(S));
-    isDirty = false;
-    updateSaveIndicator();
-    beep(1000, 0.1, 'sine', 0.05);
-    setTimeout(() => beep(1300, 0.1, 'sine', 0.05), 80);
-    showToast('💾 Сохранено!', false);
-  } catch (e) { showToast('⚠ Ошибка', true); }
+    localStorage.setItem('dmc_v11', JSON.stringify(S));
+    isDirty = false; updateSaveIndicator();
+    if (!silent) { beep(1000, 0.1, 'sine', 0.05); setTimeout(() => beep(1300, 0.1, 'sine', 0.05), 80); showToast('💾 Сохранено!', false); }
+  } catch (e) { if (!silent) showToast('⚠ Ошибка сохранения', 'warn'); }
 }
 function markDirty() { isDirty = true; updateSaveIndicator(); }
 function updateSaveIndicator() { saveBtn.classList.toggle('dirty', isDirty); }
 
 function load() {
   try {
-    const l = localStorage.getItem('dmc_v9') || localStorage.getItem('dmc_v8') || localStorage.getItem('dmc_v7');
-    if (l) S = Object.assign({}, S, JSON.parse(l));
+    const l = localStorage.getItem('dmc_v11') || localStorage.getItem('dmc_v10');
+    if (l) {
+      const loaded = JSON.parse(l);
+      S = Object.assign(defaultState(), loaded);
+      S.skills = Object.assign(defaultState().skills, loaded.skills || {});
+      if (!Array.isArray(S.ach)) S.ach = [];
+      if (!Array.isArray(S.o)) S.o = ['c1'];
+      if (!Array.isArray(S.chapterKilled) || S.chapterKilled.length !== CHAPTERS.length) {
+        S.chapterKilled = CHAPTERS.map((_, i) => (loaded.chapterKilled && loaded.chapterKilled[i]) || 0);
+      }
+    }
   } catch (e) {}
   if (!CHAIRS[S.c]) S.c = 'c1';
   if (!S.o.includes(S.c)) S.o.push(S.c);
   if (S.e >= ENEMIES.length) S.e = 0;
-  if (typeof S.storyIdx !== 'number' || S.storyIdx < 0) S.storyIdx = 0;
-  if (S.storyIdx > STORY_BOSSES.length) S.storyIdx = STORY_BOSSES.length;
+  if (S.chapterIdx < 0 || S.chapterIdx > CHAPTERS.length) S.chapterIdx = 0;
+  S.battleMode = 'free';
   S.storyActive = false; S.storyHP = 0;
   const scale = 1 + (S.loop || 0) * 0.3;
   S.emax = Math.round(ENEMIES[S.e].h * scale);
   if (S.hp <= 0 || S.hp > S.emax) S.hp = S.emax;
   if (S.php <= 0 || S.php > S.phpmax) S.php = S.phpmax;
   S.pm = 0; S.pt = 0; S.combo = 0; S.comboT = 0;
-  S.atkCdMax = ENEMIES[S.e].atk;
-  S.atkCd = S.atkCdMax;
-  isDirty = false;
-  updateSaveIndicator();
-  setupTimingForBoss(null);
-  resetBossState();
+  S.atkCdMax = ENEMIES[S.e].atk; S.atkCd = S.atkCdMax;
+  isDirty = false; updateSaveIndicator();
+  setupTimingForBoss(null); resetBossState();
   tutorialShown = localStorage.getItem('dmc_tut') === '1';
 }
 
 function resetAll() {
-  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
-  S = {
-    m: 0, c: 'c1', o: ['c1'], e: 0, hp: 10, emax: 10,
-    pm: 0, pt: 0, pmax: 15, php: 100, phpmax: 100,
-    combo: 0, comboT: 0, atkCd: 4, atkCdMax: 4,
-    wave: 1, loop: 0, storyIdx: 0, storyActive: false, storyHP: 0,
-  };
-  isDirty = false; tutorialShown = false;
+  try { for (let i = 1; i <= 20; i++) localStorage.removeItem('dmc_v' + i); localStorage.removeItem('dmc_tut'); } catch (e) {}
+  S = defaultState(); isDirty = false; tutorialShown = false; paused = false;
+  pauseOverlay.classList.remove('show'); finaleEl.classList.remove('show'); goEl.classList.remove('show');
   updateSaveIndicator(); updateAll();
   setupTimingForBoss(null); resetBossState();
-  beep(400, 0.1, 'square', 0.05);
-  setTimeout(() => beep(300, 0.15, 'square', 0.05), 100);
+  beep(400, 0.1, 'square', 0.05); setTimeout(() => beep(300, 0.15, 'square', 0.05), 100);
 }
 
-// ===== HELPERS =====
-function currentBoss() { return S.storyActive ? STORY_BOSSES[S.storyIdx] : ENEMIES[S.e]; }
-function currentBossMax() { return S.storyActive ? currentBoss().h : S.emax; }
-function getBossHP() { return S.storyActive ? S.storyHP : S.hp; }
-function setBossHP(v) { if (S.storyActive) S.storyHP = Math.max(0, v); else S.hp = Math.max(0, v); }
-function isBossFight() { return S.storyActive || currentBoss().boss; }
-function isFinalBoss() { return S.storyActive && currentBoss().finalBoss; }
+// ===== CURRENT ENEMY =====
+function currentEnemy() {
+  if (S.battleMode === 'chapter') {
+    const ch = CHAPTERS[S.chapterIdx];
+    const idx = Math.min(S.chapterKilled[S.chapterIdx], ch.demons.length - 1);
+    return ch.demons[idx];
+  }
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') {
+    return STORY_BOSSES[S.storyBossIdx];
+  }
+  return ENEMIES[S.e];
+}
+function currentEnemyMax() {
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') return STORY_BOSSES[S.storyBossIdx].h;
+  return S.emax;
+}
+function getEnemyHP() {
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') return S.storyHP;
+  return S.hp;
+}
+function setEnemyHP(v) {
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') S.storyHP = Math.max(0, v);
+  else S.hp = Math.max(0, v);
+}
+function isBossFight() {
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') return true;
+  if (S.battleMode === 'chapter') return false;
+  return !!currentEnemy().boss;
+}
+function isFinalBoss() {
+  return (S.battleMode === 'boss' || S.battleMode === 'rematch') && STORY_BOSSES[S.storyBossIdx].finalBoss;
+}
 function rewardScale() { return 1 + (S.loop || 0) * 0.5; }
+function moneyMult() { return (1 + S.skills.money * 0.15) * (1 + (S.prestige || 0) * 0.10); }
+function dmgMult() { return (1 + S.skills.dmg * 0.08) * (1 + (S.prestige || 0) * 0.05); }
+function critBonus() { return S.skills.crit * 0.03; }
+function dtFillMult() { return 1 + S.skills.dt * 0.20; }
+
+function addDT(amount) { if (S.dtActive > 0) return; S.dt = Math.min(DT_MAX, S.dt + amount * dtFillMult()); }
+
+function activateDT() {
+  if (S.dt < DT_MAX || S.dtActive > 0) return;
+  if (goEl.classList.contains('show') || finaleEl.classList.contains('show') || paused) return;
+  S.dtActive = DT_DURATION; S.dt = 0; S.dtUsed = (S.dtUsed || 0) + 1;
+  showSpecialText('😈 DEVIL TRIGGER!', '#ff2a4b');
+  beep(300, 0.3, 'sawtooth', 0.1); setTimeout(() => beep(500, 0.3, 'sawtooth', 0.1), 100); setTimeout(() => beep(700, 0.3, 'sawtooth', 0.1), 200);
+  cc.classList.add('dt-aura'); vibrate(50);
+  checkAchievements(); updateBattle(); markDirty();
+}
+
+function buySkill(id) {
+  const sk = SKILLS[id]; if (!sk) return;
+  const lv = S.skills[id] || 0;
+  if (lv >= sk.max) return;
+  const cost = sk.cost(lv);
+  if (S.souls < cost) { beep(200, 0.1, 'sawtooth', 0.05); showToast('⚠ Не хватает душ!', 'warn'); return; }
+  S.souls -= cost; S.skills[id] = lv + 1;
+  if (id === 'hp') { S.phpmax += 50; S.php += 50; }
+  beep(1000, 0.1, 'sine', 0.06); setTimeout(() => beep(1300, 0.15, 'sine', 0.06), 80);
+  showToast('✨ ' + sk.n + ' Lv.' + (lv + 1) + '!', false);
+  updateAll(); markDirty();
+}
+
+function renderSkills() {
+  skInfo.innerHTML = '💀 Души: <b style="color:var(--purple);font-size:16px">' + S.souls + '</b> · Prestige: <b style="color:var(--gold)">' + (S.prestige || 0) + '</b>';
+  const c = $('sk-c'); c.innerHTML = '';
+  Object.keys(SKILLS).forEach(id => {
+    const sk = SKILLS[id]; const lv = S.skills[id] || 0;
+    const maxed = lv >= sk.max; const cost = maxed ? 0 : sk.cost(lv);
+    const canBuy = !maxed && S.souls >= cost;
+    const div = document.createElement('div');
+    div.className = 'skill-card' + (maxed ? ' maxed' : '');
+    div.innerHTML = '<div class="skill-icon">' + sk.icon + '</div><div class="skill-info"><div class="skill-name">' + sk.n + '</div><div class="skill-desc">' + sk.desc + '</div><div class="skill-level">Уровень: ' + lv + ' / ' + sk.max + '</div></div><button class="skill-buy' + (maxed ? ' maxed' : '') + '" ' + ((!canBuy && !maxed) ? 'disabled' : '') + '>' + (maxed ? '✓ MAX' : (cost + ' 💀')) + '</button>';
+    div.querySelector('button').addEventListener('click', () => buySkill(id));
+    c.appendChild(div);
+  });
+}
+
+function checkAchievements() {
+  let newOnes = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (S.ach.includes(a.id)) return;
+    if (a.check(S)) {
+      S.ach.push(a.id);
+      if (a.reward.m) S.m += a.reward.m;
+      if (a.reward.souls) S.souls += a.reward.souls;
+      newOnes.push(a);
+    }
+  });
+  if (newOnes.length) {
+    newOnes.forEach(a => showToast('🏆 ' + a.n + '!', 'ach'));
+    beep(1500, 0.15, 'sine', 0.08); setTimeout(() => beep(1900, 0.2, 'sine', 0.08), 100);
+    markDirty();
+  }
+}
+
+function renderAchievements() {
+  achInfo.innerHTML = '🏆 Достижения: <b style="color:var(--green)">' + S.ach.length + '</b> / ' + ACHIEVEMENTS.length;
+  const c = $('ach-c'); c.innerHTML = '';
+  ACHIEVEMENTS.forEach(a => {
+    const done = S.ach.includes(a.id);
+    const div = document.createElement('div');
+    div.className = 'ach-card' + (done ? ' done' : '');
+    let rew = [];
+    if (a.reward.m) rew.push(a.reward.m.toLocaleString('ru') + ' 💎');
+    if (a.reward.souls) rew.push(a.reward.souls + ' 💀');
+    div.innerHTML = '<div class="ach-icon">' + a.icon + '</div><div class="ach-info"><div class="ach-name">' + a.n + '</div><div class="ach-desc">' + a.desc + '</div><div class="ach-reward">🎁 ' + rew.join(' · ') + '</div></div>' + (done ? '<div class="ach-check">✓</div>' : '');
+    c.appendChild(div);
+  });
+}
 
 // ===== TIMING =====
 function setupTimingForBoss(boss) {
-  // FIX: сюжетные боссы тоже имеют .timing, поэтому проверяем через него
   const isBoss = boss && (boss.boss || boss.finalBoss || boss.timing);
   if (isBoss) {
-    timing.active = true;
-    timing.hits = 0;
-    timing.open = false;
-    timing.openTimer = 0;
-    if (boss.timing) {
-      timing.speed = boss.timing.speed;
-      timing.zones = boss.timing.zones.map(z => z.slice());
-    } else {
-      timing.speed = 0.006;
-      timing.zones = [[0.30, 0.60], [0.65, 0.93]];
-    }
-    timing.pos = 0;
-    timing.dir = 1;
-    tbInd.style.left = '0%';
-    renderTimingZones();
+    timing.active = true; timing.hits = 0; timing.open = false; timing.openTimer = 0;
+    if (boss.timing) { timing.speed = boss.timing.speed; timing.zones = boss.timing.zones.map(z => z.slice()); }
+    else { timing.speed = 0.006; timing.zones = [[0.30, 0.60], [0.65, 0.93]]; }
+    timing.pos = 0; timing.dir = 1;
+    tbInd.style.left = '0%'; renderTimingZones();
     timingWrap.classList.remove('hidden');
     timingWrap.classList.toggle('final', !!boss.finalBoss);
     updateTimingLabel();
   } else {
-    timing.active = false;
-    timing.open = false;
-    timing.hits = 0;
-    timing.zones = [];
+    timing.active = false; timing.open = false; timing.hits = 0; timing.zones = [];
     timingWrap.classList.add('hidden');
   }
 }
 
 function updateTimingLabel() {
   if (!timing.active) return;
-  const boss = currentBoss();
+  const boss = currentEnemy();
   const isFinal = boss && boss.finalBoss;
-  const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentBossMax() * PARRY_MIN_PCT));
-  twLabel.textContent = (isFinal ? '☠ ' : '🎯 ') + 'ПАРИРУЙ! (' + timing.hits + '/' + PARRY_REQUIRED + ') · Парирование: ' + parryDmg.toLocaleString('ru') + ' урона';
+  const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentEnemyMax() * PARRY_MIN_PCT));
+  twLabel.textContent = (isFinal ? '☠ ' : '🎯 ') + 'ПАРИРУЙ! (' + timing.hits + '/' + PARRY_REQUIRED + ') · ' + parryDmg.toLocaleString('ru') + ' урона';
   twLabel.style.color = isFinal ? 'var(--purple)' : 'var(--green)';
 }
 
@@ -532,56 +752,45 @@ function renderTimingZones() {
 function isTimingHit() {
   if (!timing.active) return true;
   if (!timing.zones || timing.zones.length === 0) return false;
-  for (const z of timing.zones) {
-    if (timing.pos >= z[0] && timing.pos <= z[1]) return true;
-  }
+  for (const z of timing.zones) if (timing.pos >= z[0] && timing.pos <= z[1]) return true;
   return false;
 }
 
 function openBoss() {
-  timing.open = true;
-  timing.openTimer = OPEN_DURATION;
-  timing.active = false;
+  timing.open = true; timing.openTimer = OPEN_DURATION; timing.active = false;
   timingWrap.classList.add('hidden');
-  S.atkCd = currentBoss().atk;
+  S.atkCd = currentEnemy().atk;
   showSpecialText('ВРАГ ОТКРЫТ! ' + OPEN_DURATION + 'с', '#2ecc71');
-  beep(1500, 0.15, 'sine', 0.1);
-  setTimeout(() => beep(1800, 0.15, 'sine', 0.1), 100);
-  setTimeout(() => beep(2200, 0.2, 'sine', 0.1), 200);
+  beep(1500, 0.15, 'sine', 0.1); setTimeout(() => beep(1800, 0.15, 'sine', 0.1), 100); setTimeout(() => beep(2200, 0.2, 'sine', 0.1), 200);
   cc.classList.add('open-phase-aura');
   setTimeout(() => cc.classList.remove('open-phase-aura'), 1000);
 }
 
 function closeBoss() {
-  timing.open = false;
-  timing.openTimer = 0;
-  timing.hits = 0;
-  timing.pos = 0;
-  timing.dir = 1;
-  timing.active = true;
-  timingWrap.classList.remove('hidden');
-  renderTimingZones();
-  updateTimingLabel();
+  timing.open = false; timing.openTimer = 0; timing.hits = 0;
+  timing.pos = 0; timing.dir = 1; timing.active = true;
+  timingWrap.classList.remove('hidden'); renderTimingZones(); updateTimingLabel();
   showSpecialText('ЗАЩИТА ВРАГА!', '#ff2a4b');
   beep(300, 0.2, 'sawtooth', 0.08);
   cc.classList.remove('open-phase-aura');
 }
 
-function resetBossState() {
-  bossState = {
-    attackCount: 0, elapsed: 0, timer: 0,
-    mundusShieldCd: 0, mundusShieldActive: 0,
-    urizenCd: 0, urizenActive: 0,
-  };
-}
+function resetBossState() { bossState = { attackCount: 0, elapsed: 0, timer: 0, mundusShieldCd: 0, mundusShieldActive: 0, urizenCd: 0, urizenActive: 0, burn: null }; }
 
 // ===== UPDATE UI =====
 function updateBattle() {
   mD.textContent = Math.floor(S.m).toLocaleString('ru');
-  if (S.storyActive) {
-    modeLbl.textContent = 'СЮЖЕТ';
+
+  if (S.battleMode === 'chapter') {
+    modeLbl.textContent = 'ГЛАВА ' + (S.chapterIdx + 1);
+    modeLbl.style.color = 'var(--gold)';
+    waveEl.textContent = Math.min(S.chapterKilled[S.chapterIdx] + 1, CHAPTERS[S.chapterIdx].demons.length) + '/' + CHAPTERS[S.chapterIdx].demons.length;
+    waveEl.style.color = 'var(--gold)';
+    waveEl.style.textShadow = '0 0 8px var(--gold)';
+  } else if (S.battleMode === 'boss' || S.battleMode === 'rematch') {
+    modeLbl.textContent = S.battleMode === 'rematch' ? 'РЕВАНШ' : 'БОСС';
     modeLbl.style.color = 'var(--purple)';
-    waveEl.textContent = (S.storyIdx + 1) + '/' + STORY_BOSSES.length;
+    waveEl.textContent = (S.storyBossIdx + 1) + '/' + CHAPTERS.length;
     waveEl.style.color = 'var(--purple)';
     waveEl.style.textShadow = '0 0 8px var(--purple)';
   } else {
@@ -596,7 +805,12 @@ function updateBattle() {
   pT.textContent = Math.ceil(S.php).toLocaleString('ru') + ' / ' + S.phpmax.toLocaleString('ru');
   pF.classList.toggle('low', S.php / S.phpmax < 0.3);
 
-  const en = currentBoss();
+  dtF.style.width = (S.dtActive > 0 ? (S.dtActive / DT_DURATION) * 100 : S.dt) + '%';
+  if (S.dtActive > 0) { dtT.textContent = 'DT ' + S.dtActive.toFixed(1) + 'с'; dtBtn.textContent = '😈 ×2'; dtBtn.className = 'dt-btn active'; dtBtn.disabled = true; }
+  else if (S.dt >= DT_MAX) { dtT.textContent = 'ГОТОВ!'; dtBtn.textContent = '😈 DT'; dtBtn.className = 'dt-btn ready'; dtBtn.disabled = false; }
+  else { dtT.textContent = Math.floor(S.dt) + '%'; dtBtn.textContent = '😈 DT'; dtBtn.className = 'dt-btn'; dtBtn.disabled = true; }
+
+  const en = currentEnemy();
   const finalFight = isFinalBoss();
   eN.classList.remove('boss', 'final');
   if (finalFight) eN.classList.add('final');
@@ -611,70 +825,60 @@ function updateBattle() {
     aInd.textContent = 'ЖРИ! Кликай по пицце!';
     aInd.style.color = 'var(--gold)';
   } else {
-    const bhp = getBossHP(), bmax = currentBossMax();
-    eN.textContent = (finalFight ? '☠ ' : (isBossFight() ? '👑 ' : '')) + en.n;
+    const bhp = getEnemyHP(), bmax = currentEnemyMax();
+    let prefix = '';
+    if (S.battleMode === 'chapter') prefix = '👹 ';
+    else if (finalFight) prefix = '☠ ';
+    else if (isBossFight()) prefix = '👑 ';
+    eN.textContent = prefix + en.n;
     eF.style.width = Math.max(0, (bhp / bmax) * 100) + '%';
     eF.className = 'hb-f';
     eT.textContent = Math.ceil(bhp).toLocaleString('ru') + ' / ' + bmax.toLocaleString('ru');
     eB.style.display = 'none';
 
     if (timing.open) {
-      aInd.textContent = '🔥 ОТКРЫТ! БЕЙ ×' + OPEN_MULT + '! Осталось: ' + timing.openTimer.toFixed(1) + 'с';
+      aInd.textContent = '🔥 ОТКРЫТ! БЕЙ ×' + OPEN_MULT + '! ' + timing.openTimer.toFixed(1) + 'с';
       aInd.style.color = 'var(--green)';
     } else if (isBossFight() && timing.active) {
       aInd.textContent = '🛡 ПАРИРУЙ! ' + timing.hits + '/' + PARRY_REQUIRED + ' · Тапни в зелёную зону';
       aInd.style.color = isFinalBoss() ? 'var(--purple)' : 'var(--green)';
     } else {
-      aInd.textContent = '⚠ Атака врага через ' + Math.max(0, S.atkCd).toFixed(1) + 'с';
+      aInd.textContent = '⚠ Атака через ' + Math.max(0, S.atkCd).toFixed(1) + 'с · ТАПАЙ ПО СТУЛУ';
       aInd.style.color = 'var(--r)';
     }
   }
 
-  if (S.storyActive && en.timer) {
+  if ((S.battleMode === 'boss' || S.battleMode === 'rematch') && en.timer) {
     bossTimerEl.classList.remove('hidden');
     const t = Math.max(0, bossState.timer);
     btValEl.textContent = t.toFixed(1);
     bossTimerEl.classList.toggle('urgent', t < 20);
-    bossTimerEl.classList.toggle('open-phase', !!timing.open);
-  } else {
-    bossTimerEl.classList.add('hidden');
-  }
+  } else bossTimerEl.classList.add('hidden');
 
   if (S.combo >= 2) {
     const mult = (1 + Math.min(S.combo - 1, COMBO_MAX - 1) * COMBO_STEP).toFixed(2);
-    comboEl.classList.add('on');
-    comboEl.textContent = 'x' + mult;
-  } else {
-    comboEl.classList.remove('on');
-  }
+    comboEl.classList.add('on'); comboEl.textContent = 'x' + mult;
+  } else comboEl.classList.remove('on');
 
-  cc.classList.toggle('final-aura', finalFight && !goEl.classList.contains('show'));
+  cc.classList.toggle('final-aura', finalFight && !goEl.classList.contains('show') && S.dtActive <= 0);
+  if (S.dtActive > 0) cc.classList.add('dt-aura');
+  else if (!cc.classList.contains('final-aura')) cc.classList.remove('dt-aura');
 }
 
 function renderShop() {
-  const c = $('s-c');
-  c.innerHTML = '';
+  const c = $('s-c'); c.innerHTML = '';
   Object.keys(CHAIRS).forEach(id => {
-    const k = CHAIRS[id];
-    const own = S.o.includes(id);
-    const act = S.c === id;
+    const k = CHAIRS[id]; const own = S.o.includes(id); const act = S.c === id;
     if (k.storyOnly && !own) return;
     const canBuy = !own && S.m >= k.p;
     const disabled = act || (!own && !canBuy);
     const label = act ? 'В БОЮ' : (own ? 'НАДЕТЬ' : (canBuy ? 'КУПИТЬ' : 'НЕ ХВАТАЕТ'));
     const div = document.createElement('div');
     let cls = 'si';
-    if (k.lg) cls += ' legendary';
-    else if (k.sp) cls += ' special';
+    if (k.lg) cls += ' legendary'; else if (k.sp) cls += ' special';
     div.className = cls;
     const descCls = k.lg ? 'lg' : (k.sp ? 'sp' : '');
-    div.innerHTML =
-      '<div>' +
-        '<div class="i-n">' + k.n + '</div>' +
-        '<div class="i-d ' + descCls + '">' + k.desc + '</div>' +
-        '<div class="i-d">Урон: ' + k.w.toLocaleString('ru') + ' · Крит: ' + Math.round(k.crit * 100) + '%' + (own ? '' : ' · ' + k.p.toLocaleString('ru') + '💎') + '</div>' +
-      '</div>' +
-      '<button class="buy-btn ' + (own ? 'owned' : '') + '" ' + (disabled ? 'disabled' : '') + '>' + label + '</button>';
+    div.innerHTML = '<div><div class="i-n">' + k.n + '</div><div class="i-d ' + descCls + '">' + k.desc + '</div><div class="i-d">Урон: ' + k.w.toLocaleString('ru') + ' · Крит: ' + Math.round(k.crit * 100) + '%' + (own ? '' : ' · ' + k.p.toLocaleString('ru') + '💎') + '</div></div><button class="buy-btn ' + (own ? 'owned' : '') + '" ' + (disabled ? 'disabled' : '') + '>' + label + '</button>';
     div.querySelector('button').addEventListener('click', () => buyChair(id));
     c.appendChild(div);
   });
@@ -685,68 +889,95 @@ function buyChair(id) {
   const k = CHAIRS[id];
   if (k.storyOnly && !S.o.includes(id)) return;
   if (S.o.includes(id)) { S.c = id; beep(600, 0.08, 'sine', 0.04); }
-  else if (S.m >= k.p) {
-    S.m -= k.p; S.o.push(id); S.c = id;
-    beep(800, 0.15, 'sine', 0.06);
-    setTimeout(() => beep(1000, 0.15, 'sine', 0.06), 80);
-  } else return;
+  else if (S.m >= k.p) { S.m -= k.p; S.o.push(id); S.c = id; beep(800, 0.15, 'sine', 0.06); setTimeout(() => beep(1000, 0.15, 'sine', 0.06), 80); checkAchievements(); }
+  else return;
   updateAll(); markDirty();
 }
 
-function renderStory() {
-  const intro = $('st-t');
-  if (S.storyIdx >= STORY_BOSSES.length) {
-    intro.innerHTML = '☠ <b style="color:var(--purple)">ВСЕ БОССЫ ПОВЕРЖЕНЫ!</b>';
-  } else {
-    intro.innerHTML = STORY_INTRO[S.storyIdx] || STORY_INTRO[0];
-  }
-  const c = $('st-c');
-  c.innerHTML = '';
-  STORY_BOSSES.forEach((boss, idx) => {
-    const defeated = idx < S.storyIdx;
-    const current = idx === S.storyIdx;
-    const locked = idx > S.storyIdx;
+// ===== CHAPTERS UI =====
+function renderChapters() {
+  const total = CHAPTERS.length;
+  chInfo.innerHTML = '📖 Главы: <b style="color:var(--gold);font-size:16px">' + Math.min(S.chapterIdx, total) + '</b> / ' + total + ' пройдено';
+  const c = $('ch-c'); c.innerHTML = '';
+
+  CHAPTERS.forEach((ch, idx) => {
+    const defeated = idx < S.chapterIdx;
+    const current = idx === S.chapterIdx;
+    const locked = idx > S.chapterIdx;
+    const boss = STORY_BOSSES[ch.boss];
+    const killed = S.chapterKilled[idx] || 0;
+    const demonsDone = killed >= ch.demons.length;
+
     const card = document.createElement('div');
-    let cls = 'story-card';
+    let cls = 'chapter-card';
     if (current) cls += ' current';
     if (defeated) cls += ' defeated';
     if (locked) cls += ' locked';
     if (boss.finalBoss) cls += ' final-card';
     card.className = cls;
+
     let rewardText;
     if (boss.rtype === 'money') rewardText = '💰 ' + boss.reward.toLocaleString('ru') + ' мотов';
     else if (boss.rtype === 'chair') rewardText = '🏆 ' + CHAIRS[boss.chair].n;
-    else if (boss.rtype === 'erase') rewardText = '☠ ФИНАЛ · прогресс сотрётся';
+    else if (boss.rtype === 'souls') rewardText = '💀 ' + (boss.souls || 0) + ' душ';
+    else if (boss.rtype === 'erase') rewardText = '☠ ФИНАЛ · Prestige';
     else rewardText = '🏆 ФИНАЛ';
-    const btnLabel = defeated ? '✓ ПРОЙДЕНО' : (locked ? '🔒 ЗАКРЫТО' : (boss.finalBoss ? '☠ БИТВА' : '⚔️ БОЙ'));
-    const parryDmg = Math.max(boss.dmg * 5, Math.floor(boss.h * PARRY_MIN_PCT));
-    card.innerHTML =
-      '<div class="sc-head"><span class="sc-num">' + (idx + 1) + '</span><span class="sc-name">' + boss.n + '</span></div>' +
-      '<div class="sc-info">HP: ' + boss.h.toLocaleString('ru') + ' · Атака: ' + boss.dmg + ' · ' + boss.atk + 'с · ⏱ ' + (boss.timer || '—') + 'с</div>' +
-      '<div class="sc-ability' + (boss.finalBoss ? ' final' : '') + '">👹 ' + (boss.abilityDesc || '—') + '</div>' +
-      '<div class="sc-parry">⚔️ Парирование: ' + parryDmg.toLocaleString('ru') + ' урона врагу</div>' +
-      '<div class="sc-reward">🎁 ' + rewardText + '</div>' +
-      '<div class="sc-btn-row">' +
-        '<button class="sc-btn fight-btn" ' + (locked || defeated ? 'disabled' : '') + '>' + btnLabel + '</button>' +
-        '<button class="sc-btn story-btn">📖 STORY</button>' +
-      '</div>';
-    if (current && !defeated) {
-      card.querySelector('.fight-btn').addEventListener('click', startStoryBattle);
+
+    let actionBtns = '';
+    if (defeated) {
+      actionBtns = '<button class="ch-btn memory-btn" data-act="memory" data-idx="' + idx + '">📖 ВОСПОМИНАНИЕ</button><button class="ch-btn rematch-btn" data-act="rematch" data-idx="' + idx + '">⚔️ РЕВАНШ</button>';
+    } else if (current) {
+      const demonBtnLabel = demonsDone ? '✓ ДЕМОНЫ (' + ch.demons.length + '/' + ch.demons.length + ')' : '⚔️ ДЕМОНЫ (' + killed + '/' + ch.demons.length + ')';
+      const bossBtnLabel = boss.finalBoss ? '☠ БОСС' : '👑 БОСС';
+      actionBtns = '<button class="ch-btn fight-btn" data-act="demons" data-idx="' + idx + '" ' + (demonsDone ? 'disabled' : '') + '>' + demonBtnLabel + '</button><button class="ch-btn fight-btn" data-act="boss" data-idx="' + idx + '" ' + (!demonsDone ? 'disabled' : '') + '>' + bossBtnLabel + '</button>';
+    } else {
+      actionBtns = '<button class="ch-btn" disabled>🔒 ЗАКРЫТО</button>';
     }
-    card.querySelector('.story-btn').addEventListener('click', () => showBossStory(boss));
+
+    let progressText = '';
+    if (current) {
+      if (demonsDone) progressText = '<div class="ch-demon-progress done">✓ Все демоны повержены — БОСС доступен!</div>';
+      else progressText = '<div class="ch-demon-progress">👹 Демоны: ' + killed + ' / ' + ch.demons.length + '</div>';
+    } else if (defeated) {
+      progressText = '<div class="ch-demon-progress done">✓ ПРОЙДЕНО · 📖 Воспоминание открыто</div>';
+    }
+
+    card.innerHTML =
+      '<div class="ch-head"><span class="ch-num">' + (idx + 1) + '</span><span class="ch-name">' + ch.n + '</span><span class="ch-icon">' + ch.icon + '</span></div>' +
+      '<div class="ch-info">Демоны: ' + ch.demons.length + ' · Босс HP: ' + boss.h.toLocaleString('ru') + ' · ⏱ ' + (boss.timer || '—') + 'с</div>' +
+      progressText +
+      '<div class="ch-boss-line' + (boss.finalBoss ? ' final' : '') + '">👑 Босс: ' + boss.n + '</div>' +
+      '<div class="ch-info" style="color:var(--gold)">🎁 ' + rewardText + '</div>' +
+      '<div class="ch-btn-row">' + actionBtns + '</div>';
+
+    card.querySelectorAll('button[data-act]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const act = btn.dataset.act;
+        const i = parseInt(btn.dataset.idx);
+        if (act === 'demons') startChapterDemons(i);
+        else if (act === 'boss') startChapterBoss(i, false);
+        else if (act === 'memory') showMemory(i);
+        else if (act === 'rematch') startChapterBoss(i, true);
+      });
+    });
+
     c.appendChild(card);
   });
 }
 
-function showBossStory(boss) {
-  smIcon.textContent = boss.icon || '👹';
-  smTitle.textContent = boss.n;
-  smText.innerHTML = boss.story || 'История неизвестна...';
+function showMemory(chIdx) {
+  const ch = CHAPTERS[chIdx];
+  const boss = STORY_BOSSES[ch.boss];
+  smIcon.textContent = ch.icon;
+  smTitle.textContent = '📖 Глава ' + (chIdx + 1) + ': ' + ch.n;
+  smText.innerHTML = ch.memory;
+  smRematch.style.display = 'block';
+  smRematch.onclick = () => { storyModal.classList.remove('show'); startChapterBoss(chIdx, true); };
   storyModal.classList.add('show');
   beep(700, 0.1, 'sine', 0.05);
 }
 
-function updateAll() { updateBattle(); renderShop(); renderStory(); }
+function updateAll() { updateBattle(); renderChapters(); renderShop(); renderSkills(); renderAchievements(); }
 
 // ===== TABS =====
 let battleActive = true;
@@ -763,25 +994,31 @@ document.querySelectorAll('.tab').forEach(btn => {
   });
 });
 
-// ===== CANVAS =====
+function goToTab(name) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
+  const tab = document.querySelector('.tab[data-sc="' + name + '"]');
+  if (tab) tab.classList.add('active');
+  const sc = $('' + name + '-sc');
+  if (sc) sc.classList.add('active');
+  battleActive = name === 'battle';
+  if (battleActive) setTimeout(resizeCanvas, 20);
+  updateAll();
+}
+
 function resizeCanvas() {
   const w = cc.clientWidth, h = cc.clientHeight;
   if (w > 0 && (cv.width !== w || cv.height !== h)) { cv.width = w; cv.height = h; }
 }
 window.addEventListener('resize', resizeCanvas);
 
-// ===== PARTICLES =====
 const particles = [];
 function spawnParticles(x, y, count, color, opts) {
   opts = opts || {};
   for (let i = 0; i < count; i++) {
     const a = Math.random() * Math.PI * 2;
     const spd = (opts.spd || 3) * (0.4 + Math.random());
-    particles.push({
-      x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
-      a: 1, z: (opts.size || 3) * (0.5 + Math.random()),
-      color, gravity: opts.gravity || 0, life: opts.life || 0.03,
-    });
+    particles.push({ x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, a: 1, z: (opts.size || 3) * (0.5 + Math.random()), color, gravity: opts.gravity || 0, life: opts.life || 0.03 });
   }
   if (particles.length > 400) particles.splice(0, particles.length - 400);
 }
@@ -799,38 +1036,32 @@ function damagePop(x, y, dmg, crit, color, label) {
 
 function showSpecialText(text, color) {
   const el = document.createElement('div');
-  el.className = 'special-text';
-  el.textContent = text;
-  el.style.color = color;
+  el.className = 'special-text'; el.textContent = text; el.style.color = color;
   el.style.textShadow = '0 0 20px ' + color + ',0 0 40px ' + color;
   cc.appendChild(el);
   setTimeout(() => el.remove(), 1200);
 }
 
-// ===== COMBAT =====
+// ===== ATTACK =====
 function attack(ev) {
   if (S.pm) { eat(); return; }
-  if (goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
+  if (goEl.classList.contains('show') || finaleEl.classList.contains('show') || paused) return;
 
   const now = performance.now();
   const r = cv.getBoundingClientRect();
-  const x = ev.clientX - r.left;
-  const y = ev.clientY - r.top;
+  const x = (ev.clientX || (ev.touches && ev.touches[0] && ev.touches[0].clientX) || 0) - r.left;
+  const y = (ev.clientY || (ev.touches && ev.touches[0] && ev.touches[0].clientY) || 0) - r.top;
   const bossFight = isBossFight();
 
-  // === PARRY PHASE ===
   if (bossFight && timing.active) {
     if (isTimingHit()) {
-      const boss = currentBoss();
-      const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentBossMax() * PARRY_MIN_PCT));
-      timing.hits++;
+      const boss = currentEnemy();
+      const parryDmg = Math.max(boss.dmg * 5, Math.floor(currentEnemyMax() * PARRY_MIN_PCT));
+      timing.hits++; S.parries = (S.parries || 0) + 1;
       updateTimingLabel();
-
-      applyBossDamage(parryDmg, x, y, true, true, 'PARRIED!', '#2ecc71');
-
-      if (timing.hits >= PARRY_REQUIRED && getBossHP() > 0) {
-        openBoss();
-      }
+      applyEnemyDamage(parryDmg, x, y, true, true, 'PARRIED!', '#2ecc71');
+      vibrate(30); checkAchievements();
+      if (timing.hits >= PARRY_REQUIRED && getEnemyHP() > 0) openBoss();
     } else {
       damagePop(x, y, 0, false, '#555', 'MISS');
       beep(120, 0.08, 'square', 0.03);
@@ -840,20 +1071,19 @@ function attack(ev) {
     return;
   }
 
-  // === NORMAL ATTACK ===
-  if (now - S.comboT < COMBO_WINDOW) S.combo = Math.min(S.combo + 1, COMBO_MAX);
-  else S.combo = 1;
+  if (now - S.comboT < COMBO_WINDOW) S.combo = Math.min(S.combo + 1, COMBO_MAX); else S.combo = 1;
   S.comboT = now;
 
   const chair = CHAIRS[S.c];
   const comboMult = 1 + Math.min(S.combo - 1, COMBO_MAX - 1) * COMBO_STEP;
-  let isCrit = Math.random() < chair.crit;
+  const critChance = chair.crit + critBonus();
+  let isCrit = Math.random() < critChance;
   let critMult = CRIT_MULT;
   if (S.c === 'c8') critMult = 2.5;
   if (S.c === 'c9') critMult = 3;
-
   const openMult = timing.open ? OPEN_MULT : 1;
-  let dmg = chair.w * comboMult * (isCrit ? critMult : 1) * openMult;
+  let dmg = chair.w * comboMult * (isCrit ? critMult : 1) * openMult * dmgMult();
+  if (S.dtActive > 0) dmg *= 2;
 
   let isProc = false, procText = '', procColor = '#fff';
   if (S.c === 'c5' && Math.random() < JC_CHANCE) { isProc = true; procText = 'JUDGEMENT CUT!'; procColor = '#9b59b6'; }
@@ -864,302 +1094,354 @@ function attack(ev) {
   const finalBoss = isFinalBoss();
   if (isProc) {
     if (finalBoss) {
-      if (S.c === 'c5') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.jc);
-      else if (S.c === 'c6') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.exceed);
-      else if (S.c === 'c7') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.dt);
-      else if (S.c === 'c9') dmg = Math.floor(currentBoss().h * FINAL_PROC_PCT.void);
+      if (S.c === 'c5') dmg = Math.floor(STORY_BOSSES[S.storyBossIdx].h * FINAL_PROC_PCT.jc);
+      else if (S.c === 'c6') dmg = Math.floor(STORY_BOSSES[S.storyBossIdx].h * FINAL_PROC_PCT.exceed);
+      else if (S.c === 'c7') dmg = Math.floor(STORY_BOSSES[S.storyBossIdx].h * FINAL_PROC_PCT.dt);
+      else if (S.c === 'c9') dmg = Math.floor(STORY_BOSSES[S.storyBossIdx].h * FINAL_PROC_PCT.void);
     } else {
       const procBase = chair.w * 50;
-      if (S.c === 'c5') dmg = Math.max(procBase, Math.floor(getBossHP() * 0.5));
+      if (S.c === 'c5') dmg = Math.max(procBase, Math.floor(getEnemyHP() * 0.5));
       else if (S.c === 'c6') dmg *= 2;
       else if (S.c === 'c7') dmg *= 3;
-      else if (S.c === 'c9') dmg = getBossHP();
+      else if (S.c === 'c9') dmg = getEnemyHP();
     }
     if (timing.open) dmg = Math.floor(dmg * OPEN_PROC_MULT);
   }
 
-  if (isProc && bossState.urizenActive > 0 && currentBoss().ability === 'procdisable') {
-    isProc = false;
-    dmg = Math.max(1, Math.floor(chair.w * comboMult * openMult));
+  if (isProc && bossState.urizenActive > 0 && currentEnemy().ability === 'procdisable') {
+    isProc = false; dmg = Math.max(1, Math.floor(chair.w * comboMult * openMult));
     showSpecialText('ПРОК ОТКЛЮЧЁН!', '#888');
   }
-
-  if (bossState.mundusShieldActive > 0 && currentBoss().ability === 'shield') {
-    dmg = Math.floor(dmg * 0.5);
-  }
+  if (bossState.mundusShieldActive > 0 && currentEnemy().ability === 'shield') dmg = Math.floor(dmg * 0.5);
 
   const finalDmg = Math.max(1, Math.round(dmg));
-  applyBossDamage(finalDmg, x, y, isCrit, isProc, procText, procColor);
+  applyEnemyDamage(finalDmg, x, y, isCrit, isProc, procText, procColor);
+  vibrate(isCrit ? 20 : 10);
 
-  // FIX: Спаситель отражает с капом 3% макс HP
-  if (currentBoss().ability === 'reflect' && !S.pm) {
+  if (!S.pm && getEnemyHP() > 0) {
+    if (S.c === 'c10' && Math.random() < 0.20) { bossState.burn = { remaining: 3, dps: Math.floor(finalDmg * 0.3) }; showSpecialText('🔥 BURN!', '#e67e22'); beep(300, 0.15, 'sawtooth', 0.06); }
+    if (S.c === 'c11' && Math.random() < 0.15) { S.atkCd += 1; showSpecialText('❄ FREEZE!', '#00f0ff'); beep(900, 0.15, 'sine', 0.06); }
+    if (S.c === 'c12' && Math.random() < 0.10) { const chainDmg = Math.floor(finalDmg); setEnemyHP(Math.max(0, getEnemyHP() - chainDmg)); showSpecialText('⚡ CHAIN! +' + chainDmg.toLocaleString('ru'), '#f1c40f'); beep(1200, 0.15, 'sawtooth', 0.06); if (getEnemyHP() <= 0) onEnemyDefeated(); }
+  }
+  if (S.dtActive > 0) S.php = Math.min(S.phpmax, S.php + Math.floor(finalDmg * 0.05));
+  if (currentEnemy().ability === 'reflect' && !S.pm) {
     const rawReflect = Math.floor(finalDmg * 0.10);
     const cappedReflect = Math.min(rawReflect, Math.floor(S.phpmax * REFLECT_CAP_PCT));
     if (cappedReflect > 0) applyPlayerDamage(cappedReflect, '#9b59b6');
   }
-
   updateBattle(); markDirty();
 }
 
-function applyBossDamage(dmg, x, y, isCrit, isProc, procText, procColor) {
-  setBossHP(getBossHP() - dmg);
-  S.m += dmg * MONEY_PER_DMG;
-
+function applyEnemyDamage(dmg, x, y, isCrit, isProc, procText, procColor) {
+  setEnemyHP(getEnemyHP() - dmg);
+  S.m += dmg * MONEY_PER_DMG * moneyMult();
+  addDT(dmg / DT_FILL_DMG);
   if (isProc) {
     showSpecialText(procText, procColor);
-    beep(1400, 0.2, 'sawtooth', 0.08);
-    setTimeout(() => beep(1800, 0.15, 'sawtooth', 0.06), 100);
+    beep(1400, 0.2, 'sawtooth', 0.08); setTimeout(() => beep(1800, 0.15, 'sawtooth', 0.06), 100);
     spawnParticles(x, y, 25, procColor, { spd: 8, size: 4, life: 0.02 });
-    damagePop(x, y, dmg, true, procColor);
-    shakeScreen();
-    if (S.c === 'c5') {
-      cc.classList.add('judgement-cut');
-      setTimeout(() => cc.classList.remove('judgement-cut'), 400);
-    }
+    damagePop(x, y, dmg, true, procColor); shakeScreen();
+    if (S.c === 'c5') { cc.classList.add('judgement-cut'); setTimeout(() => cc.classList.remove('judgement-cut'), 400); }
   } else {
     spawnParticles(x, y, isCrit ? 15 : 8, isCrit ? '#f1c40f' : '#2ecc71', { spd: isCrit ? 5 : 4, size: isCrit ? 4 : 3 });
     damagePop(x, y, dmg, isCrit, '#2ecc71');
     beep(isCrit ? 900 : 600, 0.05, 'sine', 0.04);
   }
-
-  if (getBossHP() <= 0) {
-    setBossHP(0);
-    onEnemyDefeated();
-  }
+  if (getEnemyHP() <= 0) { setEnemyHP(0); onEnemyDefeated(); }
 }
 
 function applyPlayerDamage(dmg, color) {
   if (dmg <= 0 || S.php <= 0) return;
-  S.php -= dmg;
-  shakeScreen();
-  beep(180, 0.15, 'sawtooth', 0.05);
+  if (S.dtActive > 0) dmg = Math.floor(dmg * 0.5);
+  S.php -= dmg; addDT(dmg / DT_FILL_TAKEN);
+  shakeScreen(); beep(180, 0.15, 'sawtooth', 0.05); vibrate(40);
   damagePop(cv.width / 2, 20, dmg, false, color || '#ff2a4b');
   if (S.php <= 0) { S.php = 0; gameOver(); }
 }
 
+// ===== ENEMY DEFEATED =====
 function onEnemyDefeated() {
-  if (S.storyActive) { defeatStoryBoss(); return; }
-  if (S.c === 'c2') {
-    S.pm = 1; S.pt = S.pmax; S.combo = 0;
-    beep(1200, 0.2, 'sine', 0.08);
-    spawnParticles(cv.width / 2, cv.height / 2, 30, '#f1c40f', { spd: 8, size: 5, life: 0.02 });
+  S.kills = (S.kills || 0) + 1;
+  checkAchievements();
+
+  // ГЛАВА: демон убит
+  if (S.battleMode === 'chapter') {
+    S.chapterKilled[S.chapterIdx]++;
+    const ch = CHAPTERS[S.chapterIdx];
+    if (S.chapterKilled[S.chapterIdx] >= ch.demons.length) {
+      // все демоны убиты → возврат в главы
+      S.battleMode = 'free';
+      S.php = Math.min(S.phpmax, S.php + Math.floor(S.phpmax * 0.5));
+      beep(1500, 0.2, 'sine', 0.1); setTimeout(() => beep(1900, 0.2, 'sine', 0.1), 100);
+      goToTab('chapters');
+      showToast('🏆 Все демоны повержены! БОСС открыт!', 'ach');
+      updateAll(); markDirty();
+      return;
+    }
+    // следующий демон
+    const nextDemon = ch.demons[S.chapterKilled[S.chapterIdx]];
+    S.emax = nextDemon.h; S.hp = S.emax;
+    S.atkCdMax = nextDemon.atk; S.atkCd = S.atkCdMax;
+    S.combo = 0;
+    resetBossState();
+    beep(800, 0.15, 'sine', 0.06); setTimeout(() => beep(1100, 0.15, 'sine', 0.06), 80);
+    spawnParticles(cv.width / 2, cv.height / 2, 20, '#2ecc71', { spd: 6, size: 4 });
+    showSpecialText('ДЕМОН ' + S.chapterKilled[S.chapterIdx] + '/' + ch.demons.length + ' ПОВЕРЖЕН!', '#2ecc71');
     markDirty();
     return;
   }
-  S.m += Math.round(ENEMIES[S.e].r * rewardScale());
+
+  // БОСС / РЕВАНШ
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') {
+    defeatBoss();
+    return;
+  }
+
+  // ОБЫЧНАЯ ВОЛНА
+  if (currentEnemy().boss) S.bossKills = (S.bossKills || 0) + 1;
+  if (S.c === 'c2') { S.pm = 1; S.pt = S.pmax; S.combo = 0; beep(1200, 0.2, 'sine', 0.08); spawnParticles(cv.width / 2, cv.height / 2, 30, '#f1c40f', { spd: 8, size: 5, life: 0.02 }); markDirty(); return; }
+  S.m += Math.round(ENEMIES[S.e].r * rewardScale() * moneyMult());
   S.php = Math.min(S.phpmax, S.php + Math.floor(S.phpmax * 0.25));
-  S.wave++;
+  S.wave++; if (S.wave > S.maxWave) S.maxWave = S.wave;
   S.phpmax += 20;
   beep(800, 0.15, 'sine', 0.06);
   spawnParticles(cv.width / 2, cv.height / 2, 15, '#2ecc71', { spd: 5, size: 4 });
-  nextEnemy();
+  nextFreeEnemy();
+  checkAchievements();
 }
 
-function nextEnemy() {
+function nextFreeEnemy() {
   S.e++;
   if (S.e >= ENEMIES.length) { S.e = 0; S.loop = (S.loop || 0) + 1; }
   const en = ENEMIES[S.e];
   const scale = 1 + (S.loop || 0) * 0.3;
-  S.emax = Math.round(en.h * scale);
-  S.hp = S.emax;
-  S.atkCdMax = en.atk;
-  S.atkCd = S.atkCdMax;
-  resetBossState();
-  setupTimingForBoss(en);
-  if (en.boss) {
-    cc.classList.add('boss-flash');
-    setTimeout(() => cc.classList.remove('boss-flash'), 600);
-    beep(100, 0.4, 'sawtooth', 0.1);
-  }
+  S.emax = Math.round(en.h * scale); S.hp = S.emax;
+  S.atkCdMax = en.atk; S.atkCd = S.atkCdMax;
+  resetBossState(); setupTimingForBoss(en);
+  if (en.boss) { cc.classList.add('boss-flash'); setTimeout(() => cc.classList.remove('boss-flash'), 600); beep(100, 0.4, 'sawtooth', 0.1); }
   markDirty();
 }
 
-// ===== STORY =====
-function startStoryBattle() {
-  if (S.storyIdx >= STORY_BOSSES.length) return;
+// ===== CHAPTER START =====
+function startChapterDemons(chIdx) {
+  if (chIdx !== S.chapterIdx) return;
   if (S.pm) return;
-  const boss = STORY_BOSSES[S.storyIdx];
+  const ch = CHAPTERS[chIdx];
+  if (S.chapterKilled[chIdx] >= ch.demons.length) { showToast('Демоны уже повержены! Иди к боссу.', 'warn'); return; }
+  const demon = ch.demons[S.chapterKilled[chIdx]];
+  S.battleMode = 'chapter';
+  S.storyActive = false; S.storyHP = 0;
+  S.emax = demon.h; S.hp = demon.h;
+  S.atkCdMax = demon.atk; S.atkCd = demon.atk;
+  S.combo = 0;
+  resetBossState();
+  setupTimingForBoss(null);
+  goToTab('battle');
+  showSpecialText('👹 ГЛАВА ' + (chIdx + 1) + ' · ДЕМОН ' + (S.chapterKilled[chIdx] + 1) + '/' + ch.demons.length, '#e67e22');
+  beep(400, 0.2, 'sawtooth', 0.08);
+  updateAll(); markDirty();
+}
+
+function startChapterBoss(chIdx, isRematch) {
+  if (!isRematch && chIdx !== S.chapterIdx) return;
+  if (S.pm) return;
+  const ch = CHAPTERS[chIdx];
+  const boss = STORY_BOSSES[ch.boss];
+  if (!isRematch && S.chapterKilled[chIdx] < ch.demons.length) { showToast('⚠ Сначала победи всех демонов!', 'warn'); return; }
+  S.battleMode = isRematch ? 'rematch' : 'boss';
   S.storyActive = true;
+  S.storyBossIdx = ch.boss;
   S.storyHP = boss.h;
-  S.atkCdMax = boss.atk;
-  S.atkCd = boss.atk;
+  S.atkCdMax = boss.atk; S.atkCd = boss.atk;
   resetBossState();
   bossState.timer = boss.timer || 60;
   setupTimingForBoss(boss);
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
-  document.querySelector('.tab[data-sc="battle"]').classList.add('active');
-  $('battle-sc').classList.add('active');
-  battleActive = true;
-  setTimeout(resizeCanvas, 20);
-  cc.classList.add('boss-flash');
-  setTimeout(() => cc.classList.remove('boss-flash'), 600);
+  goToTab('battle');
+  cc.classList.add('boss-flash'); setTimeout(() => cc.classList.remove('boss-flash'), 600);
   beep(boss.finalBoss ? 80 : 200, 0.5, 'sawtooth', 0.12);
   if (boss.finalBoss) {
     setTimeout(() => beep(60, 0.8, 'sawtooth', 0.12), 300);
     setTimeout(() => beep(40, 1.0, 'sawtooth', 0.12), 700);
     showSpecialText('☠ СТЁРТЫЙ ДАНТЕ ☠', '#9b59b6');
+  } else {
+    showSpecialText((isRematch ? '⚔️ РЕВАНШ: ' : '👑 БОСС: ') + boss.n, '#ff2a4b');
   }
-  if (!tutorialShown) {
-    setTimeout(() => {
-      tutorialModal.classList.add('show');
-      tutorialShown = true;
-      try { localStorage.setItem('dmc_tut', '1'); } catch (e) {}
-    }, 800);
-  }
+  if (!tutorialShown) { setTimeout(() => { tutorialModal.classList.add('show'); tutorialShown = true; try { localStorage.setItem('dmc_tut', '1'); } catch (e) {} }, 800); }
   updateAll(); markDirty();
 }
 
-function defeatStoryBoss() {
-  const boss = STORY_BOSSES[S.storyIdx];
-  if (!boss) return;
-  if (boss.finalBoss || boss.rtype === 'erase') { showFinale(); return; }
-  let rewardMsg = '';
-  if (boss.rtype === 'money') { S.m += boss.reward; rewardMsg = boss.reward.toLocaleString('ru') + ' мотов'; }
-  else if (boss.rtype === 'chair') {
-    if (!S.o.includes(boss.chair)) S.o.push(boss.chair);
-    rewardMsg = CHAIRS[boss.chair].n;
+function defeatBoss() {
+  const bossIdx = S.storyBossIdx;
+  const boss = STORY_BOSSES[bossIdx];
+  S.bossKills = (S.bossKills || 0) + 1;
+
+  // РЕВАНШ
+  if (S.battleMode === 'rematch') {
+    const chIdx = CHAPTERS.findIndex(c => c.boss === bossIdx);
+    S.m += Math.round((boss.reward || 1000) * 0.1 * moneyMult());
+    S.battleMode = 'free';
+    S.storyActive = false;
+    S.storyHP = 0;
+    setupTimingForBoss(null);
+    beep(1500, 0.3, 'sine', 0.1); setTimeout(() => beep(2000, 0.4, 'sine', 0.1), 150);
+    goToTab('chapters');
+    showToast('⚔️ РЕВАНШ ВЫИГРАН! +' + Math.round((boss.reward || 1000) * 0.1 * moneyMult()).toLocaleString('ru') + ' 💎', 'ach');
+    updateAll(); markDirty();
+    return;
   }
-  S.storyIdx++;
+
+  // БОСС ГЛАВЫ
+  let rewardMsg = '';
+  if (boss.rtype === 'money') { S.m += boss.reward * moneyMult(); rewardMsg = Math.round(boss.reward * moneyMult()).toLocaleString('ru') + ' мотов'; }
+  else if (boss.rtype === 'chair') { if (!S.o.includes(boss.chair)) S.o.push(boss.chair); rewardMsg = CHAIRS[boss.chair].n; }
+  else if (boss.rtype === 'souls') { S.souls += boss.souls || 0; rewardMsg = (boss.souls || 0) + ' душ'; }
+  if (boss.souls && boss.rtype !== 'souls') { S.souls += boss.souls; rewardMsg += ' + 💀' + boss.souls; }
+
+  const wasFinal = boss.finalBoss;
+
+  // Переход к следующей главе
+  if (!wasFinal) {
+    S.chapterIdx++;
+  } else {
+    S.chapterIdx = CHAPTERS.length;
+  }
+  S.battleMode = 'free';
   S.storyActive = false;
   S.storyHP = 0;
   S.phpmax += 100;
   S.php = S.phpmax;
   S.pm = 0; S.pt = 0; S.combo = 0;
   setupTimingForBoss(null);
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.sc').forEach(s => s.classList.remove('active'));
-  document.querySelector('.tab[data-sc="story"]').classList.add('active');
-  $('story-sc').classList.add('active');
-  battleActive = false;
-  beep(1500, 0.3, 'sine', 0.1);
-  setTimeout(() => beep(2000, 0.4, 'sine', 0.1), 150);
-  if (rewardMsg) {
-    $('st-t').innerHTML = '🏆 <b>ПОБЕДА!</b> ' + boss.n + ' повержен! Награда: <b style="color:var(--gold)">' + rewardMsg + '</b>';
+
+  beep(1500, 0.3, 'sine', 0.1); setTimeout(() => beep(2000, 0.4, 'sine', 0.1), 150); setTimeout(() => beep(2500, 0.5, 'sine', 0.1), 300);
+
+  if (wasFinal) {
+    showFinale();
+  } else {
+    goToTab('chapters');
+    showToast('🏆 ГЛАВА ПРОЙДЕНА! Воспоминание открыто!', 'ach');
+    const ch = CHAPTERS[S.chapterIdx - 1];
+    chInfo.innerHTML = '🏆 <b>ПОБЕДА!</b> Глава ' + S.chapterIdx + ' «' + ch.n + '» пройдена! Награда: <b style="color:var(--gold)">' + rewardMsg + '</b>';
   }
-  updateAll(); markDirty();
+  checkAchievements(); updateAll(); markDirty();
 }
 
 function showFinale() {
-  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
-  goEl.classList.remove('show');
-  cc.classList.remove('final-aura');
-  finaleEl.classList.add('show');
-  setupTimingForBoss(null);
-  beep(2000, 0.4, 'sine', 0.1);
-  setTimeout(() => beep(1500, 0.4, 'sine', 0.1), 200);
-  setTimeout(() => beep(1000, 0.6, 'sine', 0.1), 400);
-  setTimeout(() => beep(500, 1.2, 'sine', 0.15), 700);
+  goEl.classList.remove('show'); cc.classList.remove('final-aura', 'dt-aura');
+  finaleEl.classList.add('show'); setupTimingForBoss(null);
+  beep(2000, 0.4, 'sine', 0.1); setTimeout(() => beep(1500, 0.4, 'sine', 0.1), 200); setTimeout(() => beep(1000, 0.6, 'sine', 0.1), 400); setTimeout(() => beep(500, 1.2, 'sine', 0.15), 700);
+  checkAchievements();
+}
+
+function prestige() {
+  const keepSouls = S.souls, keepSkills = S.skills, keepAch = S.ach;
+  const keepSound = S.sound, keepVibrate = S.vibrate, keepAutosave = S.autosave;
+  const newPrestige = (S.prestige || 0) + 1;
+  const keepDtUsed = S.dtUsed || 0, keepKills = S.kills || 0, keepBossKills = S.bossKills || 0;
+  const keepMaxWave = S.maxWave || 1, keepParries = S.parries || 0;
+  S = defaultState();
+  S.souls = keepSouls + 10; S.skills = keepSkills; S.ach = keepAch; S.prestige = newPrestige;
+  S.sound = keepSound; S.vibrate = keepVibrate; S.autosave = keepAutosave;
+  S.dtUsed = keepDtUsed; S.kills = keepKills; S.bossKills = keepBossKills; S.maxWave = keepMaxWave; S.parries = keepParries;
+  S.phpmax = 100 + S.skills.hp * 50; S.php = S.phpmax;
+  finaleEl.classList.remove('show'); goEl.classList.remove('show'); paused = false; pauseOverlay.classList.remove('show');
+  resetBossState(); setupTimingForBoss(null);
+  S.emax = ENEMIES[0].h; S.hp = S.emax;
+  S.atkCdMax = ENEMIES[0].atk; S.atkCd = S.atkCdMax;
+  save(true);
+  showToast('⭐ PRESTIGE ' + newPrestige + '! +10 душ', 'ach');
+  beep(1500, 0.3, 'sine', 0.1); setTimeout(() => beep(2000, 0.4, 'sine', 0.1), 150); setTimeout(() => beep(2500, 0.5, 'sine', 0.12), 300);
+  updateAll(); markDirty();
 }
 
 function eat() {
   if (!S.pm) return;
-  if (goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
+  if (goEl.classList.contains('show') || finaleEl.classList.contains('show') || paused) return;
   const bite = Math.max(2, CHAIRS.c2.w * 1.5);
-  S.pt -= bite;
-  S.m += bite * 1.5;
+  S.pt -= bite; S.m += bite * 1.5 * moneyMult();
   S.php = Math.min(S.phpmax, S.php + bite * 2);
   spawnParticles(cv.width / 2 + (Math.random() - 0.5) * 80, cv.height / 2 + (Math.random() - 0.5) * 80, 6, '#f1c40f', { spd: 3, size: 4, gravity: -0.1 });
   beep(500, 0.05, 'sine', 0.04);
   if (S.pt <= 0) {
-    S.m += Math.round(ENEMIES[S.e].r * rewardScale());
-    S.wave++;
+    S.m += Math.round(ENEMIES[S.e].r * rewardScale() * moneyMult());
+    S.wave++; if (S.wave > S.maxWave) S.maxWave = S.wave;
     S.phpmax += 20;
-    nextEnemy();
-    beep(1000, 0.1, 'sine', 0.06);
-    setTimeout(() => beep(1400, 0.15, 'sine', 0.06), 90);
+    S.pm = 0; S.pt = 0;
+    nextFreeEnemy();
+    beep(1000, 0.1, 'sine', 0.06); setTimeout(() => beep(1400, 0.15, 'sine', 0.06), 90);
+    checkAchievements();
   }
   updateBattle(); markDirty();
 }
 
-// ===== ABILITIES TICK =====
 function bossAbilityTick(dt) {
-  if (!isBossFight() || S.pm || goEl.classList.contains('show') || finaleEl.classList.contains('show')) return;
-  const boss = currentBoss();
-  const ability = boss.ability;
+  if (!isBossFight() || S.pm || goEl.classList.contains('show') || finaleEl.classList.contains('show') || paused) return;
+  const boss = currentEnemy(); const ability = boss.ability;
   bossState.elapsed += dt;
-
-  if (ability === 'regen' && !timing.open) {
-    setBossHP(Math.min(currentBossMax(), getBossHP() + currentBossMax() * 0.01 * dt));
-  }
+  if (ability === 'regen' && !timing.open) setEnemyHP(Math.min(currentEnemyMax(), getEnemyHP() + currentEnemyMax() * 0.01 * dt));
+  if (ability === 'legend' && !timing.open) setEnemyHP(Math.min(currentEnemyMax(), getEnemyHP() + currentEnemyMax() * 0.02 * dt));
   if (ability === 'shield') {
     bossState.mundusShieldCd -= dt;
     if (bossState.mundusShieldActive > 0) bossState.mundusShieldActive -= dt;
-    else if (bossState.mundusShieldCd <= 0) {
-      bossState.mundusShieldActive = 2;
-      bossState.mundusShieldCd = 15;
-      showSpecialText('ЩИТ МУНДУСА!', '#00f0ff');
-      beep(400, 0.2, 'sine', 0.06);
-    }
+    else if (bossState.mundusShieldCd <= 0) { bossState.mundusShieldActive = 2; bossState.mundusShieldCd = 15; showSpecialText('ЩИТ МУНДУСА!', '#00f0ff'); beep(400, 0.2, 'sine', 0.06); }
   }
   if (ability === 'procdisable') {
     bossState.urizenCd -= dt;
     if (bossState.urizenActive > 0) bossState.urizenActive -= dt;
-    else if (bossState.urizenCd <= 0) {
-      bossState.urizenActive = 2;
-      bossState.urizenCd = 20;
-      showSpecialText('ПРОКИ ОТКЛЮЧЕНЫ!', '#9b59b6');
-      beep(200, 0.3, 'sawtooth', 0.08);
-    }
+    else if (bossState.urizenCd <= 0) { bossState.urizenActive = 2; bossState.urizenCd = 20; showSpecialText('ПРОКИ ОТКЛЮЧЕНЫ!', '#9b59b6'); beep(200, 0.3, 'sawtooth', 0.08); }
   }
-  if (S.storyActive && boss.timer) {
+  if ((S.battleMode === 'boss' || S.battleMode === 'rematch') && boss.timer) {
     bossState.timer -= dt;
     if (bossState.timer <= 0) { bossState.timer = 0; timeoutLoss(); }
   }
 }
 
-function timeoutLoss() {
-  S.php = 0;
-  goMsg.textContent = '⏱ Время вышло! Босс тебя переварил.';
-  goEl.classList.add('show');
-  updateAll();
-}
+function timeoutLoss() { S.php = 0; goMsg.textContent = '⏱ Время вышло!'; goEl.classList.add('show'); updateAll(); }
 
-// ===== TICK =====
 let lastTick = performance.now();
 function gameTick(now) {
   const dt = Math.min(100, now - lastTick) / 1000;
   lastTick = now;
-  if (!battleActive || goEl.classList.contains('show') || finaleEl.classList.contains('show') || tutorialModal.classList.contains('show')) {
+  if (!battleActive || paused || goEl.classList.contains('show') || finaleEl.classList.contains('show') || tutorialModal.classList.contains('show') || settingsModal.classList.contains('show')) {
     requestAnimationFrame(gameTick); return;
   }
-
   if (S.combo > 0 && now - S.comboT > COMBO_WINDOW) S.combo = 0;
-
   if (timing.active) {
     timing.pos += timing.speed * timing.dir * dt * 60;
     if (timing.pos >= 1) { timing.pos = 1; timing.dir = -1; }
     else if (timing.pos <= 0) { timing.pos = 0; timing.dir = 1; }
     tbInd.style.left = (timing.pos * 100) + '%';
   }
-
-  if (timing.open) {
-    timing.openTimer -= dt;
-    if (timing.openTimer <= 0) closeBoss();
+  if (timing.open) { timing.openTimer -= dt; if (timing.openTimer <= 0) closeBoss(); }
+  if (S.dtActive > 0) { S.dtActive -= dt; if (S.dtActive <= 0) { S.dtActive = 0; showSpecialText('DT END', '#888'); } }
+  if (bossState.burn && bossState.burn.remaining > 0) {
+    bossState.burn.remaining -= dt;
+    if (!S.pm && getEnemyHP() > 0) {
+      const burnDmg = bossState.burn.dps * dt;
+      setEnemyHP(Math.max(0, getEnemyHP() - burnDmg));
+      S.m += burnDmg * MONEY_PER_DMG * moneyMult();
+      if (getEnemyHP() <= 0) onEnemyDefeated();
+    }
+    if (bossState.burn.remaining <= 0) bossState.burn = null;
   }
-
+  if (S.skills.regen > 0 && S.php > 0 && S.php < S.phpmax && !S.pm) S.php = Math.min(S.phpmax, S.php + S.skills.regen * dt);
   bossAbilityTick(dt);
-
+  if (S.autosave) { autosaveTimer += dt; if (autosaveTimer >= 30) { autosaveTimer = 0; save(true); } }
   if (S.pm) {
     S.pt -= dt;
     if (S.pt <= 0) {
-      S.php -= 15;
-      beep(150, 0.3, 'sawtooth', 0.06);
-      shakeScreen();
+      S.php -= 15; beep(150, 0.3, 'sawtooth', 0.06); shakeScreen();
       S.pm = 0; S.pt = 0;
       if (S.php <= 0) { gameOver(); requestAnimationFrame(gameTick); return; }
-      S.m += Math.round(ENEMIES[S.e].r * rewardScale());
-      S.wave++;
-      nextEnemy();
+      S.m += Math.round(ENEMIES[S.e].r * rewardScale() * moneyMult());
+      S.wave++; if (S.wave > S.maxWave) S.maxWave = S.wave;
+      nextFreeEnemy();
     }
   } else {
     const canAttack = !isBossFight() || timing.open;
     if (canAttack) {
       S.atkCd -= dt;
-      if (S.atkCd <= 0) {
-        bossAttack();
-        if (S.php <= 0) { requestAnimationFrame(gameTick); return; }
-      }
+      if (S.atkCd <= 0) { bossAttack(); if (S.php <= 0) { requestAnimationFrame(gameTick); return; } }
     }
   }
   updateBattle();
@@ -1167,77 +1449,68 @@ function gameTick(now) {
 }
 
 function bossAttack() {
-  const boss = currentBoss();
-  const ability = boss.ability;
+  const boss = currentEnemy(); const ability = boss.ability;
   let dmg = boss.dmg + Math.floor(Math.random() * 3);
   let special = null;
   bossState.attackCount++;
-
   if (timing.open) dmg = Math.floor(dmg * 0.5);
-
   if (isFinalBoss()) {
     const roll = Math.random();
     if (roll < 0.15) { dmg = Math.floor(S.phpmax * 0.15); special = { text: 'ВРАГ: JUDGEMENT CUT!', color: '#9b59b6' }; }
     else if (roll < 0.30) { dmg = Math.floor(S.phpmax * 0.10); special = { text: 'ВРАГ: VOID!', color: '#9b59b6' }; }
     else if (roll < 0.45) { dmg = Math.floor(S.phpmax * 0.08); special = { text: 'ВРАГ: DEVIL TRIGGER!', color: '#ff2a4b' }; }
     else if (roll < 0.60) { dmg = Math.floor(S.phpmax * 0.06); special = { text: 'ВРАГ: EXCEED!', color: '#e67e22' }; }
-    else { dmg = Math.floor(S.phpmax * 0.05); }
+    else dmg = Math.floor(S.phpmax * 0.05);
     if (timing.open) dmg = Math.floor(dmg * 0.7);
-  } else if (ability === 'exceed' && bossState.attackCount % 3 === 0) {
-    dmg *= 2;
-    special = { text: 'ВРАГ: EXCEED!', color: '#e67e22' };
-  } else if (ability === 'jc' && Math.random() < 0.20) {
-    dmg = Math.floor(S.phpmax * 0.15);
-    special = { text: 'ВРАГ: JUDGEMENT CUT!', color: '#9b59b6' };
-  }
+  } else if (ability === 'exceed' && bossState.attackCount % 3 === 0) { dmg *= 2; special = { text: 'ВРАГ: EXCEED!', color: '#e67e22' }; }
+  else if (ability === 'jc' && Math.random() < 0.20) { dmg = Math.floor(S.phpmax * 0.15); special = { text: 'ВРАГ: JUDGEMENT CUT!', color: '#9b59b6' }; }
 
   let nextAtkCd = boss.atk;
-  if (ability === 'rage') {
+  if (ability === 'rage' || ability === 'legend') {
     const ramp = Math.min(1, bossState.elapsed / 60);
     nextAtkCd = Math.max(1.2, boss.atk * (1 - ramp * 0.35));
   }
   if (timing.open) nextAtkCd *= 2;
-  S.atkCd = nextAtkCd;
-  S.atkCdMax = boss.atk;
-
+  S.atkCd = nextAtkCd; S.atkCdMax = boss.atk;
   applyPlayerDamage(dmg, isFinalBoss() ? '#9b59b6' : '#ff2a4b');
   if (special) {
     showSpecialText(special.text, special.color);
-    cc.classList.add('judgement-cut');
-    setTimeout(() => cc.classList.remove('judgement-cut'), 400);
+    cc.classList.add('judgement-cut'); setTimeout(() => cc.classList.remove('judgement-cut'), 400);
     beep(400, 0.3, 'sawtooth', 0.1);
   }
 }
 
-function shakeScreen() {
-  cc.classList.remove('shake');
-  void cc.offsetWidth;
-  cc.classList.add('shake');
-}
-
+function shakeScreen() { cc.classList.remove('shake'); void cc.offsetWidth; cc.classList.add('shake'); }
 function gameOver() {
   S.php = 0; S.pm = 0; S.pt = 0;
-  goMsg.textContent = 'Данте переварен. Вернись сильнее!';
-  goEl.classList.add('show');
-  updateAll();
+  if (S.battleMode === 'chapter' || S.battleMode === 'boss' || S.battleMode === 'rematch') {
+    goMsg.textContent = 'Данте переварен. Вернись сильнее!';
+  } else {
+    goMsg.textContent = 'Данте переварен. Вернись сильнее!';
+  }
+  goEl.classList.add('show'); updateAll();
 }
 
 function revive() {
-  goEl.classList.remove('show');
-  S.php = S.phpmax;
-  const boss = currentBoss();
-  if (S.storyActive) {
-    S.storyHP = boss.h;
+  goEl.classList.remove('show'); S.php = S.phpmax;
+  if (S.battleMode === 'boss' || S.battleMode === 'rematch') {
+    S.storyHP = STORY_BOSSES[S.storyBossIdx].h;
     resetBossState();
-    bossState.timer = boss.timer || 60;
-    setupTimingForBoss(boss);
+    bossState.timer = STORY_BOSSES[S.storyBossIdx].timer || 60;
+    setupTimingForBoss(STORY_BOSSES[S.storyBossIdx]);
+  } else if (S.battleMode === 'chapter') {
+    const ch = CHAPTERS[S.chapterIdx];
+    const idx = Math.min(S.chapterKilled[S.chapterIdx], ch.demons.length - 1);
+    const demon = ch.demons[idx];
+    S.emax = demon.h; S.hp = demon.h;
+    S.atkCdMax = demon.atk; S.atkCd = demon.atk;
+    resetBossState(); setupTimingForBoss(null);
   } else {
     S.hp = S.emax;
-    setupTimingForBoss(isBossFight() ? boss : null);
+    setupTimingForBoss(currentEnemy().boss ? currentEnemy() : null);
   }
   S.pm = 0; S.pt = 0; S.combo = 0;
-  S.atkCdMax = boss.atk;
-  S.atkCd = S.atkCdMax;
+  S.atkCdMax = currentEnemy().atk; S.atkCd = S.atkCdMax;
   updateAll();
 }
 
@@ -1246,56 +1519,61 @@ function render() {
   resizeCanvas();
   const w = cv.width, h = cv.height;
   if (w === 0 || h === 0) { requestAnimationFrame(render); return; }
-
   const isFinal = isFinalBoss() && !S.pm;
   const isOpen = timing.open && !S.pm;
-  cx.fillStyle = isFinal ? '#120a1a' : (isOpen ? '#0f1a12' : (S.storyActive ? '#150f1a' : '#0f1218'));
+  const dtOn = S.dtActive > 0 && !S.pm;
+  const isChapter = S.battleMode === 'chapter';
+  cx.fillStyle = isFinal ? '#120a1a' : (dtOn ? '#1a0a0a' : (isOpen ? '#0f1a12' : (isChapter ? '#1a140a' : '#0f1218')));
   cx.fillRect(0, 0, w, h);
-
-  cx.strokeStyle = isFinal ? 'rgba(155,89,182,0.1)' : (isOpen ? 'rgba(46,204,113,0.12)' : (S.storyActive ? 'rgba(155,89,182,0.08)' : 'rgba(0,240,255,0.05)'));
+  cx.strokeStyle = isFinal ? 'rgba(155,89,182,0.1)' : (dtOn ? 'rgba(255,42,75,0.15)' : (isChapter ? 'rgba(230,126,34,0.1)' : (isOpen ? 'rgba(46,204,113,0.12)' : 'rgba(0,240,255,0.05)')));
   cx.lineWidth = 1;
   for (let i = 0; i < w; i += 40) { cx.beginPath(); cx.moveTo(i, 0); cx.lineTo(i, h); cx.stroke(); }
   for (let i = 0; i < h; i += 40) { cx.beginPath(); cx.moveTo(0, i); cx.lineTo(w, i); cx.stroke(); }
-
   const cw = w / 2, ch = h / 2;
   const t = performance.now();
-
   if (isFinal) {
     cx.save();
     for (let ring = 0; ring < 3; ring++) {
       const r = 70 + ring * 30 + Math.sin(t / (400 + ring * 100)) * 10;
       cx.strokeStyle = 'rgba(155,89,182,' + (0.5 - ring * 0.12) + ')';
-      cx.lineWidth = 2;
-      cx.beginPath(); cx.arc(cw, ch, r, 0, Math.PI * 2); cx.stroke();
+      cx.lineWidth = 2; cx.beginPath(); cx.arc(cw, ch, r, 0, Math.PI * 2); cx.stroke();
     }
     if (Math.random() < 0.3) spawnParticles(cw + (Math.random() - 0.5) * 140, ch + 40, 1, '#9b59b6', { spd: 1, size: 2, gravity: -0.15, life: 0.02 });
+    cx.restore();
+  } else if (dtOn) {
+    cx.save();
+    for (let ring = 0; ring < 2; ring++) {
+      const r = 75 + ring * 25 + Math.sin(t / 200) * 8;
+      cx.strokeStyle = 'rgba(255,42,75,' + (0.5 - ring * 0.2) + ')';
+      cx.lineWidth = 3; cx.beginPath(); cx.arc(cw, ch, r, 0, Math.PI * 2); cx.stroke();
+    }
+    if (Math.random() < 0.5) spawnParticles(cw + (Math.random() - 0.5) * 120, ch + (Math.random() - 0.5) * 120, 1, '#ff2a4b', { spd: 1.5, size: 2, gravity: -0.2, life: 0.02 });
     cx.restore();
   } else if (isOpen) {
     cx.save();
     const pulse = 0.3 + Math.sin(t / 250) * 0.15;
     cx.strokeStyle = 'rgba(46,204,113,' + pulse + ')';
-    cx.lineWidth = 3;
-    cx.beginPath(); cx.arc(cw, ch, 75 + Math.sin(t / 300) * 8, 0, Math.PI * 2); cx.stroke();
+    cx.lineWidth = 3; cx.beginPath(); cx.arc(cw, ch, 75 + Math.sin(t / 300) * 8, 0, Math.PI * 2); cx.stroke();
     cx.restore();
   } else if (!S.pm && isBossFight()) {
     cx.save();
     cx.strokeStyle = 'rgba(255,42,75,' + (0.4 + Math.sin(t / 300) * 0.2) + ')';
-    cx.lineWidth = 2;
-    cx.beginPath(); cx.arc(cw, ch, 70 + Math.sin(t / 400) * 8, 0, Math.PI * 2); cx.stroke();
+    cx.lineWidth = 2; cx.beginPath(); cx.arc(cw, ch, 70 + Math.sin(t / 400) * 8, 0, Math.PI * 2); cx.stroke();
     cx.strokeStyle = 'rgba(46,204,113,' + (0.3 + Math.sin(t / 500) * 0.15) + ')';
     cx.beginPath(); cx.arc(cw, ch, 90 + Math.sin(t / 600) * 10, 0, Math.PI * 2); cx.stroke();
     cx.restore();
+  } else if (!S.pm && isChapter) {
+    cx.save();
+    cx.strokeStyle = 'rgba(230,126,34,' + (0.4 + Math.sin(t / 350) * 0.2) + ')';
+    cx.lineWidth = 2; cx.beginPath(); cx.arc(cw, ch, 65 + Math.sin(t / 450) * 8, 0, Math.PI * 2); cx.stroke();
+    cx.restore();
   }
-
   if (S.pm) {
     const prog = Math.max(0, S.pt / S.pmax);
     cx.save();
-    cx.translate(cw, ch);
-    cx.rotate(Math.sin(t / 500) * 0.08);
-    cx.fillStyle = '#c9822b';
-    cx.beginPath(); cx.arc(0, 0, 55, 0, Math.PI * 2); cx.fill();
-    cx.fillStyle = '#f39c12';
-    cx.beginPath(); cx.arc(0, 0, 48, 0, Math.PI * 2); cx.fill();
+    cx.translate(cw, ch); cx.rotate(Math.sin(t / 500) * 0.08);
+    cx.fillStyle = '#c9822b'; cx.beginPath(); cx.arc(0, 0, 55, 0, Math.PI * 2); cx.fill();
+    cx.fillStyle = '#f39c12'; cx.beginPath(); cx.arc(0, 0, 48, 0, Math.PI * 2); cx.fill();
     cx.fillStyle = '#c0392b';
     for (let i = 0; i < 6; i++) {
       const a = i * Math.PI / 3 + t / 3000;
@@ -1304,54 +1582,35 @@ function render() {
     cx.restore();
     cx.save();
     cx.strokeStyle = prog < 0.3 ? '#ff2a4b' : '#f1c40f';
-    cx.lineWidth = 5;
-    cx.beginPath();
-    cx.arc(cw, ch, 70, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2);
-    cx.stroke();
+    cx.lineWidth = 5; cx.beginPath(); cx.arc(cw, ch, 70, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2); cx.stroke();
     cx.restore();
   } else {
     const chair = CHAIRS[S.c];
     const bob = Math.sin(t / 400) * 3;
-    const scale = isOpen ? 1.2 : 1;
+    const scale = isOpen ? 1.2 : (dtOn ? 1.15 : 1);
     cx.save();
-    cx.translate(cw, ch + bob);
-    cx.scale(scale, scale);
+    cx.translate(cw, ch + bob); cx.scale(scale, scale);
     cx.fillStyle = chair.c;
-    cx.shadowColor = isOpen ? '#2ecc71' : chair.c;
-    cx.shadowBlur = isOpen ? 30 : 15;
-    cx.fillRect(-22, -10, 44, 8);
-    cx.fillRect(-22, -40, 8, 30);
-    cx.fillRect(-18, -2, 5, 24);
-    cx.fillRect(13, -2, 5, 24);
+    cx.shadowColor = dtOn ? '#ff2a4b' : (isOpen ? '#2ecc71' : chair.c);
+    cx.shadowBlur = dtOn ? 40 : (isOpen ? 30 : 15);
+    cx.fillRect(-22, -10, 44, 8); cx.fillRect(-22, -40, 8, 30);
+    cx.fillRect(-18, -2, 5, 24); cx.fillRect(13, -2, 5, 24);
     cx.restore();
   }
-
   if (!S.pm && S.php / S.phpmax < 0.25) {
     cx.save();
     const grad = cx.createRadialGradient(cw, ch, 0, cw, ch, Math.max(w, h));
-    grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(255,42,75,' + (0.15 + Math.sin(t / 200) * 0.1) + ')');
-    cx.fillStyle = grad;
-    cx.fillRect(0, 0, w, h);
+    grad.addColorStop(0, 'rgba(0,0,0,0)'); grad.addColorStop(1, 'rgba(255,42,75,' + (0.15 + Math.sin(t / 200) * 0.1) + ')');
+    cx.fillStyle = grad; cx.fillRect(0, 0, w, h);
     cx.restore();
   }
-
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
-    p.x += p.vx; p.y += p.vy;
-    p.vy += p.gravity;
-    p.vx *= 0.98; p.vy *= 0.98;
-    p.a -= p.life;
+    p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.98; p.vy *= 0.98; p.a -= p.life;
     if (p.a <= 0) { particles.splice(i, 1); continue; }
-    cx.save();
-    cx.globalAlpha = p.a;
-    cx.fillStyle = p.color;
-    cx.beginPath();
-    cx.arc(p.x, p.y, p.z, 0, Math.PI * 2);
-    cx.fill();
-    cx.restore();
+    cx.save(); cx.globalAlpha = p.a; cx.fillStyle = p.color;
+    cx.beginPath(); cx.arc(p.x, p.y, p.z, 0, Math.PI * 2); cx.fill(); cx.restore();
   }
-
   requestAnimationFrame(render);
 }
 
@@ -1359,30 +1618,41 @@ function render() {
 cc.addEventListener('pointerdown', e => { e.preventDefault(); attack(e); });
 eB.addEventListener('click', e => { e.preventDefault(); eat(); });
 $('revive-btn').addEventListener('click', revive);
+dtBtn.addEventListener('click', activateDT);
 saveBtn.addEventListener('click', save);
-resetBtnH.addEventListener('click', () => {
-  if (!confirm('Сбросить весь прогресс? НЕОБРАТИМО!')) return;
-  if (!confirm('ТОЧНО? Всё пропадёт!')) return;
-  resetAll();
-  showToast('🗑 Прогресс сброшен', true);
+pauseBtn.addEventListener('click', () => { paused = !paused; pauseOverlay.classList.toggle('show', paused); beep(paused ? 400 : 600, 0.1, 'sine', 0.04); });
+$('pause-resume').addEventListener('click', () => { paused = false; pauseOverlay.classList.remove('show'); beep(600, 0.1, 'sine', 0.04); });
+settingsBtn.addEventListener('click', () => { settingsModal.classList.add('show'); updateSettingsUI(); beep(700, 0.08, 'sine', 0.04); });
+$('set-close').addEventListener('click', () => settingsModal.classList.remove('show'));
+
+function updateSettingsUI() {
+  $('set-sound').textContent = S.sound ? 'ВКЛ' : 'ВЫКЛ'; $('set-sound').classList.toggle('off', !S.sound);
+  $('set-vibrate').textContent = S.vibrate ? 'ВКЛ' : 'ВЫКЛ'; $('set-vibrate').classList.toggle('off', !S.vibrate);
+  $('set-autosave').textContent = S.autosave ? 'ВКЛ' : 'ВЫКЛ'; $('set-autosave').classList.toggle('off', !S.autosave);
+  $('set-prestige').textContent = (S.prestige || 0);
+}
+
+$('set-sound').addEventListener('click', () => { S.sound = !S.sound; updateSettingsUI(); if (S.sound) beep(700, 0.08, 'sine', 0.04); markDirty(); });
+$('set-vibrate').addEventListener('click', () => { S.vibrate = !S.vibrate; updateSettingsUI(); markDirty(); });
+$('set-autosave').addEventListener('click', () => { S.autosave = !S.autosave; updateSettingsUI(); markDirty(); showToast(S.autosave ? '💾 Автосейв ВКЛ' : '💾 Автосейв ВЫКЛ', false); });
+$('set-reset').addEventListener('click', () => {
+  if (!confirm('Сбросить ВСЁ? НЕОБРАТИМО!')) return;
+  if (!confirm('ТОЧНО?')) return;
+  resetAll(); settingsModal.classList.remove('show'); showToast('🗑 Всё сброшено', 'warn');
 });
-$('reset-btn').addEventListener('click', () => {
-  try { ['dmc_v9','dmc_v8','dmc_v7','dmc_v6','dmc_v5','dmc_v4','dmc_v3','dmc_v2','dmc_o'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
-  location.reload();
-});
+$('prestige-btn').addEventListener('click', () => { if (!confirm('New Game+? Прогресс глав и деньги сбросятся, души/навыки/ачивки сохранятся.')) return; prestige(); });
+$('finale-reset').addEventListener('click', () => { if (!confirm('Полный сброс? НЕОБРАТИМО!')) return; resetAll(); });
+
 $('sm-close').addEventListener('click', () => storyModal.classList.remove('show'));
 storyModal.addEventListener('click', e => { if (e.target === storyModal) storyModal.classList.remove('show'); });
 $('tut-close').addEventListener('click', () => tutorialModal.classList.remove('show'));
 document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
 document.addEventListener('pointerdown', () => { if (!AC) beep(0, 0.001, 'sine', 0.001); }, { once: true });
 
-// ===== BOOT =====
-load();
-updateAll();
-resizeCanvas();
+load(); updateAll(); resizeCanvas();
 requestAnimationFrame(render);
 requestAnimationFrame(gameTick);
 })();
 </script>
 </body>
-</html>
+      </html>
